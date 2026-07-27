@@ -1,61 +1,116 @@
 'use client'
 
+import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Play } from 'lucide-react'
+import { ArrowRight, Play, ChevronLeft, ChevronRight, Volume2, VolumeX } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Autoplay, EffectFade, Navigation } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/effect-fade'
+import 'swiper/css/navigation'
 
 export function Hero() {
+  const [isMuted, setIsMuted] = useState(true)
+  const swiperRef = useRef(null)
+
+  // Carousel slides with images and videos
+  const slides = [
+    {
+      type: 'image',
+      src: '/interior-hallway.jpg',
+      alt: 'Modern interior hallway with terracotta',
+    },
+    {
+      type: 'image',
+      src: '/project-living-room.png',
+      alt: 'Luxury living room design',
+    },
+    {
+      type: 'image',
+      src: '/exterior-render.jpg',
+      alt: 'Exterior architectural rendering',
+    },
+    {
+      type: 'image',
+      src: '/project-kitchen.png',
+      alt: 'Modern kitchen design',
+    },
+    {
+      type: 'image',
+      src: '/commercial-restaurant.jpg',
+      alt: 'Commercial restaurant design',
+    },
+  ]
+
   return (
     <section className="relative w-full h-screen min-h-[700px] overflow-hidden">
-      {/* Background Images Grid - Right Side */}
-      <div className="absolute inset-0 w-full h-full">
-        <div className="absolute right-0 top-0 w-3/5 h-full">
-          <div className="grid grid-cols-2 gap-3 h-full p-6">
-            {/* Left column - tall image */}
-            <div className="col-span-1 row-span-2">
-              <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl">
-                <Image
-                  src="/interior-hallway.jpg"
-                  alt="Modern interior hallway"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </div>
+      {/* Full-width Carousel Background */}
+      <Swiper
+        ref={swiperRef}
+        modules={[Autoplay, EffectFade, Navigation]}
+        effect="fade"
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
+        }}
+        loop
+        className="absolute inset-0 w-full h-full"
+      >
+        {slides.map((slide, idx) => (
+          <SwiperSlide key={idx} className="relative w-full h-full">
+            {slide.type === 'image' ? (
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                fill
+                className="object-cover"
+                priority={idx === 0}
+              />
+            ) : (
+              <video
+                src={slide.src}
+                muted={isMuted}
+                autoPlay
+                loop
+                playsInline
+                className="w-full h-full object-cover"
+              />
+            )}
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
-            {/* Right column - two images stacked */}
-            <div className="col-span-1 flex flex-col gap-3">
-              <div className="relative w-full h-1/2 rounded-3xl overflow-hidden shadow-lg">
-                <Image
-                  src="/project-living-room.png"
-                  alt="Luxury living room design"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              <div className="relative w-full h-1/2 rounded-3xl overflow-hidden shadow-lg">
-                <Image
-                  src="/exterior-render.jpg"
-                  alt="Exterior architectural design"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Dark Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-dark-bg via-dark-bg/60 to-dark-bg/40 z-5" />
 
-        {/* Dark Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-dark-bg via-dark-bg/50 to-transparent" />
-      </div>
+      {/* Navigation Arrows */}
+      <button
+        onClick={() => swiperRef.current?.swiper.slidePrev()}
+        className="absolute left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all"
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </button>
+      <button
+        onClick={() => swiperRef.current?.swiper.slideNext()}
+        className="absolute right-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all"
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
 
-      {/* Content Overlay - Left Side */}
+      {/* Mute Button for Video */}
+      <button
+        onClick={() => setIsMuted(!isMuted)}
+        className="absolute top-8 right-8 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all"
+      >
+        {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+      </button>
+
+      {/* Content Overlay - Full Width */}
       <div className="absolute inset-0 flex items-center justify-start z-10">
-        <div className="w-3/5 px-8 sm:px-12 lg:px-16">
+        <div className="w-full max-w-7xl mx-auto px-8 sm:px-12 lg:px-16">
           <div className="max-w-2xl">
             {/* Eyebrow */}
             <p className="text-sm font-semibold uppercase tracking-widest text-accent mb-6">
@@ -111,8 +166,19 @@ export function Hero() {
         </div>
       </div>
 
+      {/* Carousel Indicators */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {slides.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => swiperRef.current?.swiper.slideTo(idx)}
+            className="w-2 h-2 rounded-full bg-white/40 hover:bg-white/80 transition-all"
+          />
+        ))}
+      </div>
+
       {/* Scroll Indicator */}
-      <div className="absolute bottom-10 left-1/4 z-10">
+      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10">
         <div className="flex flex-col items-center gap-3 text-white/60 animate-bounce">
           <span className="text-xs font-medium uppercase tracking-widest">Scroll</span>
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
