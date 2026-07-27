@@ -23,7 +23,7 @@ export function Timeline() {
   ]
 
   return (
-    <section className="py-20 lg:py-28">
+    <section className="bg-background-alt py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <p className="text-sm font-semibold uppercase tracking-widest text-primary">

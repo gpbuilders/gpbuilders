@@ -11,13 +11,13 @@ export function BrandsWeBuild() {
   ]
 
   return (
-    <section className="bg-primary text-white py-16 lg:py-20">
+    <section className="bg-background-alt py-16 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="font-serif text-3xl font-semibold">
+          <h2 className="font-serif text-3xl font-semibold text-foreground">
             Brands We Build With
           </h2>
-          <p className="mt-3 text-primary/80">
+          <p className="mt-3 text-muted-foreground">
             Premium materials from world-class partners
           </p>
         </div>
@@ -26,9 +26,9 @@ export function BrandsWeBuild() {
           {brands.map((brand) => (
             <div
               key={brand}
-              className="flex items-center justify-center rounded-lg border border-white/20 bg-white/5 px-4 py-6 backdrop-blur-sm transition-all hover:bg-white/10"
+              className="flex items-center justify-center rounded-lg border border-border bg-card px-4 py-6 transition-all hover:border-primary/50 hover:shadow-md"
             >
-              <span className="font-semibold text-sm text-center">{brand}</span>
+              <span className="font-semibold text-sm text-center text-foreground">{brand}</span>
             </div>
           ))}
         </div>
