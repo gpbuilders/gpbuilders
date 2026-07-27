@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { PageHero } from '@/components/page-hero'
 import { About } from '@/components/about'
 import { Values } from '@/components/values'
-import { Milestones } from '@/components/milestones'
+import { Timeline } from '@/components/timeline'
 import { CtaBand } from '@/components/cta-band'
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ export default function AboutPage() {
       />
       <About />
       <Values />
-      <Milestones />
+      <Timeline />
       <CtaBand />
     </>
   )

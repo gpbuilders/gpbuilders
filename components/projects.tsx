@@ -80,27 +80,27 @@ export function Projects() {
   return (
     <section id="projects" className="scroll-mt-20 bg-secondary/50 py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+        <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-end mb-12">
           <div className="max-w-2xl">
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary">
+            <p className="text-sm font-semibold uppercase tracking-widest text-primary">
               Selected Work
             </p>
-            <h2 className="mt-4 text-balance font-serif text-4xl font-semibold leading-tight text-foreground sm:text-5xl">
+            <h2 className="mt-3 text-balance font-serif text-5xl font-semibold leading-tight text-foreground">
               Projects we&apos;re proud of
             </h2>
           </div>
 
-          <div className="inline-flex rounded-full border border-border bg-card p-1">
+          <div className="flex gap-4">
             {FILTERS.map((filter) => (
               <button
                 key={filter.value}
                 type="button"
                 onClick={() => setActive(filter.value)}
                 className={cn(
-                  'rounded-full px-5 py-2 text-sm font-medium transition-colors',
+                  'pb-3 text-sm font-semibold uppercase tracking-widest transition-all border-b-2',
                   active === filter.value
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-foreground/70 hover:text-primary',
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-foreground/60 hover:text-primary',
                 )}
               >
                 {filter.label}

@@ -1,19 +1,20 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Inter, Fraunces } from 'next/font/google'
+import { Jost, Marcellus } from 'next/font/google'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import './globals.css'
 
-const inter = Inter({
+const jost = Jost({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-sans',
   display: 'swap',
 })
 
-const fraunces = Fraunces({
+const marcellus = Marcellus({
+  weight: '400',
   subsets: ['latin'],
-  variable: '--font-fraunces',
+  variable: '--font-serif',
   display: 'swap',
 })
 
@@ -36,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`light ${inter.variable} ${fraunces.variable} bg-background`}
+      className={`light ${jost.variable} ${marcellus.variable} bg-background`}
     >
       <body className="font-sans antialiased">
         <div className="flex min-h-screen flex-col bg-background">
