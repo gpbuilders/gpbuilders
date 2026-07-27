@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
@@ -26,22 +27,22 @@ export function Hero() {
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <a
-                href="#contact"
+              <Link
+                href="/contact"
                 className={cn(buttonVariants(), 'h-12 gap-2 px-7 text-base')}
               >
                 Start Your Project
                 <ArrowRight className="h-4 w-4" />
-              </a>
-              <a
-                href="#projects"
+              </Link>
+              <Link
+                href="/projects"
                 className={cn(
                   buttonVariants({ variant: 'outline' }),
                   'h-12 px-7 text-base',
                 )}
               >
                 View Our Work
-              </a>
+              </Link>
             </div>
 
             <dl className="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-border pt-8">

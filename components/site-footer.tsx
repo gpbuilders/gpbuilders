@@ -1,30 +1,31 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 const FOOTER_LINKS = [
   {
     title: 'Company',
     links: [
-      { label: 'About', href: '#about' },
-      { label: 'Our Process', href: '#process' },
-      { label: 'Partners', href: '#partners' },
-      { label: 'Reviews', href: '#reviews' },
+      { label: 'About Us', href: '/about' },
+      { label: 'Our Process', href: '/services' },
+      { label: 'Milestones', href: '/about' },
+      { label: 'Contact', href: '/contact' },
     ],
   },
   {
     title: 'Services',
     links: [
-      { label: 'Architecture + Interior', href: '#services' },
-      { label: 'Interior + Execution', href: '#services' },
-      { label: 'Execution Only', href: '#services' },
-      { label: 'Landscape Design', href: '#services' },
+      { label: 'Architecture + Interior', href: '/services' },
+      { label: 'Interior + Execution', href: '/services' },
+      { label: 'Execution Only', href: '/services' },
+      { label: 'Landscape Design', href: '/services' },
     ],
   },
   {
     title: 'Projects',
     links: [
-      { label: 'Residential', href: '#projects' },
-      { label: 'Commercial', href: '#projects' },
-      { label: 'Start a Project', href: '#contact' },
+      { label: 'Residential', href: '/projects' },
+      { label: 'Commercial', href: '/projects' },
+      { label: 'Start a Project', href: '/contact' },
     ],
   },
 ]
@@ -35,7 +36,7 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <div className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-3">
               <Image
                 src="/gp-logo.png"
                 alt="GP Builders logo"
@@ -46,7 +47,7 @@ export function SiteFooter() {
               <span className="font-serif text-lg font-semibold text-foreground">
                 GP Builders
               </span>
-            </div>
+            </Link>
             <p className="mt-4 max-w-xs text-pretty text-sm leading-relaxed text-muted-foreground">
               Architecture, interior design, and execution for luxury
               residential and commercial spaces. Quality at an affordable price.
@@ -62,12 +63,12 @@ export function SiteFooter() {
                 <ul className="mt-4 space-y-3">
                   {group.links.map((link) => (
                     <li key={link.label}>
-                      <a
+                      <Link
                         href={link.href}
                         className="text-sm text-muted-foreground transition-colors hover:text-primary"
                       >
                         {link.label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
