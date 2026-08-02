@@ -1,13 +1,10 @@
+'use client'
+
 import type { Metadata } from 'next'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import { PageHero } from '@/components/page-hero'
 import { ContactForm } from '@/components/contact-form'
-
-export const metadata: Metadata = {
-  title: 'Contact | GP Builders',
-  description:
-    'Get in touch with GP Builders. Tell us about your space and vision, and our team will respond with a tailored plan and transparent estimate.',
-}
+import { ParallaxSection } from '@/components/parallax-section'
 
 export default function ContactPage() {
   return (
@@ -19,7 +16,12 @@ export default function ContactPage() {
         currentLabel="Contact"
       />
 
-      <section className="py-20 lg:py-28">
+      <ParallaxSection
+        backgroundColor="bg-background-alt"
+        speed={0.5}
+        className="py-20 lg:py-28"
+      >
+        <section>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-5">
             {/* Info Column */}
@@ -115,7 +117,8 @@ export default function ContactPage() {
             </div>
           </div>
         </div>
-      </section>
+        </section>
+      </ParallaxSection>
     </>
   )
 }

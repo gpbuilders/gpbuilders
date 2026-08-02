@@ -1,14 +1,11 @@
+'use client'
+
 import type { Metadata } from 'next'
 import { PageHero } from '@/components/page-hero'
 import { Services } from '@/components/services'
 import { Process } from '@/components/process'
 import { CtaBand } from '@/components/cta-band'
-
-export const metadata: Metadata = {
-  title: 'Services | GP Builders',
-  description:
-    'Explore GP Builders services — full architecture, interior design, and execution, or individual stages. See our proven programme strategy from concept to handover.',
-}
+import { ParallaxSection } from '@/components/parallax-section'
 
 export default function ServicesPage() {
   return (
@@ -19,8 +16,20 @@ export default function ServicesPage() {
         description="Whether you need the complete journey or a single stage, our team adapts to where your project stands today — with transparent pricing and a clear process."
         currentLabel="Services"
       />
-      <Services />
-      <Process />
+      <ParallaxSection
+        backgroundColor="bg-background-alt"
+        speed={0.5}
+        className="py-20 lg:py-28"
+      >
+        <Services />
+      </ParallaxSection>
+      <ParallaxSection
+        backgroundColor="bg-background"
+        speed={0.4}
+        className="py-20 lg:py-28"
+      >
+        <Process />
+      </ParallaxSection>
       <CtaBand />
     </>
   )
