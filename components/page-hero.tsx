@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import Image from 'next/image'
 import { ChevronRight } from 'lucide-react'
 
 export function PageHero({
@@ -13,36 +16,66 @@ export function PageHero({
   currentLabel: string
 }) {
   return (
-    <section className="relative overflow-hidden border-b border-border bg-secondary/60 pt-28 lg:pt-32">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-32 left-1/4 h-72 w-72 rounded-full bg-accent/10 blur-3xl"
-      />
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+    <section className="relative w-full h-96 overflow-hidden bg-dark-bg">
+      {/* Background Image Grid - Shows project images */}
+      <div className="absolute inset-0 w-full h-full">
+        <div className="grid grid-cols-3 gap-2 w-full h-full p-4">
+          <div className="col-span-1 rounded-2xl overflow-hidden">
+            <Image
+              src="/interior-hallway.jpg"
+              alt="Project showcase"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="col-span-1 rounded-2xl overflow-hidden">
+            <Image
+              src="/project-living-room.png"
+              alt="Project showcase"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="col-span-1 rounded-2xl overflow-hidden">
+            <Image
+              src="/exterior-render.jpg"
+              alt="Project showcase"
+              fill
+              className="object-cover"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Dark Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-dark-bg via-dark-bg/70 to-dark-bg/40 z-5" />
+
+      {/* Content */}
+      <div className="absolute inset-0 flex flex-col justify-between z-10 px-8 sm:px-12 lg:px-16 py-12">
+        {/* Breadcrumb */}
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-1.5 text-sm text-muted-foreground"
+          className="flex items-center gap-2 text-sm text-white/70"
         >
-          <Link href="/" className="transition-colors hover:text-primary">
+          <Link href="/" className="transition-colors hover:text-white">
             Home
           </Link>
           <ChevronRight className="h-4 w-4" />
-          <span className="font-medium text-foreground">{currentLabel}</span>
+          <span className="font-medium text-white">{currentLabel}</span>
         </nav>
 
-        <p className="mt-8 text-sm font-medium uppercase tracking-[0.18em] text-primary">
-          {eyebrow}
-        </p>
-        <h1 className="mt-3 max-w-3xl text-balance font-serif text-4xl font-semibold leading-[1.08] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-          {title}
-        </h1>
-        <p className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground">
-          {description}
-        </p>
+        {/* Main Content */}
+        <div className="max-w-2xl">
+          <p className="text-sm font-semibold uppercase tracking-widest text-accent mb-4">
+            {eyebrow}
+          </p>
+          <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-semibold leading-tight text-white mb-6">
+            {title}
+          </h1>
+          <p className="text-lg text-white/85 leading-relaxed max-w-xl font-light">
+            {description}
+          </p>
+        </div>
       </div>
     </section>
   )
