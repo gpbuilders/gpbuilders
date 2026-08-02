@@ -2,7 +2,6 @@
 
 import type { Metadata } from 'next'
 import { PageHero } from '@/components/page-hero'
-import { ServiceOfferings } from '@/components/service-offerings'
 import { BuildingSpecializations } from '@/components/building-specializations'
 import { Process } from '@/components/process'
 import { CtaBand } from '@/components/cta-band'
@@ -17,13 +16,6 @@ export default function ServicesPage() {
         description="Whether you need the complete journey or a single stage, our team adapts to where your project stands today — with transparent pricing and a clear process."
         currentLabel="Services"
       />
-      <ParallaxSection
-        backgroundColor="bg-background"
-        speed={0.5}
-        className=""
-      >
-        <ServiceOfferings />
-      </ParallaxSection>
       <ParallaxSection
         backgroundColor="bg-background-alt"
         speed={0.4}
