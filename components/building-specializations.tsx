@@ -1,33 +1,33 @@
-import { Building2, Home, Utensils, Briefcase, Leaf, Warehouse } from 'lucide-react'
+import Image from 'next/image'
 
 const SPECIALIZATIONS = [
   {
-    icon: Home,
+    image: '/spec-residential.png',
     title: 'Residential Homes',
     description: 'Luxury villas, apartments, and bespoke residences designed for modern living with premium finishes and timeless aesthetics.',
   },
   {
-    icon: Utensils,
+    image: '/spec-hospitality.png',
     title: 'F&B & Hospitality',
     description: 'Restaurants, cafes, and hospitality spaces that blend ambiance with functionality for unforgettable guest experiences.',
   },
   {
-    icon: Briefcase,
+    image: '/spec-commercial.png',
     title: 'Commercial Offices',
     description: 'Corporate workspaces, co-working hubs, and office interiors that inspire productivity and reflect brand identity.',
   },
   {
-    icon: Building2,
+    image: '/spec-retail.png',
     title: 'Retail & Showrooms',
     description: 'High-impact retail environments and brand showrooms designed to captivate customers and drive engagement.',
   },
   {
-    icon: Leaf,
+    image: '/spec-landscape.png',
     title: 'Landscape Design',
     description: 'Outdoor spaces, gardens, and terraces that seamlessly extend your interiors with natural beauty and function.',
   },
   {
-    icon: Warehouse,
+    image: '/spec-industrial.png',
     title: 'Industrial & Adaptive',
     description: 'Warehouse conversions, studio spaces, and adaptive reuse projects that celebrate character and practicality.',
   },
@@ -51,37 +51,37 @@ export function BuildingSpecializations() {
         </div>
 
         {/* Specializations Grid */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mt-16">
-          {SPECIALIZATIONS.map((spec) => {
-            const Icon = spec.icon
-            return (
-              <div
-                key={spec.title}
-                className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-background-alt to-background border border-border p-8 transition-all duration-300 hover:border-accent hover:shadow-lg hover:from-accent/5 hover:to-accent/2"
-              >
-                {/* Background Accent */}
-                <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-accent/5 group-hover:bg-accent/10 transition-colors duration-300" />
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-16">
+          {SPECIALIZATIONS.map((spec) => (
+            <div
+              key={spec.title}
+              className="group relative overflow-hidden rounded-3xl h-80 shadow-lg hover:shadow-2xl transition-all duration-300"
+            >
+              {/* Background Image */}
+              <Image
+                src={spec.image}
+                alt={spec.title}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+              />
 
-                {/* Icon */}
-                <div className="relative mb-6 inline-flex h-16 w-16 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
-                  <Icon className="h-8 w-8 text-primary" />
-                </div>
+              {/* Overlay Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-dark-bg via-dark-bg/50 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
 
-                {/* Content */}
-                <div className="relative">
-                  <h3 className="font-serif text-2xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
-                    {spec.title}
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed group-hover:text-foreground transition-colors duration-300">
-                    {spec.description}
-                  </p>
-                </div>
+              {/* Content Overlay */}
+              <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                <h3 className="font-serif text-2xl font-semibold text-white mb-2">
+                  {spec.title}
+                </h3>
+                <p className="text-white/85 text-sm leading-relaxed mb-0 group-hover:text-white transition-colors duration-300 line-clamp-2 group-hover:line-clamp-3">
+                  {spec.description}
+                </p>
 
-                {/* Hover Indicator */}
-                <div className="absolute bottom-0 left-0 h-1 w-0 bg-accent transition-all duration-300 group-hover:w-full" />
+                {/* Bottom Accent Line */}
+                <div className="mt-4 h-1 w-0 bg-accent transition-all duration-300 group-hover:w-12" />
               </div>
-            )
-          })}
+            </div>
+          ))}
         </div>
       </div>
     </section>
