@@ -2,7 +2,8 @@
 
 import type { Metadata } from 'next'
 import { PageHero } from '@/components/page-hero'
-import { Services } from '@/components/services'
+import { ServiceOfferings } from '@/components/service-offerings'
+import { BuildingSpecializations } from '@/components/building-specializations'
 import { Process } from '@/components/process'
 import { CtaBand } from '@/components/cta-band'
 import { ParallaxSection } from '@/components/parallax-section'
@@ -17,16 +18,23 @@ export default function ServicesPage() {
         currentLabel="Services"
       />
       <ParallaxSection
-        backgroundColor="bg-background-alt"
+        backgroundColor="bg-background"
         speed={0.5}
-        className="py-20 lg:py-28"
+        className=""
       >
-        <Services />
+        <ServiceOfferings />
+      </ParallaxSection>
+      <ParallaxSection
+        backgroundColor="bg-background-alt"
+        speed={0.4}
+        className=""
+      >
+        <BuildingSpecializations />
       </ParallaxSection>
       <ParallaxSection
         backgroundColor="bg-background"
-        speed={0.4}
-        className="py-20 lg:py-28"
+        speed={0.5}
+        className=""
       >
         <Process />
       </ParallaxSection>
