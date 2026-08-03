@@ -1,6 +1,10 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Calendar } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { buttonVariants } from '@/components/ui/button'
 
 interface BlogArticle {
   id: string
@@ -71,7 +75,7 @@ const BLOG_ARTICLES: BlogArticle[] = [
   },
 ]
 
-export function BlogResources() {
+export function FullBlogResources() {
   const featuredArticle = BLOG_ARTICLES.find((a) => a.featured)
   const regularArticles = BLOG_ARTICLES.filter((a) => !a.featured)
 
@@ -93,7 +97,7 @@ export function BlogResources() {
 
         {/* Featured Article */}
         {featuredArticle && (
-          <div className="mb-16 group cursor-pointer">
+          <div className="mb-20 group cursor-pointer">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               {/* Featured Image */}
               <div className="relative h-96 lg:h-full min-h-[400px] rounded-3xl overflow-hidden shadow-xl">
@@ -142,9 +146,9 @@ export function BlogResources() {
           </div>
         )}
 
-        {/* Grid of Regular Articles - Compact 3 columns only */}
-        <div className="grid gap-8 md:grid-cols-3">
-          {regularArticles.slice(0, 3).map((article) => (
+        {/* All Articles Grid */}
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {regularArticles.map((article) => (
             <article
               key={article.id}
               className="group cursor-pointer flex flex-col rounded-2xl border border-border overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-lg"
@@ -184,17 +188,6 @@ export function BlogResources() {
               </div>
             </article>
           ))}
-        </div>
-
-        {/* View All CTA */}
-        <div className="mt-12 text-center">
-          <Link
-            href="/resources"
-            className="inline-flex items-center gap-3 px-8 py-4 bg-primary text-primary-foreground rounded-full font-semibold hover:bg-primary-dark transition-colors"
-          >
-            View All Articles
-            <ArrowRight className="w-5 h-5" />
-          </Link>
         </div>
       </div>
     </section>
