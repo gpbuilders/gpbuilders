@@ -76,114 +76,53 @@ const BLOG_ARTICLES: BlogArticle[] = [
 ]
 
 export function FullBlogResources() {
-  const featuredArticle = BLOG_ARTICLES.find((a) => a.featured)
-  const regularArticles = BLOG_ARTICLES.filter((a) => !a.featured)
+  const regularArticles = BLOG_ARTICLES
 
   return (
     <section className="py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-16">
-          <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-4">
-            Resources
-          </p>
-          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-semibold text-foreground mb-6">
-            Blog & News
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl">
-            Stay updated with the latest insights, project updates, and industry trends from GP Builders.
-          </p>
-        </div>
-
-        {/* Featured Article */}
-        {featuredArticle && (
-          <div className="mb-20 group cursor-pointer">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-              {/* Featured Image */}
-              <div className="relative h-96 lg:h-full min-h-[400px] rounded-3xl overflow-hidden shadow-xl">
-                <Image
-                  src={featuredArticle.image}
-                  alt={featuredArticle.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute top-6 left-6 z-10">
-                  <span className="px-4 py-2 bg-primary text-white text-xs font-semibold uppercase tracking-wider rounded-full">
-                    Featured
-                  </span>
-                </div>
-              </div>
-
-              {/* Featured Content */}
-              <div className="flex flex-col justify-center">
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="px-3 py-1 bg-accent/15 text-primary text-xs font-semibold uppercase tracking-wider rounded-full">
-                    {featuredArticle.category}
-                  </span>
-                  <span className="text-sm text-muted-foreground flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    {featuredArticle.date}
-                  </span>
-                </div>
-                <h3 className="font-serif text-3xl sm:text-4xl font-semibold text-foreground mb-6 group-hover:text-primary transition-colors">
-                  {featuredArticle.title}
-                </h3>
-                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                  {featuredArticle.excerpt}
-                </p>
-                <div className="flex items-center gap-4">
-                  <span className="text-sm text-muted-foreground">{featuredArticle.readTime}</span>
-                  <Link
-                    href={`/blog/${featuredArticle.id}`}
-                    className="inline-flex items-center gap-2 text-primary hover:text-primary-dark font-semibold transition-colors"
-                  >
-                    Read Article
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* All Articles Grid */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {regularArticles.map((article) => (
+        {/* Articles Grid - 2x2 + 2 layout */}
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
+          {regularArticles.map((article, index) => (
             <article
               key={article.id}
-              className="group cursor-pointer flex flex-col rounded-2xl border border-border overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-lg"
+              className={cn(
+                'group cursor-pointer relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300',
+                index === 0 || index === 3 ? 'lg:col-span-1' : 'lg:col-span-1',
+              )}
             >
-              {/* Article Image */}
-              <div className="relative h-56 overflow-hidden bg-background">
+              {/* Background Image */}
+              <div className="relative h-80 md:h-96 lg:h-[500px] overflow-hidden bg-background">
                 <Image
                   src={article.image}
                   alt={article.title}
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                 />
+                {/* Dark overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
 
-              {/* Article Content */}
-              <div className="flex flex-col justify-between flex-1 p-6">
-                <div>
+              {/* Content Overlay Card */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 translate-y-6 group-hover:translate-y-0 transition-transform duration-300">
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-6 shadow-xl">
                   <div className="flex items-center justify-between gap-3 mb-4">
-                    <span className="px-3 py-1 bg-accent/15 text-primary text-xs font-semibold uppercase tracking-wider rounded-full">
-                      {article.category}
+                    <span className="text-xs font-semibold text-foreground">
+                      Discover
                     </span>
-                    <span className="text-xs text-muted-foreground">{article.date}</span>
                   </div>
-                  <h3 className="font-serif text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                  <h3 className="font-serif text-xl md:text-2xl font-semibold text-foreground mb-3 line-clamp-2">
                     {article.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                  <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-6">
                     {article.excerpt}
                   </p>
-                </div>
-
-                {/* Footer */}
-                <div className="flex items-center justify-between mt-6 pt-6 border-t border-border">
-                  <span className="text-xs text-muted-foreground">{article.readTime}</span>
-                  <ArrowRight className="w-4 h-4 text-primary group-hover:translate-x-1 transition-transform" />
+                  <Link
+                    href={`/blog/${article.id}`}
+                    className="inline-flex items-center gap-2 px-6 py-2 bg-foreground text-white rounded-full font-semibold text-sm hover:bg-foreground/90 transition-colors"
+                  >
+                    Detail Article
+                  </Link>
                 </div>
               </div>
             </article>

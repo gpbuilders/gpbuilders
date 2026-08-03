@@ -2,18 +2,18 @@
 
 import type { Metadata } from 'next'
 import { Mail, MapPin, Phone } from 'lucide-react'
-import { PageHero } from '@/components/page-hero'
+import { MinimalHero } from '@/components/minimal-hero'
 import { ContactForm } from '@/components/contact-form'
 import { ParallaxSection } from '@/components/parallax-section'
 
 export default function ContactPage() {
   return (
     <>
-      <PageHero
+      <MinimalHero
         eyebrow="Get In Touch"
-        title="Let's start your project"
+        title="Let's Start"
+        subtitle="Your Project"
         description="Tell us about your space and vision. Our team will get back to you with a tailored plan and a transparent estimate."
-        currentLabel="Contact"
       />
 
       <ParallaxSection

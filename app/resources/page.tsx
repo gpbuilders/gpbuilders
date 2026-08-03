@@ -1,6 +1,6 @@
 'use client'
 
-import { PageHero } from '@/components/page-hero'
+import { MinimalHero } from '@/components/minimal-hero'
 import { FullBlogResources } from '@/components/full-blog-resources'
 import { CtaBand } from '@/components/cta-band'
 import { ParallaxSection } from '@/components/parallax-section'
@@ -8,11 +8,11 @@ import { ParallaxSection } from '@/components/parallax-section'
 export default function ResourcesPage() {
   return (
     <>
-      <PageHero
-        eyebrow="Resources & Learning"
-        title="Blog & News"
-        description="Discover insights, project updates, and industry trends from GP Builders. Learn about sustainable design, architectural innovations, and the latest in construction technology."
-        currentLabel="Resources"
+      <MinimalHero
+        eyebrow="Resources"
+        title="Resource"
+        subtitle="Blog & News"
+        description="Explore the latest architectural trends, innovative designs, sustainability insights, industry news, and expert tips to inspire creativity and enhance your next project."
       />
       <ParallaxSection
         backgroundColor="bg-background"
