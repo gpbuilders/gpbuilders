@@ -81,52 +81,63 @@ export function FullBlogResources() {
   return (
     <section className="py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Articles Grid - 2x2 + 2 layout */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
-          {regularArticles.map((article, index) => (
-            <article
-              key={article.id}
-              className={cn(
-                'group cursor-pointer relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300',
-                index === 0 || index === 3 ? 'lg:col-span-1' : 'lg:col-span-1',
-              )}
-            >
-              {/* Background Image */}
-              <div className="relative h-80 md:h-96 lg:h-[500px] overflow-hidden bg-background">
-                <Image
-                  src={article.image}
-                  alt={article.title}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                {/* Dark overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-
-              {/* Content Overlay Card */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 translate-y-6 group-hover:translate-y-0 transition-transform duration-300">
-                <div className="bg-white backdrop-blur-sm rounded-2xl p-6 shadow-xl">
-                  <div className="flex items-center justify-between gap-3 mb-4">
-                    <span className="text-xs font-semibold text-foreground">
-                      Discover
-                    </span>
-                  </div>
-                  <h3 className="font-serif text-xl md:text-2xl font-semibold text-foreground mb-3 line-clamp-2">
-                    {article.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-6">
-                    {article.excerpt}
-                  </p>
-                  <Link
-                    href={`/blog/${article.id}`}
-                    className="inline-flex items-center gap-2 px-6 py-2 bg-foreground text-white rounded-full font-semibold text-sm hover:bg-foreground/90 transition-colors"
-                  >
-                    Detail Article
-                  </Link>
+        {/* Articles Grid - Masonry layout with variable sizes */}
+        <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+          {regularArticles.map((article, index) => {
+            // First 2 articles are larger (2 cols wide, taller)
+            // Next 2 are regular, Last 2 are regular
+            const isLarge = index < 2
+            
+            return (
+              <article
+                key={article.id}
+                className={cn(
+                  'group cursor-pointer relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300',
+                  isLarge ? 'md:col-span-2 h-96 md:h-[500px] lg:h-[500px]' : 'h-80 md:h-96 col-span-1',
+                )}
+              >
+                {/* Background Image */}
+                <div className="relative w-full h-full overflow-hidden bg-background">
+                  <Image
+                    src={article.image}
+                    alt={article.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  {/* Overlay on hover */}
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
-              </div>
-            </article>
-          ))}
+
+                {/* Content Overlay Card - positioned at bottom-left */}
+                <div className={cn(
+                  'absolute p-6 md:p-8 transition-all duration-300',
+                  isLarge ? 'bottom-8 left-8 right-8 md:bottom-10 md:left-10 md:right-10' : 'bottom-6 left-6 right-6'
+                )}>
+                  <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-xl">
+                    <div className="mb-3 inline-block">
+                      <span className="text-xs font-semibold text-foreground tracking-widest uppercase">
+                        Discover
+                      </span>
+                    </div>
+                    <h3 className={cn(
+                      'font-serif font-semibold text-foreground mb-3 group-hover:text-primary transition-colors',
+                      isLarge ? 'text-2xl lg:text-3xl line-clamp-2' : 'text-lg md:text-xl line-clamp-2'
+                    )}>
+                      {article.title}
+                    </h3>
+                    {isLarge && (
+                      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-6">
+                        {article.excerpt}
+                      </p>
+                    )}
+                    <button className="inline-flex items-center gap-2 px-6 py-2.5 bg-foreground text-white rounded-full font-semibold text-sm hover:bg-foreground/90 transition-colors">
+                      Detail Article
+                    </button>
+                  </div>
+                </div>
+              </article>
+            )
+          })}
         </div>
       </div>
     </section>

@@ -17,10 +17,10 @@ export function PageHero({
 }) {
   return (
     <section className="relative w-full min-h-[600px] overflow-hidden bg-dark-bg">
-      {/* Hand-drawn architecture background - transparent */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/3 h-full opacity-15 pointer-events-none">
+      {/* Hand-drawn architecture background - transparent white lines */}
+      <div className="absolute right-0 top-0 w-1/2 h-full opacity-20 pointer-events-none">
         <Image
-          src="/architecture-transparent.png"
+          src="/architecture-transparent-white.png"
           alt="Architecture sketch"
           fill
           className="object-cover object-right"
@@ -28,10 +28,10 @@ export function PageHero({
       </div>
 
       {/* Content Grid Layout */}
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28 h-full">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
+      <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28 h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Column - Main Content */}
-          <div className="col-span-1 lg:col-span-2">
+          <div className="col-span-1">
             {/* Breadcrumb Navigation */}
             <nav
               aria-label="Breadcrumb"
@@ -63,17 +63,7 @@ export function PageHero({
             </p>
           </div>
 
-          {/* Right Column - Secondary Content */}
-          <div className="col-span-1 hidden lg:block">
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-8">
-              <p className="text-white/70 text-sm leading-relaxed">
-                At GP Builders, we merge innovation with timeless design to create spaces that inspire and endure. Our architecture balances aesthetics, functionality, and sustainability for a better future.
-              </p>
-              <p className="text-white/70 text-sm leading-relaxed mt-4">
-                With a passion for pushing boundaries, we embrace cutting-edge technology and visionary thinking. Every project transforms the way people live, work, and connect.
-              </p>
-            </div>
-          </div>
+
         </div>
       </div>
 
