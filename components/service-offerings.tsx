@@ -6,7 +6,7 @@ import { buttonVariants } from '@/components/ui/button'
 const SERVICE_TIERS = [
   {
     title: 'Full Service',
-    subtitle: 'Architecture + Interior + Execution',
+    subtitle: 'Architecture + Interior + Construction',
     description:
       'Complete end-to-end delivery from concept to handover. Our integrated team manages design, space planning, premium interiors, and on-site execution under one roof.',
     features: [
@@ -22,7 +22,7 @@ const SERVICE_TIERS = [
   },
   {
     title: 'Interior Focus',
-    subtitle: 'Interior Design + Execution',
+    subtitle: 'Interior Design + Construction',
     description:
       'Transform your existing space with our curated interiors and precise execution. Perfect for renovations and upgrades.',
     features: [
@@ -38,7 +38,7 @@ const SERVICE_TIERS = [
   },
   {
     title: 'Build Only',
-    subtitle: 'Execution Excellence',
+    subtitle: 'Construction Excellence',
     description:
       'Have designs ready? Let our experienced engineering and site teams deliver disciplined, quality-driven execution on schedule.',
     features: [

@@ -16,9 +16,9 @@ export function WhatWeDo() {
     },
     {
       icon: HardHat,
-      title: 'Execution',
+      title: 'Construction',
       description:
-        'Meticulous construction and finishing with transparent timelines and quality oversight.',
+        'Precise on-site delivery and finishing, backed by transparent timelines and rigorous quality oversight.',
     },
   ]
 

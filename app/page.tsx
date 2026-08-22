@@ -3,10 +3,11 @@
 import { Hero } from '@/components/hero'
 import { WhatWeDo } from '@/components/what-we-do'
 import { About } from '@/components/about'
+import { HowWeDeliver } from '@/components/how-we-deliver'
 import { Testimonials } from '@/components/testimonials'
 import { BrandsWeBuild } from '@/components/brands-we-build'
-import { BlogResources } from '@/components/blog-resources'
-import { CtaBand } from '@/components/cta-band'
+import { SelectedWork } from '@/components/selected-work'
+import { ConsultationCta } from '@/components/consultation-cta'
 import { ParallaxSection } from '@/components/parallax-section'
 
 export default function HomePage() {
@@ -16,27 +17,28 @@ export default function HomePage() {
       <ParallaxSection
         backgroundColor="bg-background-alt"
         speed={0.5}
-        className="py-20 lg:py-28"
+        className=""
       >
         <WhatWeDo />
       </ParallaxSection>
       <About />
+      <HowWeDeliver />
       <ParallaxSection
-        backgroundColor="bg-background-alt"
+        backgroundColor="bg-dark-bg"
         speed={0.4}
-        className="py-20 lg:py-28"
+        className=""
       >
         <Testimonials />
       </ParallaxSection>
       <BrandsWeBuild />
       <ParallaxSection
-        backgroundColor="bg-background"
+        backgroundColor="bg-background-alt"
         speed={0.5}
         className=""
       >
-        <BlogResources />
+        <SelectedWork />
       </ParallaxSection>
-      <CtaBand />
+      <ConsultationCta />
     </>
   )
 }

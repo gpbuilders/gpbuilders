@@ -21,7 +21,7 @@ const PROJECTS: {
   {
     title: 'Courtyard Residence',
     location: 'Chennai',
-    scope: 'Architecture + Interior + Execution',
+    scope: 'Architecture + Interior + Construction',
     category: 'residential',
     image: '/interior-hallway.jpg',
     description: 'A thoughtfully designed residential sanctuary featuring an open courtyard with lush landscaping. The project seamlessly blends modern architecture with natural elements, creating warm living spaces that encourage family connection. Premium materials and sustainable design practices ensure both beauty and longevity.',
@@ -31,7 +31,7 @@ const PROJECTS: {
   {
     title: 'Contemporary Villa',
     location: 'Coimbatore',
-    scope: 'Architecture + Execution',
+    scope: 'Architecture + Construction',
     category: 'residential',
     image: '/exterior-render.jpg',
     description: 'A contemporary villa showcasing minimalist design principles with maximum impact. Clean lines, expansive windows, and carefully curated spaces create a luxurious yet livable home. Every detail from structure to execution reflects our commitment to quality.',
@@ -40,7 +40,7 @@ const PROJECTS: {
   {
     title: 'Warm Minimal Living',
     location: 'Bengaluru',
-    scope: 'Interior Design + Execution',
+    scope: 'Interior Design + Construction',
     category: 'residential',
     image: '/project-living-room.png',
     description: 'An interior design project that proves minimalism doesn\'t mean cold. Warm tones, natural wood, and strategic teal accents create a sophisticated living space that feels both curated and inviting.',
@@ -49,7 +49,7 @@ const PROJECTS: {
   {
     title: 'Modular Kitchen Suite',
     location: 'Chennai',
-    scope: 'Interior Design + Execution',
+    scope: 'Interior Design + Construction',
     category: 'residential',
     image: '/project-kitchen.png',
     description: 'A state-of-the-art modular kitchen combining functionality with premium aesthetics. Custom cabinetry, quality appliances, and thoughtful workflow design make this kitchen both beautiful and practical for everyday living.',
@@ -58,7 +58,7 @@ const PROJECTS: {
   {
     title: 'Landscaped Courtyard',
     location: 'Madurai',
-    scope: 'Landscape + Execution',
+    scope: 'Landscape + Construction',
     category: 'residential',
     image: '/project-landscape.png',
     description: 'A beautifully landscaped outdoor space that extends the home\'s living areas. Native plants, water features, and comfortable seating areas create a serene retreat within the property.',
@@ -67,7 +67,7 @@ const PROJECTS: {
   {
     title: 'Heritage Dining House',
     location: 'Chennai',
-    scope: 'Interior Design + Execution',
+    scope: 'Interior Design + Construction',
     category: 'commercial',
     image: '/commercial-restaurant.jpg',
     description: 'A premium dining establishment blending heritage aesthetics with contemporary comfort. Curated lighting, refined materials, and thoughtful space planning create an unforgettable dining experience.',
@@ -77,7 +77,7 @@ const PROJECTS: {
   {
     title: 'Corporate Reception',
     location: 'Bengaluru',
-    scope: 'Interior Design + Execution',
+    scope: 'Interior Design + Construction',
     category: 'commercial',
     image: '/project-commercial.png',
     description: 'An impressive corporate reception space that reflects brand identity and professionalism. Modern design, optimal acoustics, and functional elegance welcome clients and employees alike.',
@@ -96,7 +96,7 @@ export function Projects() {
   const filtered = PROJECTS.filter((p) => p.category === active)
 
   return (
-    <section id="projects" className="scroll-mt-20 bg-secondary/50 py-20 lg:py-28">
+    <section id="projects" className="scroll-mt-20 py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-end mb-12">
           <div className="max-w-2xl">
@@ -132,21 +132,23 @@ export function Projects() {
             <article
               key={project.title}
               className={cn(
-                'group relative overflow-hidden rounded-2xl border border-border bg-card cursor-pointer transition-all hover:shadow-xl hover:border-primary/50',
+                'group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card cursor-pointer transition-all hover:shadow-xl hover:border-primary/50',
                 project.large && 'md:col-span-2 lg:row-span-2',
               )}
               onClick={() => setSelectedProject(project)}
             >
-              <div className="relative overflow-hidden">
+              <div
+                className={cn(
+                  'relative flex-1 overflow-hidden',
+                  project.large ? 'min-h-72 lg:min-h-[520px]' : 'min-h-60',
+                )}
+              >
                 <Image
                   src={project.image || '/placeholder.svg'}
                   alt={`${project.title} — ${project.scope} by GP Builders`}
                   width={900}
                   height={650}
-                  className={cn(
-                    'w-full object-cover transition-transform duration-500 group-hover:scale-105',
-                    project.large ? 'h-72 lg:h-[520px]' : 'h-60',
-                  )}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/0 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-6">

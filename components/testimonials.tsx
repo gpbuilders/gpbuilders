@@ -29,21 +29,21 @@ export function Testimonials() {
     <section id="reviews" className="scroll-mt-20 py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary">
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-accent">
             Customer Feedback
           </p>
-          <h2 className="mt-4 text-balance font-serif text-4xl font-semibold leading-tight text-foreground sm:text-5xl">
+          <h2 className="mt-4 text-balance font-serif text-4xl font-semibold leading-tight text-muted sm:text-5xl">
             Trusted by families &amp; businesses
           </h2>
         </div>
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+        <div className="mt-14 grid gap-8 lg:grid-cols-3">
           {TESTIMONIALS.map((t) => (
             <figure
               key={t.name}
-              className="flex flex-col rounded-2xl border border-border bg-card p-8"
+              className="flex flex-col border-t border-muted/20 pt-7"
             >
-              <Quote className="h-8 w-8 text-primary/25" />
+              <Quote className="h-8 w-8 text-accent/30" />
               <div className="mt-4 flex gap-0.5" aria-label="5 out of 5 stars">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
@@ -52,18 +52,18 @@ export function Testimonials() {
                   />
                 ))}
               </div>
-              <blockquote className="mt-4 flex-1 text-pretty text-base leading-relaxed text-foreground">
+              <blockquote className="mt-4 flex-1 text-pretty text-base leading-relaxed text-muted/90">
                 &ldquo;{t.quote}&rdquo;
               </blockquote>
-              <figcaption className="mt-6 flex items-center gap-3 border-t border-border pt-6">
-                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 font-serif text-sm font-semibold text-primary">
+              <figcaption className="mt-6 flex items-center gap-3 border-t border-muted/10 pt-6">
+                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-accent/15 font-serif text-sm font-semibold text-accent">
                   {t.initials}
                 </span>
                 <span>
-                  <span className="block text-sm font-semibold text-foreground">
+                  <span className="block text-sm font-semibold text-muted">
                     {t.name}
                   </span>
-                  <span className="block text-xs text-muted-foreground">
+                  <span className="block text-xs text-muted/60">
                     {t.role}
                   </span>
                 </span>
