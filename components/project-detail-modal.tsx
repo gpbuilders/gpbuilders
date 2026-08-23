@@ -4,17 +4,11 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { X, MapPin, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { mediaUrl } from '@/lib/media'
+import type { Project } from '@/payload-types'
 
 interface ProjectDetailModalProps {
-  project: {
-    title: string
-    location: string
-    scope: string
-    category: string
-    image: string
-    description?: string
-    gallery?: string[]
-  }
+  project: Project
   isOpen: boolean
   onClose: () => void
 }
@@ -28,9 +22,12 @@ export function ProjectDetailModal({
 
   if (!isOpen) return null
 
-  // Use gallery images or default to single image
-  const images = project.gallery || [project.image]
-  const currentImage = images[currentImageIndex]
+  // Card image first, then any extra gallery images.
+  const images = [
+    mediaUrl(project.image),
+    ...(project.gallery ?? []).map((item) => mediaUrl(item.image)),
+  ]
+  const currentImage = images[currentImageIndex] ?? images[0]
 
   const goNext = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length)

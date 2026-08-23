@@ -14,6 +14,7 @@
     "generate:importmap": "payload generate:importmap",
     "generate:icons": "node scripts/generate-icons.mjs",
     "generate:og": "node scripts/generate-og-image.mjs",
+    "seed:projects": "payload run scripts/seed-projects.ts",
     "migrate": "PAYLOAD_MIGRATING=true payload migrate",
     "migrate:create": "PAYLOAD_MIGRATING=true payload migrate:create",
     "migrate:status": "PAYLOAD_MIGRATING=true payload migrate:status"

@@ -8,6 +8,7 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
 import { Media } from './collections/Media'
+import { Projects } from './collections/Projects'
 import { Users } from './collections/Users'
 
 const filename = fileURLToPath(import.meta.url)
@@ -56,7 +57,7 @@ export default buildConfig({
       titleSuffix: '— GP Builders',
     },
   },
-  collections: [Users, Media],
+  collections: [Projects, Media, Users],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
