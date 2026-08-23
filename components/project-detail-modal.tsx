@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import { X, MapPin, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -20,7 +21,47 @@ export function ProjectDetailModal({
 }: ProjectDetailModalProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-  if (!isOpen) return null
+  // Lock the page behind the modal. Compensating for the scrollbar keeps the
+  // fixed header from jumping on platforms that reserve gutter space for it.
+  useEffect(() => {
+    if (!isOpen) return
+
+    const { body, documentElement: html } = document
+    const scrollbarWidth = window.innerWidth - html.clientWidth
+    const previous = {
+      htmlOverflow: html.style.overflow,
+      bodyOverflow: body.style.overflow,
+      bodyPaddingRight: body.style.paddingRight,
+    }
+
+    // The scrolling element here is <html>, and body's overflow only reaches
+    // the viewport by propagation — which does not apply once html has its own
+    // value. Setting both is unambiguous.
+    html.style.overflow = 'hidden'
+    body.style.overflow = 'hidden'
+    if (scrollbarWidth > 0) {
+      body.style.paddingRight = `${scrollbarWidth}px`
+    }
+
+    return () => {
+      html.style.overflow = previous.htmlOverflow
+      body.style.overflow = previous.bodyOverflow
+      body.style.paddingRight = previous.bodyPaddingRight
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose()
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [isOpen, onClose])
+
+  if (!isOpen || typeof document === 'undefined') return null
 
   // Card image first, then any extra gallery images.
   const images = [
@@ -37,16 +78,24 @@ export function ProjectDetailModal({
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)
   }
 
-  return (
+  // Rendered into document.body: ParallaxSection wraps page content in a
+  // `relative z-10` element, which creates a stacking context that would trap
+  // the modal underneath the fixed z-50 header.
+  return createPortal(
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] transition-opacity"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={project.title}
+        className="fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-8"
+      >
         <div className="relative w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-3xl bg-white shadow-2xl">
           {/* Close Button */}
           <button
@@ -162,6 +211,7 @@ export function ProjectDetailModal({
           </div>
         </div>
       </div>
-    </>
+    </>,
+    document.body,
   )
 }
