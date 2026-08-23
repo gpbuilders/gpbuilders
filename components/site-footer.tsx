@@ -49,7 +49,7 @@ export function SiteFooter() {
               </span>
             </Link>
             <p className="mt-4 max-w-xs text-pretty text-sm font-light leading-relaxed text-muted/75">
-              Architecture, interior design, and execution for luxury
+              Architecture, interior design, and construction for luxury
               residential and commercial spaces. Quality at an affordable price.
             </p>
           </div>
