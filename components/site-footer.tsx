@@ -86,7 +86,7 @@ export function SiteFooter() {
               &middot;
             </span>
             <p className="text-sm text-muted/45">
-              Designed &amp; built by{' '}
+              Crafted by{' '}
               <a
                 href="https://spatialcontinuum.com/"
                 target="_blank"
