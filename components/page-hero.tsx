@@ -18,12 +18,12 @@ export function PageHero({
   return (
     <section className="relative w-full min-h-[600px] overflow-hidden bg-dark-bg">
       {/* Hand-drawn architecture background - transparent white lines */}
-      <div className="absolute right-0 top-0 w-1/2 h-full opacity-20 pointer-events-none">
+      <div className="absolute right-0 inset-y-0 w-1/2 opacity-60 pointer-events-none">
         <Image
-          src="/architecture-transparent-white.png"
+          src="/architecture-line-art.png"
           alt="Architecture sketch"
           fill
-          className="object-cover object-right"
+          className="object-contain object-right"
         />
       </div>
 
@@ -45,12 +45,9 @@ export function PageHero({
             </nav>
 
             {/* Eyebrow */}
-            <div className="flex items-center gap-3 mb-8">
-              <div className="h-1.5 w-8 bg-accent" />
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-                {eyebrow}
-              </p>
-            </div>
+            <p className="mb-8 text-xs uppercase tracking-[0.28em] text-accent">
+              {eyebrow}
+            </p>
 
             {/* Bold Heading - Multiple lines for impact */}
             <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl font-semibold leading-[1.1] text-white mb-10 tracking-tight">

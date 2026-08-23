@@ -5,9 +5,9 @@ import { Phone, Mail, MapPin, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 const SERVICE_OPTIONS = [
-  'Architecture + Interior + Execution',
-  'Interior Design + Execution',
-  'Execution Only',
+  'Architecture + Interior + Construction',
+  'Interior Design + Construction',
+  'Construction Only',
   'Not sure yet',
 ]
 

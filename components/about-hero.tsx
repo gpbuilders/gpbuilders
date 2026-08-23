@@ -83,27 +83,24 @@ export function AboutHero() {
             {[
               {
                 number: '15+',
-                label: 'Years Experience',
-                description: 'Delivering excellence since day one',
+                label: 'Years in Construction & Interiors',
+                description: 'Hands-on industry experience behind every project',
               },
               {
-                number: '4.9/5',
-                label: 'Client Rating',
-                description: 'Trusted by hundreds of satisfied clients',
+                number: '9+',
+                label: 'Construction Projects',
+                description: 'Complete builds delivered from ground up',
               },
               {
-                number: '500+',
-                label: 'Projects Completed',
-                description: 'From concept to handover, perfectly executed',
+                number: '20+',
+                label: 'Interior Projects',
+                description: 'From modular kitchens to full home interiors',
               },
             ].map((stat) => (
               <div
                 key={stat.label}
                 className="bg-card rounded-2xl p-8 border border-border hover:border-primary/50 transition-all"
               >
-                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
-                  /{String(stat.number).padStart(2, '0')}
-                </p>
                 <p className="text-5xl sm:text-6xl font-semibold text-foreground mb-3 font-serif">
                   {stat.number}
                 </p>

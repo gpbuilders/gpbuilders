@@ -4,8 +4,9 @@ import type { Metadata } from 'next'
 import { AboutHero } from '@/components/about-hero'
 import { About } from '@/components/about'
 import { Values } from '@/components/values'
+import { ViewWorkCta } from '@/components/view-work-cta'
 import { Timeline } from '@/components/timeline'
-import { CtaBand } from '@/components/cta-band'
+import { ConsultationCta } from '@/components/consultation-cta'
 import { ParallaxSection } from '@/components/parallax-section'
 
 export default function AboutPage() {
@@ -16,18 +17,19 @@ export default function AboutPage() {
       <ParallaxSection
         backgroundColor="bg-background-alt"
         speed={0.6}
-        className="py-20 lg:py-28"
+        className=""
       >
         <Values />
       </ParallaxSection>
+      <ViewWorkCta />
       <ParallaxSection
-        backgroundColor="bg-background"
+        backgroundColor="bg-background-alt"
         speed={0.4}
-        className="py-20 lg:py-28"
+        className=""
       >
         <Timeline />
       </ParallaxSection>
-      <CtaBand />
+      <ConsultationCta variant="about" />
     </>
   )
 }

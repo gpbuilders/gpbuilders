@@ -1,3 +1,6 @@
+import Image from 'next/image'
+import { getBrandLogo } from '@/lib/brand-logos'
+
 const BRANDS = [
   'Asian Paints',
   'Jaquar',
@@ -29,16 +32,29 @@ export function Brands() {
         </div>
 
         <div className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3 lg:grid-cols-5">
-          {BRANDS.map((brand) => (
-            <div
-              key={brand}
-              className="flex items-center justify-center bg-card px-6 py-8 text-center transition-colors hover:bg-secondary"
-            >
-              <span className="font-serif text-lg font-medium text-foreground/70">
-                {brand}
-              </span>
-            </div>
-          ))}
+          {BRANDS.map((brand) => {
+            const logo = getBrandLogo(brand)
+            return (
+              <div
+                key={brand}
+                className="group flex items-center justify-center bg-card px-6 py-8 text-center transition-colors hover:bg-background-alt"
+              >
+                {logo ? (
+                  <Image
+                    src={logo.src}
+                    alt={`${brand} logo`}
+                    width={logo.width}
+                    height={logo.height}
+                    className="max-h-8 w-auto max-w-full object-contain opacity-70 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                  />
+                ) : (
+                  <span className="font-serif text-lg font-medium text-foreground/70 transition-colors group-hover:text-foreground">
+                    {brand}
+                  </span>
+                )}
+              </div>
+            )
+          })}
         </div>
       </div>
     </section>

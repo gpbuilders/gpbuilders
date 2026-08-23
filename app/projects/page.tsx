@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import { PageHero } from '@/components/page-hero'
 import { Projects } from '@/components/projects'
 import { Brands } from '@/components/brands'
-import { CtaBand } from '@/components/cta-band'
+import { ConsultationCta } from '@/components/consultation-cta'
 import { ParallaxSection } from '@/components/parallax-section'
 
 export default function ProjectsPage() {
@@ -19,7 +19,7 @@ export default function ProjectsPage() {
       <ParallaxSection
         backgroundColor="bg-background"
         speed={0.5}
-        className="py-20 lg:py-28"
+        className=""
       >
         <Projects />
       </ParallaxSection>
@@ -30,7 +30,7 @@ export default function ProjectsPage() {
       >
         <Brands />
       </ParallaxSection>
-      <CtaBand />
+      <ConsultationCta variant="projects" />
     </>
   )
 }

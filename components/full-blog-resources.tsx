@@ -110,10 +110,15 @@ export function FullBlogResources() {
 
                 {/* Content Overlay Card - positioned at bottom-left */}
                 <div className={cn(
-                  'absolute p-6 md:p-8 transition-all duration-300',
-                  isLarge ? 'bottom-8 left-8 right-8 md:bottom-10 md:left-10 md:right-10' : 'bottom-6 left-6 right-6'
+                  'absolute transition-all duration-300',
+                  isLarge
+                    ? 'p-6 md:p-8 bottom-8 left-8 right-8 md:bottom-10 md:left-10 md:right-10'
+                    : 'bottom-4 left-4 right-4'
                 )}>
-                  <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-xl">
+                  <div className={cn(
+                    'bg-white/95 backdrop-blur-md rounded-2xl shadow-xl',
+                    isLarge ? 'p-6 md:p-8' : 'p-5',
+                  )}>
                     <div className="mb-3 inline-block">
                       <span className="text-xs font-semibold text-foreground tracking-widest uppercase">
                         Discover
@@ -121,7 +126,7 @@ export function FullBlogResources() {
                     </div>
                     <h3 className={cn(
                       'font-serif font-semibold text-foreground mb-3 group-hover:text-primary transition-colors',
-                      isLarge ? 'text-2xl lg:text-3xl line-clamp-2' : 'text-lg md:text-xl line-clamp-2'
+                      isLarge ? 'text-2xl lg:text-3xl line-clamp-2' : 'text-lg lg:text-base line-clamp-3'
                     )}>
                       {article.title}
                     </h3>
@@ -130,7 +135,7 @@ export function FullBlogResources() {
                         {article.excerpt}
                       </p>
                     )}
-                    <button className="inline-flex items-center gap-2 px-6 py-2.5 bg-foreground text-white rounded-full font-semibold text-sm hover:bg-foreground/90 transition-colors">
+                    <button className="inline-flex items-center gap-2 whitespace-nowrap px-6 py-2.5 bg-foreground text-white rounded-full font-semibold text-sm hover:bg-foreground/90 transition-colors">
                       Detail Article
                     </button>
                   </div>

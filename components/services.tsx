@@ -4,7 +4,7 @@ import { Compass, PencilRuler, HardHat, Check, ArrowRight } from 'lucide-react'
 const SERVICES = [
   {
     icon: Compass,
-    title: 'Architecture + Interior + Execution',
+    title: 'Architecture + Interior + Construction',
     description:
       'Full end-to-end delivery — from architectural design and space planning to interiors and on-site execution, managed under one roof.',
     features: [
@@ -16,7 +16,7 @@ const SERVICES = [
   },
   {
     icon: PencilRuler,
-    title: 'Interior Design + Execution',
+    title: 'Interior Design + Construction',
     description:
       'Elevate your existing space with bespoke interior design and precise execution — modular kitchens, living spaces, and complete home interiors.',
     features: [
@@ -28,7 +28,7 @@ const SERVICES = [
   },
   {
     icon: HardHat,
-    title: 'Execution Only',
+    title: 'Construction Only',
     description:
       'Already have designs and drawings? Our engineering and site teams deliver disciplined, quality-driven execution on schedule.',
     features: [
