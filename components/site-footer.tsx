@@ -49,7 +49,7 @@ export function SiteFooter() {
               </span>
             </Link>
             <p className="mt-4 max-w-xs text-pretty text-sm font-light leading-relaxed text-muted/75">
-              Architecture, interior design, and execution for luxury
+              Architecture, interior design, and construction for luxury
               residential and commercial spaces. Quality at an affordable price.
             </p>
           </div>
@@ -78,9 +78,25 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-muted/10 pt-8 sm:flex-row">
-          <p className="text-sm text-muted/45">
-            © {new Date().getFullYear()} GP Builders. All rights reserved.
-          </p>
+          <div className="flex flex-col items-center gap-1.5 sm:flex-row sm:gap-3">
+            <p className="text-sm text-muted/45">
+              © {new Date().getFullYear()} GP Builders. All rights reserved.
+            </p>
+            <span aria-hidden className="hidden text-muted/25 sm:inline">
+              &middot;
+            </span>
+            <p className="text-sm text-muted/45">
+              Crafted by{' '}
+              <a
+                href="https://spatialcontinuum.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-muted/70 underline-offset-4 transition-colors hover:text-accent hover:underline"
+              >
+                Spatial Continuum
+              </a>
+            </p>
+          </div>
           <p className="text-sm font-medium text-accent">
             Quality at an Affordable Price
           </p>

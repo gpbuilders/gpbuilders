@@ -1,4 +1,5 @@
-'use client'
+import config from '@payload-config'
+import { getPayload } from 'payload'
 
 import { Hero } from '@/components/hero'
 import { WhatWeDo } from '@/components/what-we-do'
@@ -10,7 +11,16 @@ import { SelectedWork } from '@/components/selected-work'
 import { ConsultationCta } from '@/components/consultation-cta'
 import { ParallaxSection } from '@/components/parallax-section'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const payload = await getPayload({ config })
+  // Only the four the Featured Projects layout can show.
+  const { docs: projects } = await payload.find({
+    collection: 'projects',
+    depth: 1,
+    limit: 4,
+    sort: 'order',
+  })
+
   return (
     <>
       <Hero />
@@ -36,7 +46,7 @@ export default function HomePage() {
         speed={0.5}
         className=""
       >
-        <SelectedWork />
+        <SelectedWork projects={projects} />
       </ParallaxSection>
       <ConsultationCta />
     </>

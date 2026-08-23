@@ -2,41 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { MapPin } from 'lucide-react'
 import { cn } from '@/lib/utils'
-
-type Project = {
-  title: string
-  scope: string
-  location: string
-  image: string
-}
-
-const HERO: Project = {
-  title: 'Courtyard Residence',
-  scope: 'Architecture + Interior + Construction',
-  location: 'Chennai',
-  image: '/interior-hallway.jpg',
-}
-
-const SUPPORTING: Project[] = [
-  {
-    title: 'Contemporary Villa',
-    scope: 'Architecture + Construction',
-    location: 'Coimbatore',
-    image: '/exterior-render.jpg',
-  },
-  {
-    title: 'Warm Minimal Living',
-    scope: 'Interior Design + Construction',
-    location: 'Bengaluru',
-    image: '/project-living-room.png',
-  },
-  {
-    title: 'Heritage Dining House',
-    scope: 'Interior Design + Construction',
-    location: 'Chennai',
-    image: '/commercial-restaurant.jpg',
-  },
-]
+import { mediaUrl } from '@/lib/media'
+import type { Project } from '@/payload-types'
 
 function ProjectCard({
   project,
@@ -54,7 +21,7 @@ function ProjectCard({
     >
       <div className={cn('relative w-full overflow-hidden', ratio)}>
         <Image
-          src={project.image}
+          src={mediaUrl(project.image)}
           alt={`${project.title} — ${project.scope} by GP Builders`}
           fill
           sizes={sizes}
@@ -78,7 +45,13 @@ function ProjectCard({
   )
 }
 
-export function SelectedWork() {
+export function SelectedWork({ projects }: { projects: Project[] }) {
+  // The first project by `order` leads; the next three fill the row below.
+  // Reorder in the admin panel to change what the home page shows.
+  const [hero, ...supporting] = projects.slice(0, 4)
+
+  if (!hero) return null
+
   return (
     <section className="py-20 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -96,21 +69,23 @@ export function SelectedWork() {
 
         <div className="space-y-6">
           <ProjectCard
-            project={HERO}
+            project={hero}
             ratio="aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9]"
             sizes="100vw"
           />
 
-          <div className="grid gap-6 md:grid-cols-3">
-            {SUPPORTING.map((project) => (
-              <ProjectCard
-                key={project.title}
-                project={project}
-                ratio="aspect-[4/3]"
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
-            ))}
-          </div>
+          {supporting.length > 0 && (
+            <div className="grid gap-6 md:grid-cols-3">
+              {supporting.map((project) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  ratio="aspect-[4/3]"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
