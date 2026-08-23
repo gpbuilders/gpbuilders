@@ -2,19 +2,23 @@ import type { CollectionConfig, Payload } from 'payload'
 
 const authenticated = ({ req: { user } }: { req: { user?: unknown } }) => Boolean(user)
 
+// Both pages read this collection and both are statically rendered, so an edit
+// in the admin panel stays invisible until they are revalidated.
+const DEPENDENT_PATHS = ['/projects', '/'] as const
+
 /**
- * /projects is statically rendered, so an edit in the admin panel is invisible
- * until the path is revalidated. Imported lazily and guarded because the same
- * config is loaded by the Payload CLI (seeding, migrations), where there is no
- * Next.js cache to revalidate.
+ * Imported lazily and guarded because the same config is loaded by the Payload
+ * CLI (seeding, migrations), where there is no Next.js cache to revalidate.
  */
 async function revalidateProjects(payload: Payload) {
   try {
     const { revalidatePath } = await import('next/cache')
-    revalidatePath('/projects')
-    payload.logger.info('Revalidated /projects')
+    for (const path of DEPENDENT_PATHS) {
+      revalidatePath(path)
+    }
+    payload.logger.info(`Revalidated ${DEPENDENT_PATHS.join(', ')}`)
   } catch {
-    payload.logger.warn('Skipped revalidating /projects (no Next.js cache in this context)')
+    payload.logger.warn('Skipped revalidation (no Next.js cache in this context)')
   }
 }
 

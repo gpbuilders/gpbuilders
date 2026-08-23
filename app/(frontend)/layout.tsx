@@ -20,7 +20,7 @@ const marcellus = Marcellus({
 
 const TITLE = 'GP Builders | Quality at an Affordable Price'
 const DESCRIPTION =
-  'GP Builders delivers architecture, interior design, and execution for luxury residential and commercial spaces. Quality construction and interiors at an affordable price.'
+  'GP Builders delivers architecture, interior design, and construction for luxury residential and commercial spaces. Quality construction and interiors at an affordable price.'
 
 // Set NEXT_PUBLIC_SERVER_URL to the live domain before deploying — without it
 // Open Graph tags resolve against localhost and social previews break.
