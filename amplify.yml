@@ -18,9 +18,18 @@ frontend:
         # DATABASE_URI are both read at runtime. This lands inside the server
         # bundle, not in public/.
         - env | grep -E '^(DATABASE_|PAYLOAD_|NEXT_PUBLIC_|S3_)' >> .env.production
-        # Migrations are idempotent, so running on every build is safe. Uses
-        # DATABASE_URI_DIRECT — the pooler cannot run DDL.
-        - pnpm migrate
+        # NOTE: `pnpm migrate` is deliberately NOT run here. The Payload CLI
+        # hangs indefinitely on this project after "Reading migration files" —
+        # it opens a connection, issues no query, and never exits. In a build
+        # that means a 30-minute timeout rather than a clean failure.
+        #
+        # Safe to skip for now: the schema already exists and
+        # 20260825_032057_initial is recorded in payload_migrations, so the
+        # command would be a no-op even if it worked.
+        #
+        # Before the NEXT schema change, this has to be fixed or migrations
+        # applied by hand — otherwise new columns will silently never reach
+        # production. See `pnpm migrate:status`, which does work.
     build:
       commands:
         - pnpm build
