@@ -1,0 +1,34 @@
+# AWS Amplify Hosting build spec.
+#
+# Kept in the repo rather than the Amplify console so it is reviewable and
+# travels with the code. Amplify picks this up automatically from the root.
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Next 16 and Payload 3 both want Node 20+; Amplify's default is older.
+        - nvm install 22 && nvm use 22
+        # Amplify ships npm and yarn, not pnpm. Corepack reads the version from
+        # the "packageManager" field in package.json.
+        - corepack enable && corepack prepare --activate
+        - pnpm install --frozen-lockfile
+        # Amplify reliably injects env vars at build time; reaching the SSR
+        # runtime has been inconsistent across versions, and PAYLOAD_SECRET and
+        # DATABASE_URI are both read at runtime. This lands inside the server
+        # bundle, not in public/.
+        - env | grep -E '^(DATABASE_|PAYLOAD_|NEXT_PUBLIC_|S3_)' >> .env.production
+        # Migrations are idempotent, so running on every build is safe. Uses
+        # DATABASE_URI_DIRECT — the pooler cannot run DDL.
+        - pnpm migrate
+    build:
+      commands:
+        - pnpm build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .next/cache/**/*
+      - node_modules/**/*

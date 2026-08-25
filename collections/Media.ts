@@ -9,9 +9,9 @@ export const Media: CollectionConfig = {
     group: 'Admin',
   },
   upload: {
-    // Files land in /public/media so Next can serve them without a storage
-    // adapter. Swap in @payloadcms/storage-s3 (Supabase Storage is
-    // S3-compatible) before deploying anywhere with an ephemeral filesystem.
+    // Local-development fallback only. When S3_BUCKET is set, the s3Storage
+    // plugin in payload.config.ts takes over and disables local storage —
+    // public/media is neither served nor persisted on an ephemeral host.
     staticDir: 'public/media',
     mimeTypes: ['image/*'],
     imageSizes: [
