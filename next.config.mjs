@@ -13,13 +13,11 @@ const nextConfig = {
     // 85 is visually indistinguishable from the original at display size;
     // Next 16 requires every quality used in a component to be declared here.
     qualities: [75, 85, 90],
-    // Uploads are served from Supabase Storage once S3_BUCKET is set.
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'tqadsrlufzitgfzilhya.storage.supabase.co',
-      },
-    ],
+    // No remotePatterns needed: verified that the S3 adapter keeps serving
+    // uploads through Payload's own /api/media/file/... route and streams from
+    // the bucket behind it, so image sources stay same-origin. This would only
+    // change if the adapter were given a generateFileURL pointing straight at
+    // Supabase Storage.
   },
   // The Supabase CA cert is read at runtime from a path supplied by an env
   // var, which file tracing cannot follow. Ship certs/ so DATABASE_CA_CERT
