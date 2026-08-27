@@ -6,6 +6,17 @@ const serverOrigin = process.env.NEXT_PUBLIC_SERVER_URL
   ? new URL(process.env.NEXT_PUBLIC_SERVER_URL)
   : null
 
+// Uploads are served straight from the storage bucket's public host (see
+// generateFileURL in payload.config.ts), which is a different origin again.
+const storageHostname = (() => {
+  try {
+    const ref = process.env.S3_ENDPOINT && new URL(process.env.S3_ENDPOINT).hostname.split('.')[0]
+    return ref ? `${ref}.supabase.co` : null
+  } catch {
+    return null
+  }
+})()
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
@@ -24,9 +35,12 @@ const nextConfig = {
     // deployment's own hostname. Without this the optimiser answers 400 and
     // every CMS image breaks, while relative-path images in public/ keep
     // working. Derived from the origin so a custom domain needs no edit here.
-    remotePatterns: serverOrigin
-      ? [{ protocol: serverOrigin.protocol.replace(':', ''), hostname: serverOrigin.hostname }]
-      : [],
+    remotePatterns: [
+      ...(serverOrigin
+        ? [{ protocol: serverOrigin.protocol.replace(':', ''), hostname: serverOrigin.hostname }]
+        : []),
+      ...(storageHostname ? [{ protocol: 'https', hostname: storageHostname }] : []),
+    ],
   },
   // The Supabase CA cert is read at runtime from a path supplied by an env
   // var, which file tracing cannot follow. Ship certs/ so DATABASE_CA_CERT

@@ -97,10 +97,52 @@ if (!s3Bucket && isProductionServer) {
   )
 }
 
+// By default the adapter keeps serving uploads through Payload's own
+// /api/media/file/... route and streams from the bucket behind it. That puts
+// the app server in the path of every image request: slower, and images go
+// down whenever the server does. The bucket is public, so hand out its URL
+// directly instead and take the server out of the loop entirely.
+//
+// Supabase's S3 endpoint is https://<ref>.storage.supabase.co/storage/v1/s3
+// and its public object URL is https://<ref>.supabase.co/storage/v1/object/public.
+// Derive one from the other so there is no extra variable to keep in sync,
+// and allow an explicit override for non-Supabase buckets.
+function publicStorageBase(): string | undefined {
+  if (process.env.S3_PUBLIC_URL) {
+    return process.env.S3_PUBLIC_URL.replace(/\/$/, '')
+  }
+
+  const endpoint = process.env.S3_ENDPOINT
+  if (!endpoint) return undefined
+
+  try {
+    const { hostname } = new URL(endpoint)
+    const [ref, storage] = hostname.split('.')
+    if (storage !== 'storage') return undefined
+    return `https://${ref}.supabase.co/storage/v1/object/public`
+  } catch {
+    return undefined
+  }
+}
+
+const publicBase = publicStorageBase()
+
 const storagePlugins = s3Bucket
   ? [
       s3Storage({
-        collections: { media: true },
+        collections: {
+          // Both options are per-collection, not top-level.
+          // disablePayloadAccessControl is the one that stops Payload wrapping
+          // every file in its own route; generateFileURL then decides what URL
+          // is stored. Without the first, the second is ignored.
+          media: publicBase
+            ? {
+                disablePayloadAccessControl: true,
+                generateFileURL: ({ filename }: { filename: string }) =>
+                  `${publicBase}/${s3Bucket}/${filename}`,
+              }
+            : true,
+        },
         bucket: s3Bucket,
         config: {
           endpoint: process.env.S3_ENDPOINT,
