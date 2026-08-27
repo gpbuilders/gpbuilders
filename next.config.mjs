@@ -1,5 +1,11 @@
 import { withPayload } from '@payloadcms/next/withPayload'
 
+// Parsed once so a malformed value fails the build loudly rather than silently
+// disabling image optimisation for every uploaded image.
+const serverOrigin = process.env.NEXT_PUBLIC_SERVER_URL
+  ? new URL(process.env.NEXT_PUBLIC_SERVER_URL)
+  : null
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
@@ -13,11 +19,14 @@ const nextConfig = {
     // 85 is visually indistinguishable from the original at display size;
     // Next 16 requires every quality used in a component to be declared here.
     qualities: [75, 85, 90],
-    // No remotePatterns needed: verified that the S3 adapter keeps serving
-    // uploads through Payload's own /api/media/file/... route and streams from
-    // the bucket behind it, so image sources stay same-origin. This would only
-    // change if the adapter were given a generateFileURL pointing straight at
-    // Supabase Storage.
+    // Payload builds media URLs from serverURL, so they are absolute — and
+    // Next treats every absolute URL as remote, even one pointing at the
+    // deployment's own hostname. Without this the optimiser answers 400 and
+    // every CMS image breaks, while relative-path images in public/ keep
+    // working. Derived from the origin so a custom domain needs no edit here.
+    remotePatterns: serverOrigin
+      ? [{ protocol: serverOrigin.protocol.replace(':', ''), hostname: serverOrigin.hostname }]
+      : [],
   },
   // The Supabase CA cert is read at runtime from a path supplied by an env
   // var, which file tracing cannot follow. Ship certs/ so DATABASE_CA_CERT
