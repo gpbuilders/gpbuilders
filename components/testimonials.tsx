@@ -37,11 +37,22 @@ export function Testimonials() {
           </h2>
         </div>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-3">
+        {/* Below lg this is a snapping horizontal scroller; at lg it goes back
+            to the three-column grid. It deliberately sits inside the page
+            gutter rather than bleeding to the screen edge, so cards keep the
+            same left inset as the heading above them. */}
+        <div
+          className={[
+            'mt-14 flex snap-x snap-mandatory gap-8 overflow-x-auto overscroll-x-contain pb-4',
+            'lg:grid lg:snap-none lg:grid-cols-3 lg:overflow-visible lg:pb-0',
+          ].join(' ')}
+        >
           {TESTIMONIALS.map((t) => (
             <figure
               key={t.name}
-              className="flex flex-col border-t border-muted/20 pt-7"
+              /* 82% leaves the next card peeking, which is what signals the
+                 row can be swiped. */
+              className="flex w-[82%] shrink-0 snap-start flex-col border-t border-muted/20 pt-7 sm:w-[60%] lg:w-auto"
             >
               <Quote className="h-8 w-8 text-accent/30" />
               <div className="mt-4 flex gap-0.5" aria-label="5 out of 5 stars">
