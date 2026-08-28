@@ -89,27 +89,35 @@ export function Hero() {
       {/* Navigation Arrows */}
       <button
         onClick={() => swiperRef.current?.swiper.slidePrev()}
-        className="absolute left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all"
+        aria-label="Previous slide"
+        className="absolute left-8 top-1/2 -translate-y-1/2 z-20 hidden p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all lg:block"
       >
         <ChevronLeft className="w-6 h-6" />
       </button>
       <button
         onClick={() => swiperRef.current?.swiper.slideNext()}
-        className="absolute right-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all"
+        aria-label="Next slide"
+        className="absolute right-8 top-1/2 -translate-y-1/2 z-20 hidden p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all lg:block"
       >
         <ChevronRight className="w-6 h-6" />
       </button>
 
-      {/* Mute Button for Video */}
+      {/* Mute Button for Video.
+          Sits clear of the fixed header (~64px tall) rather than level with
+          the menu button, which made the two easy to hit by mistake. */}
       <button
         onClick={() => setIsMuted(!isMuted)}
-        className="absolute top-8 right-8 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all"
+        aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+        aria-pressed={isMuted}
+        className="absolute top-24 right-6 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all sm:right-8"
       >
         {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
       </button>
 
-      {/* Content Overlay - Full Width */}
-      <div className="absolute inset-0 flex items-center justify-start z-10">
+      {/* Content Overlay - Full Width.
+          pt-16 keeps the centring from counting the space behind the fixed
+          header, which otherwise pushes the eyebrow up against it. */}
+      <div className="absolute inset-0 flex items-center justify-start z-10 pt-16 pointer-events-none">
         <div className="w-full max-w-7xl mx-auto px-8 sm:px-12 lg:px-16">
           <div className="max-w-2xl">
             {/* Eyebrow */}
@@ -130,7 +138,7 @@ export function Hero() {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 mb-16 pointer-events-auto">
               <Link
                 href="/projects"
                 className={cn(
@@ -172,8 +180,11 @@ export function Hero() {
           <button
             key={idx}
             onClick={() => swiperRef.current?.swiper.slideTo(idx)}
-            className="w-2 h-2 rounded-full bg-white/40 hover:bg-white/80 transition-all"
-          />
+            aria-label={`Go to slide ${idx + 1}`}
+            className="group -m-2 p-2"
+          >
+            <span className="block w-2 h-2 rounded-full bg-white/40 transition-all group-hover:bg-white/80" />
+          </button>
         ))}
       </div>
 
