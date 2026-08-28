@@ -82,7 +82,7 @@ export function AboutHero() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                number: '15+',
+                number: '12+',
                 label: 'Years in Construction & Interiors',
                 description: 'Hands-on industry experience behind every project',
               },

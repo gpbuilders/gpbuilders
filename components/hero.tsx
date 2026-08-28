@@ -150,9 +150,9 @@ export function Hero() {
             {/* Stats Bar */}
             <div className="grid grid-cols-3 gap-12 pt-8 border-t border-white/20">
               {[
-                { number: '15+', label: 'Years Experience' },
-                { number: '500+', label: 'Projects Completed' },
-                { number: '98%', label: 'Client Satisfaction' },
+                { number: '9+', label: 'Full Construction Projects' },
+                { number: '20+', label: 'Interior Projects Delivered' },
+                { number: '100%', label: 'Commitment to Quality' },
               ].map((stat) => (
                 <div key={stat.label}>
                   <p className="text-4xl font-semibold text-accent font-serif">
