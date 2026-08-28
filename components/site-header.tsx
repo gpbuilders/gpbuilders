@@ -55,10 +55,20 @@ export function SiteHeader() {
             className="h-10 w-10 object-contain"
           />
           <span className="flex flex-col leading-none">
-            <span className="font-serif text-lg font-semibold tracking-tight text-foreground">
+            <span
+              className={cn(
+                'font-serif text-lg font-semibold tracking-tight transition-colors duration-300',
+                solid ? 'text-foreground' : 'text-background',
+              )}
+            >
               GP Builders
             </span>
-            <span className="text-[10px] uppercase tracking-[0.2em] text-primary">
+            <span
+              className={cn(
+                'text-[10px] uppercase tracking-[0.2em] transition-colors duration-300',
+                solid ? 'text-primary' : 'text-accent',
+              )}
+            >
               Quality. Affordable.
             </span>
           </span>
@@ -75,8 +85,14 @@ export function SiteHeader() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'text-sm font-medium transition-colors hover:text-primary',
-                  active ? 'text-primary' : 'text-foreground/70',
+                  'text-sm font-medium transition-colors duration-300',
+                  solid
+                    ? active
+                      ? 'text-primary'
+                      : 'text-foreground/70 hover:text-primary'
+                    : active
+                      ? 'text-accent'
+                      : 'text-background/80 hover:text-accent',
                 )}
               >
                 {link.label}
@@ -94,7 +110,10 @@ export function SiteHeader() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground lg:hidden"
+          className={cn(
+            'inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors duration-300 lg:hidden',
+            solid ? 'text-foreground' : 'text-background',
+          )}
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
         >
