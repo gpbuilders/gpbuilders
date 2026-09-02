@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import { X, MapPin, ChevronLeft, ChevronRight } from 'lucide-react'
@@ -78,6 +78,36 @@ export function ProjectDetailModal({
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)
   }
 
+  // Swipe handling. The panel below scrolls vertically, so a gesture only
+  // counts as a swipe when it is clearly horizontal — otherwise scrolling the
+  // details would keep changing the photo underneath.
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
+
+  const onTouchStart = (event: React.TouchEvent) => {
+    const t = event.touches[0]
+    touchStart.current = { x: t.clientX, y: t.clientY }
+  }
+
+  const onTouchEnd = (event: React.TouchEvent) => {
+    const start = touchStart.current
+    touchStart.current = null
+    if (!start || images.length < 2) return
+
+    const t = event.changedTouches[0]
+    const dx = t.clientX - start.x
+    const dy = t.clientY - start.y
+
+    // 40px filters out taps and stray movement; the dy check keeps a vertical
+    // scroll from registering as a swipe.
+    if (Math.abs(dx) < 40 || Math.abs(dx) <= Math.abs(dy)) return
+
+    if (dx < 0) {
+      goNext()
+    } else {
+      goPrev()
+    }
+  }
+
   // Rendered into document.body: ParallaxSection wraps page content in a
   // `relative z-10` element, which creates a stacking context that would trap
   // the modal underneath the fixed z-50 header.
@@ -96,7 +126,9 @@ export function ProjectDetailModal({
         aria-label={project.title}
         className="fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-8"
       >
-        <div className="relative w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-3xl bg-white shadow-2xl">
+        {/* flex-col so the scrolling area below can be given a bounded height.
+            max-h alone leaves the child's h-full resolving against nothing. */}
+        <div className="relative flex w-full max-w-5xl max-h-[90vh] flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
           {/* Close Button */}
           <button
             onClick={onClose}
@@ -105,30 +137,47 @@ export function ProjectDetailModal({
             <X className="h-6 w-6" />
           </button>
 
-          <div className="grid grid-cols-1 lg:grid-cols-6 h-full overflow-y-auto">
+          {/* min-h-0 matters: a flex child defaults to min-height:auto, which
+              refuses to shrink below its content and so never scrolls. */}
+          <div className="grid min-h-0 flex-1 grid-cols-1 overflow-y-auto lg:grid-cols-6">
             {/* Image Section */}
-            <div className="lg:col-span-4 relative bg-background-alt min-h-96 lg:min-h-screen flex items-center justify-center group">
-              <div className="relative w-full h-96 lg:h-screen">
+            <div className="lg:col-span-4 relative bg-background-alt flex items-center justify-center group">
+              {/* Was h-screen, which is taller than the modal's own 90vh cap —
+                  the image alone overflowed it. Sized to leave room for the
+                  details below on mobile, and to fill the row on desktop. */}
+              <div
+                className="relative w-full h-[45vh] lg:h-[80vh]"
+                onTouchStart={onTouchStart}
+                onTouchEnd={onTouchEnd}
+              >
                 <Image
                   src={currentImage}
                   alt={project.title}
                   fill
-                  className="object-cover"
+                  // contain, not cover: show the whole photograph rather than
+                  // cropping it to the container's shape.
+                  className="object-contain"
+                  sizes="(min-width: 1024px) 66vw, 100vw"
                   priority
                 />
 
                 {/* Image Navigation */}
                 {images.length > 1 && (
                   <>
+                    {/* Visible by default, hover-revealed only from lg up:
+                        opacity-0 + group-hover left these permanently invisible
+                        on touch, where there is no hover state to trigger. */}
                     <button
                       onClick={goPrev}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/80 hover:bg-white text-foreground transition-all opacity-0 group-hover:opacity-100"
+                      aria-label="Previous image"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/80 hover:bg-white text-foreground transition-all lg:opacity-0 lg:group-hover:opacity-100"
                     >
                       <ChevronLeft className="h-5 w-5" />
                     </button>
                     <button
                       onClick={goNext}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/80 hover:bg-white text-foreground transition-all opacity-0 group-hover:opacity-100"
+                      aria-label="Next image"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/80 hover:bg-white text-foreground transition-all lg:opacity-0 lg:group-hover:opacity-100"
                     >
                       <ChevronRight className="h-5 w-5" />
                     </button>
@@ -144,6 +193,8 @@ export function ProjectDetailModal({
                         <button
                           key={idx}
                           onClick={() => setCurrentImageIndex(idx)}
+                          aria-label={`Go to image ${idx + 1}`}
+                          aria-current={idx === currentImageIndex}
                           className={cn(
                             'h-2 rounded-full transition-all',
                             idx === currentImageIndex
