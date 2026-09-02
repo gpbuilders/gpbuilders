@@ -8,9 +8,21 @@ const serverOrigin = process.env.NEXT_PUBLIC_SERVER_URL
 
 // Uploads are served straight from the storage bucket's public host (see
 // generateFileURL in payload.config.ts), which is a different origin again.
+// Mirrors publicStorageBase() there — keep the two in step.
 const storageHostname = (() => {
   try {
-    const ref = process.env.S3_ENDPOINT && new URL(process.env.S3_ENDPOINT).hostname.split('.')[0]
+    if (process.env.S3_PUBLIC_URL) {
+      return new URL(process.env.S3_PUBLIC_URL).hostname
+    }
+
+    const { S3_ENDPOINT: endpoint, S3_REGION: region, S3_BUCKET: bucket } = process.env
+
+    // No custom endpoint means real AWS S3, which puts the bucket in the host.
+    if (!endpoint) {
+      return bucket && region ? `${bucket}.s3.${region}.amazonaws.com` : null
+    }
+
+    const ref = new URL(endpoint).hostname.split('.')[0]
     return ref ? `${ref}.supabase.co` : null
   } catch {
     return null

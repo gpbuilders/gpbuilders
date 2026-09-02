@@ -103,29 +103,39 @@ if (!s3Bucket && isProductionServer) {
 // down whenever the server does. The bucket is public, so hand out its URL
 // directly instead and take the server out of the loop entirely.
 //
-// Supabase's S3 endpoint is https://<ref>.storage.supabase.co/storage/v1/s3
-// and its public object URL is https://<ref>.supabase.co/storage/v1/object/public.
-// Derive one from the other so there is no extra variable to keep in sync,
-// and allow an explicit override for non-Supabase buckets.
-function publicStorageBase(): string | undefined {
+// Returns a prefix that a filename can simply be appended to. The two providers
+// put the bucket in different places, so it is folded in here rather than at the
+// call site:
+//
+//   AWS S3    https://<bucket>.s3.<region>.amazonaws.com/<file>   bucket in host
+//   Supabase  https://<ref>.supabase.co/storage/v1/object/public/<bucket>/<file>
+//
+// S3_PUBLIC_URL wins when set and is taken as a complete base — that is the
+// escape hatch for a CDN in front of the bucket, where the host is neither.
+function publicStorageBase(bucket: string): string | undefined {
   if (process.env.S3_PUBLIC_URL) {
     return process.env.S3_PUBLIC_URL.replace(/\/$/, '')
   }
 
   const endpoint = process.env.S3_ENDPOINT
-  if (!endpoint) return undefined
+  const region = process.env.S3_REGION
+
+  // No custom endpoint means real AWS S3.
+  if (!endpoint) {
+    return region ? `https://${bucket}.s3.${region}.amazonaws.com` : undefined
+  }
 
   try {
     const { hostname } = new URL(endpoint)
     const [ref, storage] = hostname.split('.')
     if (storage !== 'storage') return undefined
-    return `https://${ref}.supabase.co/storage/v1/object/public`
+    return `https://${ref}.supabase.co/storage/v1/object/public/${bucket}`
   } catch {
     return undefined
   }
 }
 
-const publicBase = publicStorageBase()
+const publicBase = s3Bucket ? publicStorageBase(s3Bucket) : undefined
 
 const storagePlugins = s3Bucket
   ? [
@@ -139,7 +149,7 @@ const storagePlugins = s3Bucket
             ? {
                 disablePayloadAccessControl: true,
                 generateFileURL: ({ filename }: { filename: string }) =>
-                  `${publicBase}/${s3Bucket}/${filename}`,
+                  `${publicBase}/${filename}`,
               }
             : true,
         },
