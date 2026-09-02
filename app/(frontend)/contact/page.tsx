@@ -3,6 +3,7 @@
 import type { Metadata } from 'next'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import { MinimalHero } from '@/components/minimal-hero'
+import { Suspense } from 'react'
 import { ContactForm } from '@/components/contact-form'
 import { ParallaxSection } from '@/components/parallax-section'
 
@@ -112,7 +113,12 @@ export default function ContactPage() {
                 <p className="text-muted-foreground mb-8">
                   Fill out the form below and we&apos;ll get back to you as soon as possible.
                 </p>
-                <ContactForm />
+                {/* ContactForm reads ?project= to prefill an enquiry from the
+                    project modal, and useSearchParams needs a boundary or the
+                    whole page is forced out of static rendering. */}
+                <Suspense fallback={null}>
+                  <ContactForm />
+                </Suspense>
               </div>
             </div>
           </div>

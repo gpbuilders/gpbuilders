@@ -1,17 +1,28 @@
 'use client'
 
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Mail, MapPin, Phone, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false)
+
+  // "Discuss Similar Project" in the project modal links here with the project
+  // it came from, so the enquiry starts with context rather than a blank box.
+  // Read once as the initial state — the visitor stays in control of it after.
+  const searchParams = useSearchParams()
+  const fromProject = searchParams.get('project')
+  const fromType = searchParams.get('type')
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    projectType: '',
-    message: '',
+    projectType: fromType ?? '',
+    message: fromProject
+      ? `I'd like to discuss a project similar to "${fromProject}".\n\n`
+      : '',
   })
 
   const handleChange = (

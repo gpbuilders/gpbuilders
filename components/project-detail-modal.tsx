@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Image from 'next/image'
+import Link from 'next/link'
 import { X, MapPin, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { mediaUrl } from '@/lib/media'
@@ -252,11 +253,20 @@ export function ProjectDetailModal({
                 )}
               </div>
 
-              {/* Footer CTA */}
+              {/* Footer CTA. Was a bare <button> with no handler, so it did
+                  nothing at all. Carries the project through so the enquiry
+                  arrives with context instead of the visitor retyping it. */}
               <div className="pt-6 border-t border-border">
-                <button className="w-full py-3 px-6 bg-primary text-primary-foreground rounded-full font-semibold hover:bg-primary-dark transition-colors">
+                <Link
+                  href={{
+                    pathname: '/contact',
+                    query: { project: project.title, type: project.category },
+                  }}
+                  onClick={onClose}
+                  className="block w-full py-3 px-6 bg-primary text-primary-foreground rounded-full font-semibold text-center hover:bg-primary-dark transition-colors"
+                >
                   Discuss Similar Project
-                </button>
+                </Link>
               </div>
             </div>
           </div>
