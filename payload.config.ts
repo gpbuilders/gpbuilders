@@ -191,7 +191,13 @@ export default buildConfig({
         Logo: '/components/payload/Logo#Logo',
         Icon: '/components/payload/Icon#Icon',
       },
+      beforeNavLinks: ['/components/payload/DashboardLink#DashboardLink'],
       afterNavLinks: ['/components/payload/ViewSiteLink#ViewSiteLink'],
+      views: {
+        // The composition — KPI strip, then pipeline, then work queue —
+        // is the point, and the widget grid cannot guarantee that order.
+        dashboard: { Component: '/components/payload/DashboardView#DashboardView' },
+      },
     },
   },
   collections: [Leads, Projects, Media, Users],

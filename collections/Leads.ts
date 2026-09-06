@@ -21,6 +21,11 @@ export const Leads: CollectionConfig = {
     group: 'Enquiries',
     description:
       'Everyone who has submitted the contact form. Newest first. Update the status as you work through them.',
+    components: {
+      // Same component as the dashboard widget: the counts are as useful here,
+      // where each card filters the very list you are looking at.
+      beforeList: ['/components/payload/widgets/EnquiryStats#EnquiryStats'],
+    },
   },
   // The list is worked from the top, so the newest enquiry should be there.
   defaultSort: '-createdAt',

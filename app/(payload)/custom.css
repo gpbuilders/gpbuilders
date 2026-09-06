@@ -54,12 +54,12 @@ html[data-theme='dark'] .btn--style-primary {
 }
 
 /* Focus rings and the active nav item pick up the brand rather than blue. */
-.nav__link--active,
+.nav__link.active,
 .nav__link:hover {
   color: #2f6169;
 }
 
-html[data-theme='dark'] .nav__link--active,
+html[data-theme='dark'] .nav__link.active,
 html[data-theme='dark'] .nav__link:hover {
   color: #8fc0c7;
 }
@@ -149,4 +149,383 @@ html[data-theme='dark'] .nav__link:hover {
  * until the preview loads. */
 .gallery-grid .upload--has-many__dragItem {
   min-height: 140px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Sidebar: separate a section heading from the pages inside it.
+ *
+ * Payload gives .nav__label only a slightly dimmer colour, so "Enquiries" the
+ * group and "Enquiries" the collection look almost identical. Making the
+ * heading smaller, uppercase and letter-spaced turns it into a label, and
+ * indenting the links underneath shows what belongs to it.
+ * ------------------------------------------------------------------------- */
+
+.nav__label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--theme-elevation-450);
+}
+
+.nav-group__toggle {
+  margin-top: calc(var(--base) / 2);
+}
+
+/* The indent is what makes the grouping legible at a glance. */
+.nav-group .nav__link {
+  padding-inline-start: 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* Dashboard and View site sit outside any group, so they keep the full width
+ * and read as top-level destinations rather than members of a section. */
+.nav__link.active {
+  color: #2f6169;
+}
+
+html[data-theme='dark'] .nav__link.active {
+  color: #8fc0c7;
+}
+
+/* ---------------------------------------------------------------------------
+ * Overall scale.
+ *
+ * Payload sets the admin root to 13px and expresses almost everything in rem —
+ * including --base, which drives spacing. Raising the root therefore scales
+ * text and the space around it together, rather than enlarging type inside
+ * padding that stayed put. One value instead of chasing individual sizes.
+ * ------------------------------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+
+/* ===========================================================================
+ * Dashboard view (components/payload/DashboardView.tsx)
+ *
+ * Replaces Payload's default dashboard. The rhythm is deliberate: a KPI strip
+ * to land on, a pipeline showing the funnel's shape, then a queue of work.
+ * Every colour is a Payload token so it follows the panel into dark mode.
+ * ========================================================================= */
+
+.gp-dash {
+  display: flex;
+  flex-direction: column;
+  gap: var(--base);
+  padding: var(--base);
+  max-width: 1500px;
+}
+
+.gp-dash__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.gp-dash__head h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--theme-elevation-1000);
+}
+
+.gp-dash__date {
+  font-size: 0.8125rem;
+  color: var(--theme-elevation-500);
+}
+
+/* --- KPI strip --- */
+
+.gp-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: calc(var(--base) / 2);
+}
+
+.gp-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: calc(var(--base) / 1.4);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: var(--style-radius-m);
+  background: var(--theme-elevation-0);
+  text-decoration: none;
+  transition: border-color .15s ease, background .15s ease;
+}
+
+.gp-kpi:hover {
+  border-color: var(--theme-elevation-300);
+  background: var(--theme-elevation-50);
+}
+
+/* One number is the headline — the rest stay quiet so the eye lands somewhere. */
+.gp-kpi--lead {
+  border-color: #2f6169;
+  background: rgba(47, 97, 105, .07);
+}
+.gp-kpi--lead .gp-kpi__n { color: #2f6169; }
+
+html[data-theme='dark'] .gp-kpi--lead {
+  border-color: #8fc0c7;
+  background: rgba(143, 192, 199, .10);
+}
+html[data-theme='dark'] .gp-kpi--lead .gp-kpi__n { color: #8fc0c7; }
+
+.gp-kpi__label {
+  font-size: .6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--theme-elevation-500);
+}
+
+.gp-kpi__n {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--theme-elevation-1000);
+  font-variant-numeric: tabular-nums;
+}
+
+.gp-kpi__sub { font-size: .75rem; color: var(--theme-elevation-450); }
+
+/* --- panels --- */
+
+.gp-panel {
+  padding: var(--base);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: var(--style-radius-m);
+  background: var(--theme-elevation-0);
+}
+
+.gp-panel__h {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin: 0 0 calc(var(--base) / 1.5);
+  font-size: .8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--theme-elevation-500);
+}
+
+.gp-panel__count {
+  padding: .1rem .45rem;
+  border-radius: 999px;
+  background: rgba(47, 97, 105, .12);
+  color: #2f6169;
+  font-size: .6875rem;
+  letter-spacing: 0;
+}
+html[data-theme='dark'] .gp-panel__count {
+  background: rgba(143, 192, 199, .16);
+  color: #8fc0c7;
+}
+
+.gp-panel__more {
+  display: inline-block;
+  margin-top: calc(var(--base) / 2);
+  font-size: .8125rem;
+  color: var(--theme-elevation-600);
+  text-decoration: none;
+}
+.gp-panel__more:hover { color: #2f6169; }
+html[data-theme='dark'] .gp-panel__more:hover { color: #8fc0c7; }
+
+.gp-empty { margin: 0; font-size: .875rem; color: var(--theme-elevation-500); }
+
+/* --- pipeline --- */
+
+.gp-pipe { display: flex; flex-direction: column; gap: .3rem; }
+
+.gp-pipe__row {
+  display: grid;
+  grid-template-columns: 88px 1fr 44px 40px;
+  align-items: center;
+  gap: .6rem;
+  padding: .15rem 0;
+  text-decoration: none;
+  border-radius: var(--style-radius-s);
+}
+.gp-pipe__row:hover { background: var(--theme-elevation-50); }
+
+.gp-pipe__label {
+  font-size: .6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--theme-elevation-500);
+  text-align: right;
+}
+
+.gp-pipe__track {
+  height: 20px;
+  background: var(--theme-elevation-100);
+  border-radius: var(--style-radius-s);
+  overflow: hidden;
+}
+
+.gp-pipe__fill {
+  display: block;
+  height: 100%;
+  background: #2f6169;
+  border-radius: var(--style-radius-s);
+}
+html[data-theme='dark'] .gp-pipe__fill { background: #8fc0c7; }
+
+/* Won and Closed are settled, not live — muting them lets the shape mean
+   something rather than colouring every bar identically. */
+.gp-pipe__fill--done { background: var(--theme-elevation-300); }
+html[data-theme='dark'] .gp-pipe__fill--done { background: var(--theme-elevation-300); }
+
+.gp-pipe__n {
+  font-size: .875rem;
+  font-weight: 600;
+  text-align: right;
+  color: var(--theme-elevation-800);
+  font-variant-numeric: tabular-nums;
+}
+
+.gp-pipe__pct {
+  font-size: .75rem;
+  text-align: right;
+  color: var(--theme-elevation-450);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- work queue --- */
+
+.gp-queue { list-style: none; margin: 0; padding: 0; }
+
+.gp-queue__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .5rem 0;
+  border-bottom: 1px solid var(--theme-elevation-100);
+  text-decoration: none;
+}
+.gp-queue li:last-child .gp-queue__row { border-bottom: 0; }
+.gp-queue__row:hover .gp-queue__name { color: #2f6169; }
+html[data-theme='dark'] .gp-queue__row:hover .gp-queue__name { color: #8fc0c7; }
+
+.gp-queue__main { display: flex; flex-direction: column; gap: .1rem; min-width: 0; }
+
+.gp-queue__name {
+  font-size: .9375rem;
+  font-weight: 500;
+  color: var(--theme-elevation-800);
+}
+
+/* A long email must not push the status chip out of the panel. */
+.gp-queue__meta {
+  font-size: .75rem;
+  color: var(--theme-elevation-500);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gp-queue__right { display: flex; align-items: center; gap: .6rem; flex-shrink: 0; }
+
+.gp-queue__age {
+  font-size: .75rem;
+  color: var(--theme-elevation-450);
+  font-variant-numeric: tabular-nums;
+  min-width: 3.5rem;
+  text-align: right;
+}
+
+.gp-chip {
+  padding: .15rem .55rem;
+  border-radius: 999px;
+  font-size: .6875rem;
+  font-weight: 500;
+  background: var(--theme-elevation-100);
+  color: var(--theme-elevation-600);
+  white-space: nowrap;
+}
+
+.gp-chip--new {
+  background: rgba(47, 97, 105, .12);
+  color: #2f6169;
+}
+html[data-theme='dark'] .gp-chip--new {
+  background: rgba(143, 192, 199, .16);
+  color: #8fc0c7;
+}
+
+/* ===========================================================================
+ * Enquiry stats panel — still used above the Enquiries list.
+ * ========================================================================= */
+
+.gp-widget {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--base) / 2);
+  padding: var(--base);
+  margin-bottom: var(--base);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: var(--style-radius-m);
+  background: var(--theme-elevation-0);
+}
+
+.gp-widget--empty { color: var(--theme-elevation-500); font-size: .875rem; }
+
+.gp-widget__title {
+  margin: 0;
+  font-size: .8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--theme-elevation-500);
+}
+
+.gp-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: calc(var(--base) / 3);
+}
+
+.gp-stat {
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+  padding: calc(var(--base) / 2);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: var(--style-radius-m);
+  background: var(--theme-elevation-50);
+  text-decoration: none;
+  transition: border-color .15s ease, background .15s ease;
+}
+.gp-stat:hover { border-color: var(--theme-elevation-300); background: var(--theme-elevation-100); }
+
+.gp-stat--attention { border-color: #2f6169; background: rgba(47, 97, 105, .08); }
+.gp-stat--attention .gp-stat__count { color: #2f6169; }
+html[data-theme='dark'] .gp-stat--attention {
+  border-color: #8fc0c7;
+  background: rgba(143, 192, 199, .12);
+}
+html[data-theme='dark'] .gp-stat--attention .gp-stat__count { color: #8fc0c7; }
+
+.gp-stat--zero { opacity: .55; }
+
+.gp-stat__count {
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--theme-elevation-800);
+  font-variant-numeric: tabular-nums;
+}
+
+.gp-stat__label {
+  font-size: .6875rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--theme-elevation-500);
 }
