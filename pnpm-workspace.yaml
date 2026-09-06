@@ -1,3 +1,13 @@
+# pnpm's default isolated layout defeats Next.js file tracing: sharp was
+# bundled for the Amplify runtime while its dependency detect-libc, which
+# lives only under node_modules/.pnpm, was left behind — taking down
+# payload.config.ts and with it every server route. A hoisted layout gives
+# the tracer the flat node_modules it expects, fixing the whole class of
+# missing-transitive-dependency failures rather than this one instance.
+#
+# pnpm 10+ reads this here, not from .npmrc.
+nodeLinker: hoisted
+
 overrides:
   hono: 4.12.25
 

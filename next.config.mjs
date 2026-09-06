@@ -54,6 +54,10 @@ const nextConfig = {
       ...(storageHostname ? [{ protocol: 'https', hostname: storageHostname }] : []),
     ],
   },
+  // sharp is a native binary. Bundling it means tracing its dependency tree
+  // correctly, which is exactly what failed; treating it as external leaves it
+  // to be required from node_modules at runtime, as the platform intends.
+  serverExternalPackages: ['sharp'],
   // The Supabase CA cert is read at runtime from a path supplied by an env
   // var, which file tracing cannot follow. Ship certs/ so DATABASE_CA_CERT
   // works on a serverless host; DATABASE_CA_CERT_VALUE needs none of this.
