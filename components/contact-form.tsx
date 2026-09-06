@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Mail, MapPin, Phone, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { submitLead } from '@/app/(frontend)/contact/actions'
 
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false)
@@ -36,20 +37,28 @@ export function ContactForm() {
     })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // Handle form submission here
+    setError(null)
+    setSending(true)
+
+    // Built from the live form so the honeypot is included without having to
+    // mirror it in component state.
+    const data = new FormData(e.currentTarget)
+    if (fromProject) data.set('project', fromProject)
+
+    const result = await submitLead(data)
+    setSending(false)
+
+    if (!result.ok) {
+      setError(result.error)
+      return
+    }
+
     setSubmitted(true)
-    setTimeout(() => {
-      setSubmitted(false)
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        projectType: '',
-        message: '',
-      })
-    }, 3000)
   }
 
   if (submitted) {
@@ -173,8 +182,41 @@ export function ContactForm() {
         />
       </div>
 
-      <Button type="submit" className="h-12 w-full text-base">
-        Send Enquiry
+      {/* Honeypot. Positioned off-screen rather than display:none, which some
+          bots know to skip, and hidden from assistive tech and the tab order
+          so nobody using a keyboard or screen reader can land in it. */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          width: '1px',
+          height: '1px',
+          overflow: 'hidden',
+        }}
+      >
+        <label htmlFor="company">Company (leave this empty)</label>
+        <input
+          type="text"
+          id="company"
+          name="company"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+
+      {error && (
+        <p role="alert" className="text-sm font-medium text-destructive-strong">
+          {error}
+        </p>
+      )}
+
+      <Button
+        type="submit"
+        disabled={sending}
+        className="h-12 w-full text-base disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {sending ? 'Sending…' : 'Send Enquiry'}
       </Button>
     </form>
   )

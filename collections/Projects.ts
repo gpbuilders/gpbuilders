@@ -119,20 +119,21 @@ export const Projects: CollectionConfig = {
     },
     {
       name: 'gallery',
-      type: 'array',
-      labels: { singular: 'Image', plural: 'Images' },
+      // An upload field with hasMany renders a compact grid of thumbnails that
+      // stays workable at twenty images. The array field this replaced gave
+      // every image a full-height row, so a long gallery became a long scroll
+      // with the pictures themselves barely visible.
+      type: 'upload',
+      relationTo: 'media',
+      hasMany: true,
       admin: {
+        // Hook for the grid layout in app/(payload)/custom.css. Scoped to this
+        // field rather than every upload, so a future single-image field keeps
+        // Payload's default row.
+        className: 'gallery-grid',
         description:
-          'Extra images for the detail modal. Leave empty to show only the card image.',
+          'Extra images for the detail modal, shown after the main one. Drag to reorder. Leave empty to show only the card image.',
       },
-      fields: [
-        {
-          name: 'image',
-          type: 'upload',
-          relationTo: 'media',
-          required: true,
-        },
-      ],
     },
     {
       type: 'row',

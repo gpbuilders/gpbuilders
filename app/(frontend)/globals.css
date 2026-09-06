@@ -27,6 +27,7 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-destructive-strong: var(--destructive-strong);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -73,6 +74,9 @@
   --accent: #8fc0c7;
   --accent-foreground: #232a2c;
   --destructive: #ff8a80;
+  /* --destructive is tuned for dark sections and only reaches 2.08:1 on the
+     cream background; this is the variant for light surfaces (5.95:1). */
+  --destructive-strong: #b3261e;
   --border: rgba(35, 42, 44, 0.08);
   --input: #f6f4ef;
   --ring: #2f6169;

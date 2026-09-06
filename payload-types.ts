@@ -67,6 +67,7 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    leads: Lead;
     projects: Project;
     media: Media;
     users: User;
@@ -77,6 +78,7 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
+    leads: LeadsSelect<false> | LeadsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -120,6 +122,34 @@ export interface UserAuthOperations {
   };
 }
 /**
+ * Everyone who has submitted the contact form. Newest first. Update the status as you work through them.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  projectType?: ('residential' | 'commercial' | 'interiors' | 'landscape' | 'consultation') | null;
+  message: string;
+  /**
+   * Set automatically when the enquiry started from "Discuss Similar Project" on a project.
+   */
+  project?: string | null;
+  /**
+   * Where this enquiry has got to.
+   */
+  status: 'new' | 'contacted' | 'quoted' | 'won' | 'closed';
+  /**
+   * Only ever visible here — never shown on the website.
+   */
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Everything shown on the Projects page. Order controls the sequence; Featured makes a project span a larger tile.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -150,14 +180,9 @@ export interface Project {
    */
   image: number | Media;
   /**
-   * Extra images for the detail modal. Leave empty to show only the card image.
+   * Extra images for the detail modal, shown after the main one. Drag to reorder. Leave empty to show only the card image.
    */
-  gallery?:
-    | {
-        image: number | Media;
-        id?: string | null;
-      }[]
-    | null;
+  gallery?: (number | Media)[] | null;
   /**
    * Span a larger tile in the grid.
    */
@@ -170,6 +195,8 @@ export interface Project {
   createdAt: string;
 }
 /**
+ * Every image used across the site. Uploading here is optional — adding one to a project uploads it for you.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
@@ -268,6 +295,10 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
+        relationTo: 'leads';
+        value: number | Lead;
+      } | null)
+    | ({
         relationTo: 'projects';
         value: number | Project;
       } | null)
@@ -323,6 +354,22 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  projectType?: T;
+  message?: T;
+  project?: T;
+  status?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
@@ -332,12 +379,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   scope?: T;
   description?: T;
   image?: T;
-  gallery?:
-    | T
-    | {
-        image?: T;
-        id?: T;
-      };
+  gallery?: T;
   featured?: T;
   order?: T;
   updatedAt?: T;

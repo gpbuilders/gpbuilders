@@ -5,8 +5,12 @@ export const Media: CollectionConfig = {
   access: {
     read: () => true,
   },
+  labels: { singular: 'Image', plural: 'Images' },
   admin: {
-    group: 'Admin',
+    // Sits with Projects, not with Users: this is material the client
+    // uploads, not administration of the site.
+    group: 'Content',
+    description: 'Every image used across the site. Uploading here is optional — adding one to a project uploads it for you.',
   },
   upload: {
     // Local-development fallback only. When S3_BUCKET is set, the s3Storage

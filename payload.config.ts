@@ -8,6 +8,7 @@ import { s3Storage } from '@payloadcms/storage-s3'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
+import { Leads } from './collections/Leads'
 import { Media } from './collections/Media'
 import { Projects } from './collections/Projects'
 import { Users } from './collections/Users'
@@ -183,8 +184,17 @@ export default buildConfig({
     meta: {
       titleSuffix: '— GP Builders',
     },
+    // Resolved through the import map, which is why these are strings rather
+    // than imports — run `pnpm generate:importmap` after changing them.
+    components: {
+      graphics: {
+        Logo: '/components/payload/Logo#Logo',
+        Icon: '/components/payload/Icon#Icon',
+      },
+      afterNavLinks: ['/components/payload/ViewSiteLink#ViewSiteLink'],
+    },
   },
-  collections: [Projects, Media, Users],
+  collections: [Leads, Projects, Media, Users],
   editor: lexicalEditor(),
   plugins: storagePlugins,
   secret: process.env.PAYLOAD_SECRET || '',

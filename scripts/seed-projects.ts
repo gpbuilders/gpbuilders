@@ -94,11 +94,10 @@ for (const project of seedData) {
   // modal does not open on a duplicate.
   const galleryPaths = (project.gallery ?? []).filter((p) => p !== project.image)
 
-  const gallery = []
+  // gallery is a hasMany upload field, so it holds media IDs directly.
+  const gallery: number[] = []
   for (const [i, galleryPath] of galleryPaths.entries()) {
-    gallery.push({
-      image: await uploadMedia(galleryPath, `${project.title} — image ${i + 2}`),
-    })
+    gallery.push(await uploadMedia(galleryPath, `${project.title} — image ${i + 2}`))
   }
 
   await payload.create({

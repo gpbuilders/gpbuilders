@@ -67,7 +67,7 @@ export function ProjectDetailModal({
   // Card image first, then any extra gallery images.
   const images = [
     mediaUrl(project.image),
-    ...(project.gallery ?? []).map((item) => mediaUrl(item.image)),
+    ...(project.gallery ?? []).map((item) => mediaUrl(item)),
   ]
   const currentImage = images[currentImageIndex] ?? images[0]
 

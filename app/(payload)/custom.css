@@ -1,1 +1,152 @@
-/* Admin panel overrides go here. See https://payloadcms.com/docs/admin/customizing-css */
+/* Admin panel overrides. See https://payloadcms.com/docs/admin/customizing-css
+ *
+ * Payload builds its whole interface from --color-base-0..1000, a neutral
+ * greyscale that --theme-elevation-* maps onto — and that mapping inverts for
+ * the dark theme. Overriding the base scale rather than the elevation tokens
+ * therefore restyles both themes from one place.
+ *
+ * The scale below was generated from Payload's own greys: each step keeps its
+ * original lightness, and only the endpoints move — white to the site's cream,
+ * black to its ink. Contrast between steps is preserved exactly, so nothing
+ * Payload relies on for legibility is disturbed.
+ */
+:root {
+  --color-base-0: rgb(246, 244, 239);
+  --color-base-50: rgb(238, 236, 231);
+  --color-base-100: rgb(229, 228, 224);
+  --color-base-150: rgb(218, 217, 213);
+  --color-base-200: rgb(207, 207, 203);
+  --color-base-250: rgb(196, 196, 193);
+  --color-base-300: rgb(185, 185, 182);
+  --color-base-350: rgb(174, 175, 172);
+  --color-base-400: rgb(162, 164, 162);
+  --color-base-450: rgb(152, 154, 152);
+  --color-base-500: rgb(141, 143, 142);
+  --color-base-550: rgb(129, 132, 131);
+  --color-base-600: rgb(119, 122, 121);
+  --color-base-650: rgb(107, 111, 111);
+  --color-base-700: rgb(96, 101, 101);
+  --color-base-750: rgb(85, 90, 90);
+  --color-base-800: rgb(74, 79, 80);
+  --color-base-850: rgb(63, 69, 70);
+  --color-base-900: rgb(52, 58, 59);
+  --color-base-950: rgb(41, 48, 49);
+  --color-base-1000: rgb(35, 42, 44);
+}
+
+/* The accent is applied deliberately rather than folded into the ramp:
+ * --theme-text resolves to --theme-elevation-800, the same token the primary
+ * button uses for its background. Tinting the ramp toward teal would have
+ * turned every line of body text teal along with it. */
+.btn--style-primary {
+  --bg-color: #2f6169;
+  --color: #f6f4ef;
+  --hover-bg: #234c53;
+  --hover-color: #f6f4ef;
+}
+
+/* Keep the accent legible on the dark theme's darker ground. */
+html[data-theme='dark'] .btn--style-primary {
+  --bg-color: #8fc0c7;
+  --color: #232a2c;
+  --hover-bg: #a6cfd4;
+  --hover-color: #232a2c;
+}
+
+/* Focus rings and the active nav item pick up the brand rather than blue. */
+.nav__link--active,
+.nav__link:hover {
+  color: #2f6169;
+}
+
+html[data-theme='dark'] .nav__link--active,
+html[data-theme='dark'] .nav__link:hover {
+  color: #8fc0c7;
+}
+
+/* ---------------------------------------------------------------------------
+ * Gallery as a grid of tiles.
+ *
+ * A hasMany upload field renders one full-width row per image with a 26px
+ * thumbnail — readable at three images, unusable at twenty, and the pictures
+ * are too small to tell apart, which is the whole point of a gallery.
+ *
+ * Payload has no grid mode for this field, so the row layout is restyled into
+ * cards. Scoped to .gallery-grid (set via the field's admin.className) so
+ * other upload fields keep the default.
+ * ------------------------------------------------------------------------- */
+
+.gallery-grid .upload--has-many__draggable-rows {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: calc(var(--base) / 2);
+}
+
+/* Each row becomes a card. */
+.gallery-grid .upload--has-many__dragItem {
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: var(--style-radius-m);
+  padding: calc(var(--base) / 4);
+  background: var(--theme-elevation-50);
+}
+
+/* Stack thumbnail over filename instead of sitting them side by side. */
+.gallery-grid .upload-relationship-details,
+.gallery-grid .upload-relationship-details__imageAndDetails {
+  flex-direction: column;
+  align-items: stretch;
+  gap: calc(var(--base) / 4);
+}
+
+/* The thumbnail is the point of a gallery, so give it the tile. 4:3 matches
+ * the card sizes Payload generates, so nothing is letterboxed oddly. */
+.gallery-grid .upload--has-many__dragItem .thumbnail {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--style-radius-s);
+  overflow: hidden;
+}
+
+.gallery-grid .upload--has-many__dragItem .thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Long filenames would otherwise stretch the grid column. */
+.gallery-grid .upload-relationship-details__filename {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+}
+
+/* Keep edit/remove reachable without them dominating the tile. */
+.gallery-grid .upload-relationship-details__actions {
+  justify-content: flex-end;
+}
+
+/* While an upload is in flight Payload renders shimmer placeholders in a
+ * separate .upload__loadingRows container, outside the draggable list. Left
+ * alone it appears as a full-width bar under the tiles, so a new image looks
+ * like it landed somewhere else. Match the grid so it appears as a tile in
+ * place, and keep it directly under the existing ones. */
+.gallery-grid .upload__loadingRows {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: calc(var(--base) / 2);
+  margin-top: calc(var(--base) / 2);
+}
+
+.gallery-grid .upload__loadingRows > * {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--style-radius-m);
+}
+
+/* A tile keeps its footprint even before its thumbnail resolves, so a freshly
+ * added image occupies space immediately rather than appearing to be missing
+ * until the preview loads. */
+.gallery-grid .upload--has-many__dragItem {
+  min-height: 140px;
+}
