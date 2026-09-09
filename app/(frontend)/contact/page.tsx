@@ -11,7 +11,6 @@ export default function ContactPage() {
   return (
     <>
       <MinimalHero
-        eyebrow="Get In Touch"
         title="Let's Start"
         subtitle="Your Project"
         description="Tell us about your space and vision. Our team will get back to you with a tailored plan and a transparent estimate."

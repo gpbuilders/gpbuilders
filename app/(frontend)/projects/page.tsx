@@ -30,7 +30,6 @@ export default async function ProjectsPage() {
         eyebrow="Our Work"
         title="Spaces we've brought to life"
         description="From luxury homes and interiors to commercial fit-outs and landscapes, explore a selection of spaces we've designed and delivered."
-        currentLabel="Projects"
       />
       <ParallaxSection
         backgroundColor="bg-background"

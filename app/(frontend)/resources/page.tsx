@@ -9,7 +9,6 @@ export default function ResourcesPage() {
   return (
     <>
       <MinimalHero
-        eyebrow="Resources"
         title="Resource"
         subtitle="Blog & News"
         description="Explore the latest architectural trends, innovative designs, sustainability insights, industry news, and expert tips to inspire creativity and enhance your next project."

@@ -14,7 +14,6 @@ export default function ServicesPage() {
         eyebrow="What We Do"
         title="Services tailored to your project"
         description="Whether you need the complete journey or a single stage, our team adapts to where your project stands today — with transparent pricing and a clear process."
-        currentLabel="Services"
       />
       <ParallaxSection
         backgroundColor="bg-background"

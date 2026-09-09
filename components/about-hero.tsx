@@ -44,8 +44,9 @@ export function AboutHero() {
                 We merge innovation with timeless design to create spaces that inspire and endure. Our architecture balances aesthetics, functionality, and sustainability for a better future.
               </p>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              {/* Single CTA, so no row/column switching to do — buttonVariants
+                  already makes the link inline-flex. */}
+              <div className="mb-12">
                 <Link
                   href="/contact"
                   className={cn(
@@ -56,9 +57,6 @@ export function AboutHero() {
                   Start Your Project
                   <ArrowRight className="h-4 w-4" />
                 </Link>
-                <button className="h-12 px-8 text-base font-semibold rounded-lg border-2 border-primary text-primary hover:bg-primary/5 transition-all">
-                  Learn More
-                </button>
               </div>
 
               {/* Contact Info */}

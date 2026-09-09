@@ -1,19 +1,15 @@
 'use client'
 
-import Link from 'next/link'
 import Image from 'next/image'
-import { ChevronRight } from 'lucide-react'
 
 export function PageHero({
   eyebrow,
   title,
   description,
-  currentLabel,
 }: {
   eyebrow: string
   title: string
   description: string
-  currentLabel: string
 }) {
   return (
     <section className="relative w-full min-h-[600px] overflow-hidden bg-dark-bg">
@@ -32,18 +28,6 @@ export function PageHero({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Column - Main Content */}
           <div className="col-span-1">
-            {/* Breadcrumb Navigation */}
-            <nav
-              aria-label="Breadcrumb"
-              className="flex items-center gap-3 text-sm mb-12"
-            >
-              <Link href="/" className="text-white/60 transition-colors hover:text-white font-medium">
-                Home
-              </Link>
-              <ChevronRight className="h-4 w-4 text-white/40" />
-              <span className="font-semibold text-accent">{currentLabel}</span>
-            </nav>
-
             {/* Eyebrow */}
             <p className="mb-8 text-xs uppercase tracking-[0.28em] text-accent">
               {eyebrow}
