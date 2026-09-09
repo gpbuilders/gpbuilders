@@ -26,8 +26,20 @@ export function CtaBand() {
             <Link
               href="/contact"
               className={cn(
-                buttonVariants({ variant: 'secondary' }),
-                'h-12 gap-2 px-7 text-base',
+                buttonVariants(),
+                // The band is bg-primary, and the secondary variant (#3d7680)
+                // sat at 1.35:1 against it — the label was legible but the
+                // button itself all but disappeared. Cream on teal gives 6.3:1,
+                // and pairs with the outlined button beside it as filled/outline
+                // in one colour rather than two competing fills.
+                'h-12 gap-2 px-7 text-base bg-primary-foreground text-primary',
+                // Must use the [a]: prefix, not plain hover:. The default
+                // variant sets [a]:hover:bg-primary/80 — the band's own colour —
+                // so on hover the button disappeared into the panel. A plain
+                // hover: class does not override it: different variant prefix,
+                // so tailwind-merge sees no conflict, and the attribute
+                // selector outranks it on specificity anyway.
+                '[a]:hover:bg-primary-foreground/85 [a]:hover:text-primary',
               )}
             >
               Start Your Project
