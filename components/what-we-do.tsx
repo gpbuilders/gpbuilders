@@ -9,16 +9,16 @@ export function WhatWeDo() {
         'Visionary designs that blend aesthetics with functionality, tailored to your space and lifestyle.',
     },
     {
-      icon: Palette,
-      title: 'Interior Design',
-      description:
-        'Curated interiors using premium materials and expert craftsmanship to transform spaces.',
-    },
-    {
       icon: HardHat,
       title: 'Construction',
       description:
         'Precise on-site delivery and finishing, backed by transparent timelines and rigorous quality oversight.',
+    },
+    {
+      icon: Palette,
+      title: 'Interior Design',
+      description:
+        'Curated interiors using premium materials and expert craftsmanship to transform spaces.',
     },
   ]
 
