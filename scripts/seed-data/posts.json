@@ -1,0 +1,107 @@
+[
+  {
+    "title": "Sustainable Design: Building for Tomorrow",
+    "slug": "sustainable-design-building-for-tomorrow",
+    "excerpt": "How eco-friendly materials and sustainable practice are reshaping construction in Chennai — and what actually pays for itself.",
+    "category": "sustainability",
+    "featured": true,
+    "publishedAt": "2026-08-15",
+    "image": "/spec-residential.png",
+    "body": [
+      { "h2": "Sustainability starts with the site, not the spec sheet" },
+      { "p": "The most effective sustainability decision on a Chennai project is usually made before a single material is chosen: which way the building faces. Orientation, shading and cross-ventilation cost nothing at design stage and determine how hard the air conditioning has to work for the next thirty years. A west-facing bedroom wall with no shading will undo a great deal of expensive insulation." },
+      { "p": "We start every residential project by walking the plot at different times of day. Where the afternoon sun lands, where the prevailing breeze comes from, which neighbours will eventually build up and block both — these shape the plan more than any material selection that follows." },
+      { "h2": "Materials that earn their place" },
+      { "p": "Not every green material is worth its premium. The ones that consistently justify themselves on our projects are the ones that reduce cooling load or maintenance over the building's life:" },
+      { "ul": [
+        "Fly ash and AAC blocks in place of conventional brick — lighter loads, better thermal performance, and a smaller structural frame as a result.",
+        "Local stone and terracotta, which arrive with a fraction of the transport emissions of imported equivalents and age better in this climate.",
+        "Low-VOC paints and adhesives, which matter most in interiors where a family moves in within days of the work finishing.",
+        "Double-glazed or heat-reflective glass on west and south-west elevations, where the cooling saving is real rather than theoretical."
+      ] },
+      { "h2": "Water is the harder problem" },
+      { "p": "Chennai has learned the hard way that water security is not a luxury feature. Rainwater harvesting is mandatory, but the difference between a compliant installation and a working one is in the detail: adequately sized first-flush diverters, recharge pits placed where the soil actually percolates, and a filtration setup the owner will realistically maintain." },
+      { "p": "Greywater recycling for landscape irrigation is worth considering on any plot with a garden. It adds cost at construction and saves it every month afterwards." },
+      { "h2": "What we would tell a client starting today" },
+      { "p": "Spend the sustainability budget in this order: orientation and shading first, envelope second, systems third, certification last. A well-oriented, well-shaded building with ordinary materials will outperform a badly-oriented one full of expensive green products, and it will cost less to build." }
+    ]
+  },
+  {
+    "title": "Interior Design Trends 2026",
+    "slug": "interior-design-trends-2026",
+    "excerpt": "The colour palettes, materials and spatial ideas we are actually being asked for this year — and the ones clients have moved on from.",
+    "category": "design",
+    "featured": true,
+    "publishedAt": "2026-08-12",
+    "image": "/project-living-room.png",
+    "body": [
+      { "h2": "Warm neutrals have replaced cool grey" },
+      { "p": "The grey-and-white palette that defined the last decade of Indian interiors has largely given way to warmer ground: oatmeal, clay, sand, and putty, with timber doing more of the work. It photographs less dramatically and lives considerably better, particularly in rooms that get hard afternoon light." },
+      { "p": "Where a client still wants contrast, it now tends to arrive as a single saturated element — a deep green kitchen island, an oxblood study wall — against an otherwise quiet room." },
+      { "h2": "Fewer, better materials" },
+      { "p": "The strongest interiors we have delivered this year use three or four materials, repeated with discipline, rather than a different finish in every room. It reads as considered rather than sparse, and it has a practical benefit most clients only appreciate later: matching a repair or an extension years on is straightforward." },
+      { "h2": "Storage as architecture" },
+      { "p": "Full-height joinery, flush with the wall and without visible handles, is now the default request rather than a premium one. It buys back floor area in apartments where every square foot is expensive, and it keeps the visual field calm." },
+      { "ul": [
+        "Wall-to-wall wardrobes with recessed handles instead of freestanding almirahs.",
+        "Kitchen tall units that run to the ceiling rather than stopping short and collecting dust.",
+        "Bench seating with storage beneath at dining and window nooks."
+      ] },
+      { "h2": "Lighting has finally been taken seriously" },
+      { "p": "The single-ceiling-light room is disappearing. Layered lighting — ambient, task and accent on separate circuits — has moved from a designer's recommendation to something clients ask for by name. It is also the cheapest intervention on this list to get right at the wiring stage, and the most expensive to add afterwards." },
+      { "h2": "What has faded" },
+      { "p": "Heavily veined statement marble on every surface, open shelving in kitchens, and the all-white minimalism that never survived contact with Chennai dust. All three still appear in mood boards; noticeably fewer of them survive to the final drawing." }
+    ]
+  },
+  {
+    "title": "Project Update: New Residential Complex",
+    "slug": "project-update-new-residential-complex",
+    "excerpt": "A look behind the hoarding at a 50-unit residential development, and what running a project at that scale actually involves week to week.",
+    "category": "projects",
+    "featured": false,
+    "publishedAt": "2026-08-10",
+    "image": "/spec-commercial.png",
+    "body": [
+      { "h2": "Where the project stands" },
+      { "p": "Structure is topped out across all three blocks and the site has moved into the finishing phase — block work complete, plastering following a block behind, and the first-floor units opened up for electrical and plumbing rough-in. The tower crane comes down next month, which is always the point at which a site starts to look finished to everyone except the people building it." },
+      { "h2": "Fifty units is a different kind of problem" },
+      { "p": "A single villa is a sequencing problem you can hold in your head. Fifty units is a logistics problem. The same trade has to move through the same sequence fifty times without colliding with the trade in front of it, and a two-day slip in one unit compounds quickly if nobody catches it." },
+      { "p": "What keeps it on track is unglamorous: a weekly look-ahead that names which units each crew is in, a snag list closed out unit by unit rather than at the end, and a materials schedule that has tiles on site before the screed is ready rather than after." },
+      { "h2": "Decisions we are glad we made early" },
+      { "ul": [
+        "Standardising on two bathroom layouts across all fifty units, which turned plumbing from fifty problems into two.",
+        "Building a full sample unit before starting the others — every disagreement about finish level got resolved in one room instead of fifty.",
+        "Running the electrical conduit survey before plastering, which caught eleven misplaced boxes while they were still cheap to move."
+      ] },
+      { "h2": "Next on site" },
+      { "p": "Flooring begins in the first block once plastering is signed off, followed by joinery installation. The landscape and common-area work starts in parallel, which is deliberate: it is the part most often left until the end, and the part residents judge the development by on the day they move in." }
+    ]
+  },
+  {
+    "title": "The Art of Space Planning",
+    "slug": "the-art-of-space-planning",
+    "excerpt": "Good space planning is mostly about circulation, daylight and honest thinking about how a family actually lives — not about fitting in more rooms.",
+    "category": "architecture",
+    "featured": false,
+    "publishedAt": "2026-08-08",
+    "image": "/spec-retail.png",
+    "body": [
+      { "h2": "Plan the movement, then the rooms" },
+      { "p": "Most plans that feel wrong are circulation problems wearing a different hat. If the route from the front door to the kitchen passes through the living room, the living room will never quite settle. If the only way to the guest bathroom crosses the dining area, guests will be uncomfortable and so will everyone eating." },
+      { "p": "We draw the paths people take through a house before we draw the furniture. Front door to kitchen with shopping. Bedroom to bathroom at night. Kitchen to dining while carrying something hot. Where those paths cross a room they should clip its edge, not cut through the middle of it." },
+      { "h2": "Rooms are defined by what they are next to" },
+      { "p": "A study is quiet because of what surrounds it, not because of its dimensions. Putting it against the shared wall of a teenager's room undoes it. The reverse holds too — a modest living room opening onto a courtyard will feel larger than a bigger one with a single window onto a boundary wall." },
+      { "h2": "The questions worth asking before the first sketch" },
+      { "ul": [
+        "Where does everyone actually end up in the evening? Design for that room, not the one that will be used twice a year.",
+        "Who else lives here, now or later — parents, a live-in helper, adult children who move back? Ground-floor bedrooms are hard to add afterwards.",
+        "Where does laundry go, dry and get put away? It is the single most commonly forgotten sequence in an otherwise careful plan.",
+        "How much storage does this family have today? Then plan for more, because nobody has ever asked us for less."
+      ] },
+      { "h2": "Daylight is a planning decision" },
+      { "p": "Two-sided daylight makes a room feel calm; one-sided daylight makes it feel like a corridor with furniture. Where the plot only allows one external wall for a room, a high-level window or a light well on the opposite side does more for the space than any amount of extra floor area." },
+      { "h2": "Leave something undecided" },
+      { "p": "The best plans have one room whose purpose is not fixed — a spare room off the circulation with its own door and a window, near a bathroom. Over twenty years it will be a nursery, a study, a guest room and eventually a ground-floor bedroom for someone who can no longer manage the stairs. Planning for that flexibility costs nothing at drawing stage." }
+    ]
+  }
+]
