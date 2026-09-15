@@ -1,146 +1,135 @@
-'use client'
-
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Calendar } from 'lucide-react'
+import { Calendar, Clock } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { buttonVariants } from '@/components/ui/button'
+import { CATEGORY_LABELS, formatPostDate } from '@/lib/posts'
+import { mediaAlt, mediaUrl } from '@/lib/media'
+import type { Post } from '@/payload-types'
 
-interface BlogArticle {
-  id: string
-  title: string
-  excerpt: string
-  category: string
-  date: string
-  image: string
-  readTime: string
-  featured?: boolean
-}
+export function FullBlogResources({ posts }: { posts: Post[] }) {
+  if (posts.length === 0) {
+    return (
+      <section className="py-20 lg:py-28">
+        <div className="mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8">
+          <h2 className="font-serif text-2xl font-semibold text-foreground">
+            Nothing published yet
+          </h2>
+          <p className="mt-3 leading-relaxed text-muted-foreground">
+            We&apos;re writing up what we&apos;ve learned on site. Check back
+            shortly, or{' '}
+            <Link href="/contact" className="font-semibold text-primary underline-offset-4 hover:underline">
+              get in touch
+            </Link>{' '}
+            if there&apos;s something specific you&apos;d like to know.
+          </p>
+        </div>
+      </section>
+    )
+  }
 
-const BLOG_ARTICLES: BlogArticle[] = [
-  {
-    id: '1',
-    title: 'Sustainable Design: Building for Tomorrow',
-    excerpt: 'Explore how eco-friendly materials and sustainable practices are reshaping the architecture industry and creating healthier living spaces.',
-    category: 'Sustainability',
-    date: 'Aug 15, 2024',
-    readTime: '5 min read',
-    image: '/spec-residential.png',
-    featured: true,
-  },
-  {
-    id: '2',
-    title: 'Interior Design Trends 2024',
-    excerpt: 'Discover the latest color palettes, furniture styles, and spatial arrangements that are defining modern interior design this year.',
-    category: 'Design',
-    date: 'Aug 12, 2024',
-    readTime: '4 min read',
-    image: '/project-living-room.png',
-  },
-  {
-    id: '3',
-    title: 'Project Update: New Residential Complex',
-    excerpt: 'Behind the scenes look at our latest 50-unit residential project featuring sustainable design and modern architecture.',
-    category: 'Projects',
-    date: 'Aug 10, 2024',
-    readTime: '6 min read',
-    image: '/spec-commercial.png',
-  },
-  {
-    id: '4',
-    title: 'The Art of Space Planning',
-    excerpt: 'Learn how optimal space planning can transform any area into a functional and beautiful environment for work or living.',
-    category: 'Architecture',
-    date: 'Aug 8, 2024',
-    readTime: '4 min read',
-    image: '/spec-retail.png',
-  },
-  {
-    id: '5',
-    title: 'Material Innovation in Construction',
-    excerpt: 'Exploring cutting-edge materials that are revolutionizing the construction industry with durability and aesthetic appeal.',
-    category: 'Innovation',
-    date: 'Aug 5, 2024',
-    readTime: '7 min read',
-    image: '/spec-landscape.png',
-  },
-  {
-    id: '6',
-    title: 'Residential vs Commercial: Design Differences',
-    excerpt: 'Understanding the key differences in approach, regulations, and design philosophy between residential and commercial projects.',
-    category: 'Architecture',
-    date: 'Aug 1, 2024',
-    readTime: '5 min read',
-    image: '/spec-industrial.png',
-  },
-]
-
-export function FullBlogResources() {
-  const regularArticles = BLOG_ARTICLES
+  // Featured posts lead, and each takes a double-width tile. Sorting them to
+  // the front is what keeps the grid whole: a wide tile placed part-way through
+  // a four-column row cannot fit beside what precedes it, and CSS grid leaves
+  // the gap rather than reflowing around it.
+  const ordered = [...posts].sort(
+    (a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)),
+  )
 
   return (
     <section className="py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Articles Grid - Masonry layout with variable sizes */}
-        <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-          {regularArticles.map((article, index) => {
-            // First 2 articles are larger (2 cols wide, taller)
-            // Next 2 are regular, Last 2 are regular
-            const isLarge = index < 2
-            
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {ordered.map((post, index) => {
+            const isLarge = Boolean(post.featured)
+
             return (
-              <article
-                key={article.id}
+              <Link
+                key={post.id}
+                href={`/resources/${post.slug}`}
                 className={cn(
-                  'group cursor-pointer relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300',
-                  isLarge ? 'md:col-span-2 h-96 md:h-[500px] lg:h-[500px]' : 'h-80 md:h-96 col-span-1',
+                  'group relative block overflow-hidden rounded-3xl shadow-lg transition-all duration-300 hover:shadow-2xl',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+                  isLarge
+                    ? 'h-96 md:col-span-2 md:h-[500px]'
+                    : 'col-span-1 h-80 md:h-96',
                 )}
               >
-                {/* Background Image */}
-                <div className="relative w-full h-full overflow-hidden bg-background">
+                <div className="relative h-full w-full overflow-hidden bg-background">
                   <Image
-                    src={article.image}
-                    alt={article.title}
+                    src={mediaUrl(post.coverImage)}
+                    alt={mediaAlt(post.coverImage, post.title)}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes={
+                      isLarge
+                        ? '(max-width: 768px) 100vw, (max-width: 1280px) 100vw, 640px'
+                        : '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 320px'
+                    }
+                    // The first tiles are above the fold on every viewport.
+                    priority={index < 2}
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  {/* Overlay on hover */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </div>
 
-                {/* Content Overlay Card - positioned at bottom-left */}
-                <div className={cn(
-                  'absolute transition-all duration-300',
-                  isLarge
-                    ? 'p-6 md:p-8 bottom-8 left-8 right-8 md:bottom-10 md:left-10 md:right-10'
-                    : 'bottom-4 left-4 right-4'
-                )}>
-                  <div className={cn(
-                    'bg-white/95 backdrop-blur-md rounded-2xl shadow-xl',
-                    isLarge ? 'p-6 md:p-8' : 'p-5',
-                  )}>
-                    <div className="mb-3 inline-block">
-                      <span className="text-xs font-semibold text-foreground tracking-widest uppercase">
-                        Discover
-                      </span>
-                    </div>
-                    <h3 className={cn(
-                      'font-serif font-semibold text-foreground mb-3 group-hover:text-primary transition-colors',
-                      isLarge ? 'text-2xl lg:text-3xl line-clamp-2' : 'text-lg lg:text-base line-clamp-3'
-                    )}>
-                      {article.title}
+                <div
+                  className={cn(
+                    'absolute transition-all duration-300',
+                    isLarge
+                      ? 'bottom-8 left-8 right-8 p-6 md:bottom-10 md:left-10 md:right-10 md:p-8'
+                      : 'bottom-4 left-4 right-4',
+                  )}
+                >
+                  <div
+                    className={cn(
+                      'rounded-2xl bg-white/95 shadow-xl backdrop-blur-md',
+                      isLarge ? 'p-6 md:p-8' : 'p-5',
+                    )}
+                  >
+                    <span className="text-xs font-semibold uppercase tracking-widest text-primary">
+                      {CATEGORY_LABELS[post.category]}
+                    </span>
+                    <h3
+                      className={cn(
+                        'mt-3 font-serif font-semibold text-foreground transition-colors group-hover:text-primary',
+                        isLarge
+                          ? 'line-clamp-2 text-2xl lg:text-3xl'
+                          : 'line-clamp-3 text-lg lg:text-base',
+                      )}
+                    >
+                      {post.title}
                     </h3>
                     {isLarge && (
-                      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-6">
-                        {article.excerpt}
+                      <p className="mb-6 mt-3 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                        {post.excerpt}
                       </p>
                     )}
-                    <button className="inline-flex items-center gap-2 whitespace-nowrap px-6 py-2.5 bg-foreground text-white rounded-full font-semibold text-sm hover:bg-foreground/90 transition-colors">
-                      Detail Article
-                    </button>
+                    <div
+                      className={cn(
+                        'flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground',
+                        isLarge ? 'mb-6' : 'mb-4 mt-3',
+                      )}
+                    >
+                      <span className="inline-flex items-center gap-1.5">
+                        <Calendar className="h-3.5 w-3.5" />
+                        <time dateTime={post.publishedAt}>
+                          {formatPostDate(post.publishedAt)}
+                        </time>
+                      </span>
+                      {post.readTime ? (
+                        <span className="inline-flex items-center gap-1.5">
+                          <Clock className="h-3.5 w-3.5" />
+                          {post.readTime} min read
+                        </span>
+                      ) : null}
+                    </div>
+                    {/* A span, not a button: the whole card is already the
+                        link, and a button nested in an anchor is invalid. */}
+                    <span className="inline-flex whitespace-nowrap rounded-full bg-foreground px-6 py-2.5 text-sm font-semibold text-white transition-colors group-hover:bg-primary">
+                      Read article
+                    </span>
                   </div>
                 </div>
-              </article>
+              </Link>
             )
           })}
         </div>

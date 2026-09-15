@@ -110,3 +110,60 @@
     @apply w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm text-foreground shadow-sm transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20;
   }
 }
+
+@layer components {
+  /* Payload's Lexical renderer emits plain, unstyled elements, so the article
+     body gets its typography here rather than from @tailwindcss/typography —
+     which would need overriding to match the site's scale anyway. */
+  .article-body {
+    @apply text-lg leading-relaxed text-muted-foreground;
+  }
+  .article-body > * + * {
+    @apply mt-6;
+  }
+  .article-body h2 {
+    @apply mt-12 font-serif text-3xl font-semibold leading-tight text-foreground;
+  }
+  .article-body h3 {
+    @apply mt-10 font-serif text-2xl font-semibold leading-tight text-foreground;
+  }
+  .article-body h4 {
+    @apply mt-8 font-serif text-xl font-semibold text-foreground;
+  }
+  .article-body strong {
+    @apply font-semibold text-foreground;
+  }
+  .article-body a {
+    @apply font-medium text-primary underline underline-offset-4 transition-colors hover:text-primary-dark;
+  }
+  .article-body ul {
+    @apply list-disc space-y-2 pl-6 marker:text-primary;
+  }
+  .article-body ol {
+    @apply list-decimal space-y-2 pl-6 marker:text-primary;
+  }
+  .article-body blockquote {
+    @apply border-l-4 border-primary/40 pl-6 font-serif text-xl italic text-foreground;
+  }
+  .article-body hr {
+    @apply my-12 border-border;
+  }
+  .article-body img {
+    @apply rounded-2xl;
+  }
+  .article-body figcaption {
+    @apply mt-3 text-sm text-muted-foreground;
+  }
+  /* Lexical can emit tables; keep a wide one inside its own scroller so the
+     article column never scrolls sideways. */
+  .article-body table {
+    @apply block w-full overflow-x-auto text-base;
+  }
+  .article-body th,
+  .article-body td {
+    @apply border border-border px-4 py-2 text-left;
+  }
+  .article-body th {
+    @apply font-semibold text-foreground;
+  }
+}

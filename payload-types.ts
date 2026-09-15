@@ -68,6 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     leads: Lead;
+    posts: Post;
     projects: Project;
     media: Media;
     users: User;
@@ -79,6 +80,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     leads: LeadsSelect<false> | LeadsSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -150,49 +152,70 @@ export interface Lead {
   createdAt: string;
 }
 /**
- * Everything shown on the Projects page. Order controls the sequence; Featured makes a project span a larger tile.
+ * Articles on the Resources page. Save a draft while you work on it; nothing is public until you hit Publish.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "projects".
+ * via the `definition` "posts".
  */
-export interface Project {
+export interface Post {
   id: number;
+  /**
+   * The headline, shown on the card and at the top of the article.
+   */
   title: string;
-  location: string;
   /**
-   * Which filter tab the project appears under.
+   * The web address: /resources/your-slug. Filled in from the title when you first save. Change it only if you have to — an existing link to the old one stops working.
    */
-  category: 'residential' | 'commercial';
+  slug?: string | null;
   /**
-   * Shown as the pill on the project card.
+   * One or two sentences, shown on the card. Capped at 200 characters so it cannot overflow the tile.
    */
-  scope:
-    | 'Architecture + Interior + Construction'
-    | 'Architecture + Construction'
-    | 'Interior Design + Construction'
-    | 'Landscape + Construction';
+  excerpt: string;
   /**
-   * Shown in the detail modal. Two or three sentences works best.
+   * Shown as the label above the headline on the card.
    */
-  description?: string | null;
+  category: 'architecture' | 'design' | 'sustainability' | 'innovation' | 'projects' | 'news';
   /**
-   * The card image. Landscape crops best.
-   */
-  image: number | Media;
-  /**
-   * Extra images for the detail modal, shown after the main one. Drag to reorder. Leave empty to show only the card image.
-   */
-  gallery?: (number | Media)[] | null;
-  /**
-   * Span a larger tile in the grid.
+   * Give this post a wide tile in the grid.
    */
   featured?: boolean | null;
   /**
-   * Lower numbers appear first.
+   * The card background and the banner on the article. Landscape crops best.
    */
-  order?: number | null;
+  coverImage: number | Media;
+  /**
+   * The article itself.
+   */
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * The date shown on the post, and what the list is sorted by.
+   */
+  publishedAt: string;
+  /**
+   * Change this only for a guest byline.
+   */
+  author?: string | null;
+  /**
+   * Minutes, worked out from the length of the article when you save.
+   */
+  readTime?: number | null;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * Every image used across the site. Uploading here is optional — adding one to a project uploads it for you.
@@ -243,6 +266,51 @@ export interface Media {
       filename?: string | null;
     };
   };
+}
+/**
+ * Everything shown on the Projects page. Order controls the sequence; Featured makes a project span a larger tile.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  title: string;
+  location: string;
+  /**
+   * Which filter tab the project appears under.
+   */
+  category: 'residential' | 'commercial';
+  /**
+   * Shown as the pill on the project card.
+   */
+  scope:
+    | 'Architecture + Interior + Construction'
+    | 'Architecture + Construction'
+    | 'Interior Design + Construction'
+    | 'Landscape + Construction';
+  /**
+   * Shown in the detail modal. Two or three sentences works best.
+   */
+  description?: string | null;
+  /**
+   * The card image. Landscape crops best.
+   */
+  image: number | Media;
+  /**
+   * Extra images for the detail modal, shown after the main one. Drag to reorder. Leave empty to show only the card image.
+   */
+  gallery?: (number | Media)[] | null;
+  /**
+   * Span a larger tile in the grid.
+   */
+  featured?: boolean | null;
+  /**
+   * Lower numbers appear first.
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -297,6 +365,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'leads';
         value: number | Lead;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: number | Post;
       } | null)
     | ({
         relationTo: 'projects';
@@ -367,6 +439,25 @@ export interface LeadsSelect<T extends boolean = true> {
   notes?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  category?: T;
+  featured?: T;
+  coverImage?: T;
+  content?: T;
+  publishedAt?: T;
+  author?: T;
+  readTime?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

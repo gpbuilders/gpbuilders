@@ -10,6 +10,7 @@ import sharp from 'sharp'
 
 import { Leads } from './collections/Leads'
 import { Media } from './collections/Media'
+import { Posts } from './collections/Posts'
 import { Projects } from './collections/Projects'
 import { Users } from './collections/Users'
 
@@ -200,7 +201,7 @@ export default buildConfig({
       },
     },
   },
-  collections: [Leads, Projects, Media, Users],
+  collections: [Leads, Posts, Projects, Media, Users],
   editor: lexicalEditor(),
   plugins: storagePlugins,
   secret: process.env.PAYLOAD_SECRET || '',
