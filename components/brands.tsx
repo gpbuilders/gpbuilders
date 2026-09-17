@@ -37,7 +37,7 @@ export function Brands() {
             return (
               <div
                 key={brand}
-                className="group flex items-center justify-center bg-card px-6 py-8 text-center transition-colors hover:bg-background-alt"
+                className="flex items-center justify-center bg-card px-6 py-8 text-center transition-colors hover:bg-background-alt"
               >
                 {logo ? (
                   <Image
@@ -45,10 +45,10 @@ export function Brands() {
                     alt={`${brand} logo`}
                     width={logo.width}
                     height={logo.height}
-                    className="max-h-8 w-auto max-w-full object-contain opacity-70 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                    className="max-h-8 w-auto max-w-full object-contain"
                   />
                 ) : (
-                  <span className="font-serif text-lg font-medium text-foreground/70 transition-colors group-hover:text-foreground">
+                  <span className="font-serif text-lg font-medium text-foreground">
                     {brand}
                   </span>
                 )}

@@ -31,7 +31,7 @@ export function BrandsWeBuild() {
             return (
               <div
                 key={brand}
-                className="group flex h-24 items-center justify-center rounded-lg border border-border bg-card px-4 transition-all hover:border-primary/50 hover:shadow-md"
+                className="flex h-24 items-center justify-center rounded-lg border border-border bg-card px-4 transition-all hover:border-primary/50 hover:shadow-md"
               >
                 {logo ? (
                   <Image
@@ -39,7 +39,7 @@ export function BrandsWeBuild() {
                     alt={`${brand} logo`}
                     width={logo.width}
                     height={logo.height}
-                    className="max-h-8 w-auto max-w-full object-contain opacity-70 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                    className="max-h-8 w-auto max-w-full object-contain"
                   />
                 ) : (
                   <span className="text-center text-sm font-semibold text-foreground">
