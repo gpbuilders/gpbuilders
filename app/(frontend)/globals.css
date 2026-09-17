@@ -185,3 +185,33 @@
     }
   }
 }
+
+@layer components {
+  /* Scrim for text sitting on a photograph. An eased ramp rather than a linear
+     one: a two-stop linear fade leaves a visible edge where it meets the image,
+     and halves its density by the midpoint — right where a heading sits.
+
+     The stops are tuned so white text clears WCAG AA over a bright photo at
+     every line position, including the third line the description expands to on
+     hover, while the top 8% of the image is left untouched. Alphas are baked
+     into the stops rather than applied to the whole layer, because a blanket
+     opacity thins the bottom of the ramp along with the top. */
+  .card-scrim {
+    /* rgb() with an alpha channel rather than color-mix(): a color-mix stop
+       built on var(--dark-bg) cannot be resolved at build time, so the
+       minifier emits a fallback with every stop opaque — a solid block over
+       the photograph — and only the @supports copy is correct. These are the
+       channels of --dark-bg (#232a2c); keep them in step with it. */
+    background-image: linear-gradient(
+      to top,
+      rgb(35 42 44 / 0.95) 0%,
+      rgb(35 42 44 / 0.88) 20%,
+      rgb(35 42 44 / 0.78) 35%,
+      rgb(35 42 44 / 0.62) 50%,
+      rgb(35 42 44 / 0.4) 65%,
+      rgb(35 42 44 / 0.18) 80%,
+      rgb(35 42 44 / 0.05) 92%,
+      rgb(35 42 44 / 0) 100%
+    );
+  }
+}

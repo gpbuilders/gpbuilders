@@ -65,8 +65,8 @@ export function BuildingSpecializations() {
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
               />
 
-              {/* Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-dark-bg via-dark-bg/50 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
+              {/* Scrim — see .card-scrim in globals.css */}
+              <div className="card-scrim pointer-events-none absolute inset-0" />
 
               {/* Content Overlay */}
               <div className="absolute inset-0 p-8 flex flex-col justify-end">
