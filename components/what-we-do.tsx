@@ -4,7 +4,7 @@ export function WhatWeDo() {
   const services = [
     {
       icon: Compass,
-      title: 'Architecture & Design',
+      title: 'Architectural Design',
       description:
         'Visionary designs that blend aesthetics with functionality, tailored to your space and lifestyle.',
     },
@@ -26,10 +26,7 @@ export function WhatWeDo() {
     <section className="bg-background-alt py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-primary">
-            Our Services
-          </p>
-          <h2 className="mt-3 font-serif text-4xl font-semibold text-foreground sm:text-5xl lg:text-6xl">
+          <h2 className="font-serif text-4xl font-semibold text-foreground sm:text-5xl lg:text-6xl">
             What We Do
           </h2>
           <p className="mt-6 mx-auto max-w-2xl text-lg text-muted-foreground">
