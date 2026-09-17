@@ -167,3 +167,21 @@
     @apply font-semibold text-foreground;
   }
 }
+
+@layer components {
+  /* The three-column project mosaic. Placement is computed in
+     components/projects.tsx so the featured 2x2 tile can alternate between the
+     left and right columns — CSS auto-placement always packs it left, which
+     stacks every big tile down one side of the page.
+
+     Scoped to lg because that is the only breakpoint with three columns; below
+     it the Tailwind classes on each card apply and these custom properties are
+     ignored. The selector is (0,1,1) so it outranks Tailwind's col-span
+     utilities without !important. */
+  @media (min-width: 64rem) {
+    .project-grid > * {
+      grid-column: var(--pc) / span var(--pcs, 1);
+      grid-row: var(--pr) / span var(--prs, 1);
+    }
+  }
+}
