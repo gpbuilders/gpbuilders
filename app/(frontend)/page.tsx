@@ -1,6 +1,8 @@
 import config from '@payload-config'
 import { getPayload } from 'payload'
 
+import { getHeroMedia } from '@/lib/hero-media'
+
 import { Hero } from '@/components/hero'
 import { WhatWeDo } from '@/components/what-we-do'
 import { About } from '@/components/about'
@@ -12,6 +14,7 @@ import { ConsultationCta } from '@/components/consultation-cta'
 import { ParallaxSection } from '@/components/parallax-section'
 
 export default async function HomePage() {
+  const hero = await getHeroMedia()
   const payload = await getPayload({ config })
   // Only the four the Featured Projects layout can show.
   const { docs: projects } = await payload.find({
@@ -23,7 +26,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero />
+      <Hero slides={hero.homeSlides} />
       <WhatWeDo />
       <About />
       <HowWeDeliver />

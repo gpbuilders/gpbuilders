@@ -1,24 +1,30 @@
 'use client'
 
 import Image from 'next/image'
+import type { HeroSlide } from '@/lib/hero-media'
 
 export function PageHero({
   eyebrow,
   title,
   description,
+  art,
 }: {
   eyebrow: string
   title: string
   description: string
+  art: HeroSlide
 }) {
   return (
     <section className="relative w-full min-h-[600px] overflow-hidden bg-dark-bg">
       {/* Hand-drawn architecture background - transparent white lines */}
       <div className="absolute right-0 inset-y-0 w-1/2 opacity-60 pointer-events-none">
         <Image
-          src="/architecture-line-art.png"
-          alt="Architecture sketch"
+          src={art.src}
+          alt={art.alt}
           fill
+          // Half the viewport wide at every breakpoint, capped at the point
+          // the layout stops growing.
+          sizes="(max-width: 1280px) 50vw, 640px"
           className="object-contain object-right"
         />
       </div>

@@ -1,7 +1,6 @@
-'use client'
-
 import type { Metadata } from 'next'
 import { AboutHero } from '@/components/about-hero'
+import { getHeroMedia } from '@/lib/hero-media'
 import { About } from '@/components/about'
 import { Values } from '@/components/values'
 import { ViewWorkCta } from '@/components/view-work-cta'
@@ -9,10 +8,12 @@ import { Timeline } from '@/components/timeline'
 import { ConsultationCta } from '@/components/consultation-cta'
 import { ParallaxSection } from '@/components/parallax-section'
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const hero = await getHeroMedia()
+
   return (
     <>
-      <AboutHero />
+      <AboutHero sketch={hero.aboutSketch} />
       <About />
       <ParallaxSection
         backgroundColor="bg-background-alt"

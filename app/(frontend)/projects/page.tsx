@@ -3,6 +3,7 @@ import config from '@payload-config'
 import { getPayload } from 'payload'
 
 import { PageHero } from '@/components/page-hero'
+import { getHeroMedia } from '@/lib/hero-media'
 import { Projects } from '@/components/projects'
 import { Brands } from '@/components/brands'
 import { ConsultationCta } from '@/components/consultation-cta'
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
 }
 
 export default async function ProjectsPage() {
+  const hero = await getHeroMedia()
   const payload = await getPayload({ config })
   // depth 1 populates the image and gallery upload fields.
   const { docs: projects } = await payload.find({
@@ -27,6 +29,7 @@ export default async function ProjectsPage() {
   return (
     <>
       <PageHero
+        art={hero.pageHeroArt}
         eyebrow="Our Work"
         title="Spaces we've brought to life"
         description="From luxury homes and interiors to commercial fit-outs and landscapes, explore a selection of spaces we've designed and delivered."

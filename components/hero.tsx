@@ -1,49 +1,37 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Play, ChevronLeft, ChevronRight, Volume2, VolumeX } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
+import type { HeroSlide } from '@/lib/hero-media'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, EffectFade, Navigation } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/effect-fade'
 import 'swiper/css/navigation'
 
-export function Hero() {
-  const [isMuted, setIsMuted] = useState(true)
+export function Hero({ slides }: { slides: HeroSlide[] }) {
   const swiperRef = useRef(null)
+  const [isMuted, setIsMuted] = useState(true)
 
-  // Carousel slides with images and videos
-  const slides = [
-    {
-      type: 'image',
-      src: '/interior-hallway.jpg',
-      alt: 'Modern interior hallway with terracotta',
-    },
-    {
-      type: 'image',
-      src: '/project-living-room.png',
-      alt: 'Luxury living room design',
-    },
-    {
-      type: 'image',
-      src: '/exterior-render.jpg',
-      alt: 'Exterior architectural rendering',
-    },
-    {
-      type: 'image',
-      src: '/project-kitchen.png',
-      alt: 'Modern kitchen design',
-    },
-    {
-      type: 'image',
-      src: '/commercial-restaurant.jpg',
-      alt: 'Commercial restaurant design',
-    },
-  ]
+  // A full-screen autoplaying video is exactly what this setting is for.
+  // Read after mount rather than during render, so the server and the first
+  // client pass agree and React does not report a hydration mismatch.
+  const [reduceMotion, setReduceMotion] = useState(false)
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const sync = () => setReduceMotion(query.matches)
+    sync()
+    query.addEventListener('change', sync)
+    return () => query.removeEventListener('change', sync)
+  }, [])
+
+  // The control only exists while something can hear it.
+  const hasVideo = slides.some((slide) => slide.kind === 'video') && !reduceMotion
+
 
   return (
     <section className="relative w-full h-screen min-h-[700px] overflow-hidden">
@@ -61,27 +49,50 @@ export function Hero() {
       >
         {slides.map((slide, idx) => (
           <SwiperSlide key={idx} className="relative w-full h-full">
-            {slide.type === 'image' ? (
-              <Image
-                src={slide.src}
-                alt={slide.alt}
-                fill
-                className="object-cover"
-                priority={idx === 0}
-              />
-            ) : (
+            {slide.kind === 'video' && !reduceMotion ? (
               <video
+                key={slide.src}
                 src={slide.src}
+                poster={slide.poster}
+                aria-label={slide.alt}
                 muted={isMuted}
                 autoPlay
                 loop
                 playsInline
-                className="w-full h-full object-cover"
+                // The poster is a real image and carries the first paint;
+                // metadata is enough to start, the rest streams.
+                preload="metadata"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <Image
+                src={slide.kind === 'video' ? slide.poster : slide.src}
+                alt={slide.alt}
+                fill
+                // Full-bleed at every size, so the browser always wants the
+                // widest source it can get.
+                sizes="100vw"
+                className="object-cover"
+                priority={idx === 0}
               />
             )}
           </SwiperSlide>
         ))}
       </Swiper>
+
+      {hasVideo && (
+        /* Sits clear of the fixed header (~64px tall) rather than level with
+           the menu button, which made the two easy to hit by mistake. */
+        <button
+          type="button"
+          onClick={() => setIsMuted(!isMuted)}
+          aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+          aria-pressed={!isMuted}
+          className="absolute top-24 right-6 z-20 rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition-all hover:bg-white/20 sm:right-8"
+        >
+          {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+        </button>
+      )}
 
       {/* Dark Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-dark-bg via-dark-bg/60 to-dark-bg/40 z-5" />
@@ -100,18 +111,6 @@ export function Hero() {
         className="absolute right-8 top-1/2 -translate-y-1/2 z-20 hidden p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all lg:block"
       >
         <ChevronRight className="w-6 h-6" />
-      </button>
-
-      {/* Mute Button for Video.
-          Sits clear of the fixed header (~64px tall) rather than level with
-          the menu button, which made the two easy to hit by mistake. */}
-      <button
-        onClick={() => setIsMuted(!isMuted)}
-        aria-label={isMuted ? 'Unmute video' : 'Mute video'}
-        aria-pressed={isMuted}
-        className="absolute top-24 right-6 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all sm:right-8"
-      >
-        {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
       </button>
 
       {/* Content Overlay - Full Width.

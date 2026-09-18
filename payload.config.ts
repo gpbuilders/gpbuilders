@@ -13,6 +13,8 @@ import { Media } from './collections/Media'
 import { Posts } from './collections/Posts'
 import { Projects } from './collections/Projects'
 import { Users } from './collections/Users'
+import { Videos } from './collections/Videos'
+import { HeroMedia } from './globals/HeroMedia'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -154,6 +156,16 @@ const storagePlugins = s3Bucket
                   `${publicBase}/${filename}`,
               }
             : true,
+          // Same bucket, same reasoning — and it matters more here: streaming a
+          // hero video through the app server would put every byte of it on the
+          // Node process.
+          videos: publicBase
+            ? {
+                disablePayloadAccessControl: true,
+                generateFileURL: ({ filename }: { filename: string }) =>
+                  `${publicBase}/${filename}`,
+              }
+            : true,
         },
         bucket: s3Bucket,
         config: {
@@ -201,7 +213,8 @@ export default buildConfig({
       },
     },
   },
-  collections: [Leads, Posts, Projects, Media, Users],
+  collections: [Leads, Posts, Projects, Media, Videos, Users],
+  globals: [HeroMedia],
   editor: lexicalEditor(),
   plugins: storagePlugins,
   secret: process.env.PAYLOAD_SECRET || '',

@@ -6,8 +6,9 @@ import { ArrowRight } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { AboutStats } from '@/components/about-stats'
+import type { HeroSlide } from '@/lib/hero-media'
 
-export function AboutHero() {
+export function AboutHero({ sketch }: { sketch: HeroSlide }) {
   return (
     <>
       {/* Main Hero Section */}
@@ -17,9 +18,10 @@ export function AboutHero() {
             {/* Left Side - Architectural Sketch */}
             <div className="relative h-96 lg:h-[500px]">
               <Image
-                src="/architecture-sketch.png"
-                alt="Architectural building sketch"
+                src={sketch.src}
+                alt={sketch.alt}
                 fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-contain"
                 priority
               />

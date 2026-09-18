@@ -71,6 +71,7 @@ export interface Config {
     posts: Post;
     projects: Project;
     media: Media;
+    videos: Video;
     users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -83,6 +84,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    videos: VideosSelect<false> | VideosSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -93,8 +95,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'hero-media': HeroMedia;
+  };
+  globalsSelect: {
+    'hero-media': HeroMediaSelect<false> | HeroMediaSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -313,6 +319,30 @@ export interface Project {
   createdAt: string;
 }
 /**
+ * Video used in the home page slideshow. Keep files under ~10MB — a hero video downloads before anything else on the page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "videos".
+ */
+export interface Video {
+  id: number;
+  /**
+   * What the footage shows. Used as the accessible description, so write it for someone who cannot see it.
+   */
+  caption?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
@@ -377,6 +407,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'videos';
+        value: number | Video;
       } | null)
     | ({
         relationTo: 'users';
@@ -530,6 +564,24 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "videos_select".
+ */
+export interface VideosSelect<T extends boolean = true> {
+  caption?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
@@ -590,6 +642,69 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * The photographs, video and artwork behind the page headers. Leave any of these empty to keep what the site ships with.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "hero-media".
+ */
+export interface HeroMedia {
+  id: number;
+  /**
+   * What fades through behind the home page headline — photographs, video, or a mix. Drag to reorder; the first one is what a visitor sees on arrival. Leave empty to keep the five the site ships with.
+   */
+  homeSlides?:
+    | {
+        /**
+         * What this slide shows.
+         */
+        kind: 'image' | 'video';
+        /**
+         * Landscape crops best — this is displayed full-bleed and full-height.
+         */
+        image?: (number | null) | Media;
+        /**
+         * Plays muted and loops, like a background. Keep it short and under ~10MB.
+         */
+        video?: (number | null) | Video;
+        /**
+         * A still shown while the video loads, and instead of it for visitors who have asked their device to reduce motion. Without one the slide is blank until the video arrives.
+         */
+        poster?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * The line drawing on the right of the dark header, shared by both pages. A transparent PNG works best; it sits at 60% opacity over the dark ground.
+   */
+  pageHeroArt?: (number | null) | Media;
+  /**
+   * The drawing beside the About headline. Shown whole rather than cropped, so any shape works.
+   */
+  aboutSketch?: (number | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "hero-media_select".
+ */
+export interface HeroMediaSelect<T extends boolean = true> {
+  homeSlides?:
+    | T
+    | {
+        kind?: T;
+        image?: T;
+        video?: T;
+        poster?: T;
+        id?: T;
+      };
+  pageHeroArt?: T;
+  aboutSketch?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
