@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useId, useRef, useState } from 'react'
-import { ArrowDown, ArrowUpRight } from 'lucide-react'
+import { ArrowDown, ArrowUpRight, DraftingCompass, Ruler, Pencil, TriangleRight, Eraser } from 'lucide-react'
 import Link from 'next/link'
 import styles from './what-we-do.module.css'
 
@@ -73,8 +73,12 @@ export function WhatWeDo() {
       const build = ease(range(progress, 0.24, 0.49))
       const enter = ease(range(progress, 0.60, 0.85))
       const interior = ease(range(progress, 0.73, 0.88))
-      const draw = ease(range(progress, 0, 0.20))
-      stage.style.setProperty('--draw', `${12 + draw * 88}%`)
+      const draw = ease(range(progress, 0.03, 0.20))
+      const toolsExit = ease(range(progress, 0.04, 0.18))
+      stage.style.setProperty('--draw', `${draw * 100}%`)
+      stage.style.setProperty('--tools-opacity', String(1 - toolsExit))
+      stage.style.setProperty('--tools-shift', `${-toolsExit * 30}px`)
+      stage.style.setProperty('--tools-scale', String(1 + toolsExit * 0.08))
       stage.style.setProperty('--build', String(build))
       stage.style.setProperty('--exterior-opacity', String(1 - interior))
       stage.style.setProperty('--camera-scale', String(1 + enter * 1.7))
@@ -123,12 +127,21 @@ export function WhatWeDo() {
     <section ref={sectionRef} id="what-we-do" aria-labelledby="services-heading" className={styles.section}>
       <div ref={stageRef} className={styles.stage}>
         <header className={styles.header}>
-          <p className={styles.eyebrow}>One vision. Every detail.</p>
           <h2 id="services-heading">What We Do</h2>
           <p className={styles.summary}>From the first line to the space you call home.</p>
         </header>
 
         <div className={styles.scene} aria-hidden="true">
+          <div className={styles.draftingTools}>
+            <div className={styles.draftingDesk}>
+              <div className={styles.sketchPaper}><span>CONCEPT / 01</span></div>
+              <DraftingCompass className={`${styles.instrument} ${styles.compass}`} />
+              <Ruler className={`${styles.instrument} ${styles.ruler}`} />
+              <Pencil className={`${styles.instrument} ${styles.pencil}`} />
+              <TriangleRight className={`${styles.instrument} ${styles.setSquare}`} />
+              <Eraser className={`${styles.instrument} ${styles.eraser}`} />
+            </div>
+          </div>
           <div className={styles.drawing}><VillaFrame index={0} /></div>
           <div className={styles.exterior}><VillaFrame index={1} /></div>
           <div className={styles.interior}><VillaFrame index={2} /></div>

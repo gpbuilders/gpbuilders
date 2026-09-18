@@ -1,4 +1,72 @@
+'use client'
+
+import { useEffect, useId, useRef } from 'react'
 import styles from './how-we-deliver.module.css'
+
+const MARKERS = [
+  { x: 134, y: 343, radius: 52 },
+  { x: 389, y: 305, radius: 52 },
+  { x: 625, y: 305, radius: 52 },
+  { x: 857, y: 305, radius: 52 },
+  { x: 1072, y: 310, radius: 53 },
+  { x: 1395, y: 380, radius: 49 },
+]
+
+function Roadmap() {
+  const id = useId()
+  const ref = useRef<SVGSVGElement>(null)
+
+  useEffect(() => {
+    const svg = ref.current
+    if (!svg) return
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const markers = svg.querySelectorAll<SVGGElement>('[data-marker]')
+    let frame = 0
+    const update = () => {
+      frame = 0
+      const progress = (window.innerHeight * .95 - svg.getBoundingClientRect().top) / (window.innerHeight * .65)
+      markers.forEach((marker, index) => {
+        const t = reduced.matches ? 1 : Math.max(0, Math.min(1, (progress - index * .09) / .5))
+        const eased = 1 - Math.pow(1 - t, 3)
+        marker.style.transform = `translateY(${-180 * (1 - eased)}px)`
+        marker.style.opacity = String(Math.min(1, t * 4))
+      })
+    }
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update) }
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
+    reduced.addEventListener('change', schedule)
+    update()
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      reduced.removeEventListener('change', schedule)
+    }
+  }, [])
+
+  return (
+    <div className={styles.roadContainer}>
+      <svg ref={ref} viewBox="0 35 1672 555" className={styles.road} aria-hidden="true" focusable="false">
+        <defs>
+          <mask id={`${id}-road`} maskUnits="userSpaceOnUse" x="0" y="35" width="1672" height="555">
+            <rect x="0" y="35" width="1672" height="555" fill="white" />
+            {MARKERS.map(({ x, y, radius }, index) => <circle key={index} cx={x} cy={y} r={radius} fill="black" />)}
+          </mask>
+          {MARKERS.map(({ x, y, radius }, index) => (
+            <clipPath key={index} id={`${id}-marker-${index}`}><circle cx={x} cy={y} r={radius} /></clipPath>
+          ))}
+        </defs>
+        <image href="/images/delivery-blueprint.png" width="1672" height="941" mask={`url(#${id}-road)`} />
+        {MARKERS.map((_, index) => (
+          <g key={index} data-marker>
+            <image href="/images/delivery-blueprint.png" width="1672" height="941" clipPath={`url(#${id}-marker-${index})`} />
+          </g>
+        ))}
+      </svg>
+    </div>
+  )
+}
 
 const STEPS = [
   { title: 'Project planning', points: ['Define scope & goals', 'Set key milestones'], crop: '85 600 175 190' },
@@ -31,7 +99,7 @@ export function HowWeDeliver() {
             <h2 id="delivery-heading" className={styles.title}>How we deliver</h2>
             <p className={styles.intro}>Plan strategically. Execute precisely.</p>
           </header>
-          <BlueprintArt viewBox="0 35 1672 555" className={styles.road} />
+          <Roadmap />
         </div>
         <ol className={styles.steps}>
           {STEPS.map((step, index) => (
@@ -47,7 +115,6 @@ export function HowWeDeliver() {
           ))}
         </ol>
         <footer className={styles.footer}>
-          <p className={styles.note}>Our Managing Director personally inspects<br className="hidden sm:block" /> every active site — twice a week.</p>
           <p className={styles.plate}>A six-step building journey</p>
           <div className={styles.stamp}>
             <div><span>Built by</span><strong>GP Builders</strong></div>

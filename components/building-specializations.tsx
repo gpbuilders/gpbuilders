@@ -54,7 +54,7 @@ export function BuildingSpecializations() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <header className={styles.header}>
           <p className={styles.eyebrow}>Our expertise</p>
-          <h2 id="specializations-heading">What We Build<br />&amp; Design</h2>
+          <h2 id="specializations-heading">What We Build &amp; Design</h2>
           <p className={styles.intro}>From intimate residences to ambitious commercial spaces, explore the places we bring to life.</p>
         </header>
         <div className={styles.layout}>

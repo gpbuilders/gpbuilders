@@ -4,9 +4,9 @@ import { useEffect, useRef } from 'react'
 import { Armchair, Building2, DraftingCompass } from 'lucide-react'
 
 const STATS = [
-  { value: 12, icon: DraftingCompass, label: 'Years in Construction & Interiors', description: 'Hands-on industry experience behind every project' },
-  { value: 9, icon: Building2, label: 'Construction Projects', description: 'Complete builds delivered from ground up' },
-  { value: 20, icon: Armchair, label: 'Interior Projects', description: 'From modular kitchens to full home interiors' },
+  { value: 12, icon: DraftingCompass, label: 'Years in Construction & Interiors' },
+  { value: 9, icon: Building2, label: 'Construction Projects' },
+  { value: 20, icon: Armchair, label: 'Interior Projects' },
 ] as const
 
 function Stat({ stat }: { stat: (typeof STATS)[number] }) {
@@ -51,16 +51,15 @@ function Stat({ stat }: { stat: (typeof STATS)[number] }) {
 
   const Icon = stat.icon
   return (
-    <div ref={ref} className="py-8 first:pt-0 last:pb-0 md:px-5 md:py-0 md:first:pl-0 md:last:pr-0 lg:px-10">
-      <div className="mb-6 flex items-center justify-between gap-4 text-primary">
+    <div ref={ref} className="py-8 first:pt-0 last:pb-0 md:px-5 md:py-0 lg:px-10">
+      <div className="mb-6 flex items-center justify-center gap-5 text-primary lg:gap-6">
+        <Icon aria-hidden="true" strokeWidth={1.35} className="h-9 w-9 shrink-0 lg:h-11 lg:w-11" />
         <p className="flex items-start gap-1 font-serif text-[72px] leading-none tracking-tight lg:text-[88px]" aria-label={`${stat.value} plus`}>
           <span ref={numberRef} aria-hidden="true" className="tabular-nums">{stat.value}</span>
           <span aria-hidden="true" className="mt-1 font-sans text-4xl font-light">+</span>
         </p>
-        <Icon aria-hidden="true" strokeWidth={1.35} className="h-14 w-14 shrink-0 lg:h-16 lg:w-16" />
       </div>
-      <h3 className="mb-3 max-w-[24ch] text-lg font-medium leading-snug text-foreground md:min-h-[50px]">{stat.label}</h3>
-      <p className="max-w-[32ch] text-sm leading-relaxed text-muted-foreground">{stat.description}</p>
+      <h3 className="mx-auto max-w-[24ch] text-center text-lg font-medium leading-snug text-foreground md:min-h-[50px]">{stat.label}</h3>
     </div>
   )
 }

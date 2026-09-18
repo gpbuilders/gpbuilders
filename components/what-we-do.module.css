@@ -4,7 +4,10 @@
   background: var(--background-alt);
 }
 .stage {
-  --draw: 12%;
+  --draw: 0%;
+  --tools-opacity: 1;
+  --tools-shift: 0px;
+  --tools-scale: 1;
   --build: 0;
   --exterior-opacity: 1;
   --camera-scale: 1;
@@ -23,11 +26,22 @@
 .summary { margin-top: 12px; max-width: 30ch; color: var(--muted-foreground); font-size: 15px; line-height: 1.6; }
 .scene { position: absolute; inset: 0 0 0 29%; overflow: hidden; }
 .frame { display: block; width: 100%; height: 100%; overflow: hidden; }
+.draftingTools { position: absolute; inset: 0; display: grid; place-items: center; opacity: var(--tools-opacity); transform: translateY(var(--tools-shift)) scale(var(--tools-scale)); pointer-events: none; }
+.draftingDesk { position: relative; width: min(78%, 750px); aspect-ratio: 1.25; max-height: 86%; }
+.sketchPaper { position: absolute; inset: 8.25% 6% 9.25% 6%; transform: rotate(-8deg); background-color: var(--background); background-image: linear-gradient(rgb(47 97 105 / 8%) 1px, transparent 1px), linear-gradient(90deg, rgb(47 97 105 / 8%) 1px, transparent 1px); background-size: 24px 24px; box-shadow: 4px 10px 28px rgb(35 42 44 / 8%); }
+.sketchPaper::before { content: ''; position: absolute; inset: 20% 16%; border: 1px solid rgb(47 97 105 / 24%); background: linear-gradient(90deg, transparent 48%, rgb(47 97 105 / 16%) 49%, transparent 50%), linear-gradient(transparent 49%, rgb(47 97 105 / 16%) 50%, transparent 51%); }
+.sketchPaper span { position: absolute; right: 6%; bottom: 5%; font-size: 10px; letter-spacing: .16em; color: var(--primary); }
+.instrument { position: absolute; height: auto; color: var(--primary); stroke-width: 1; filter: drop-shadow(3px 5px 2px rgb(35 42 44 / 12%)); }
+.compass { width: 30.272%; top: 19%; left: 31%; transform: rotate(18deg); }
+.ruler { width: 28.7232%; bottom: 13%; left: 14%; transform: rotate(27deg); }
+.pencil { width: 22.528%; right: 10%; top: 16%; transform: rotate(-25deg); }
+.setSquare { width: 21.12%; right: 12%; bottom: 20%; transform: rotate(-15deg); }
+.eraser { width: 12.672%; left: 15%; top: 17%; transform: rotate(-18deg); }
 .drawing, .exterior, .interior { position: absolute; inset: 0; }
 .drawing { clip-path: inset(0 calc(100% - var(--draw)) 0 0); opacity: calc(1 - var(--build)); }
 .exterior { clip-path: inset(calc((1 - var(--build)) * 100%) 0 0 0); opacity: var(--exterior-opacity); transform: scale(var(--camera-scale)); transform-origin: 57% 68%; will-change: transform, opacity; }
 .interior { opacity: var(--interior); transform: scale(var(--interior-scale)); will-change: transform, opacity; }
-.sceneBlend { position: absolute; inset: 0; background: linear-gradient(to right, var(--background-alt) 0%, transparent 22%), linear-gradient(to top, var(--background-alt) 0%, transparent 18%), linear-gradient(to bottom, var(--background-alt) 0%, transparent 12%); pointer-events: none; }
+.sceneBlend { position: absolute; inset: 0; opacity: .5; background: linear-gradient(to right, var(--background-alt) 0%, transparent 22%), linear-gradient(to top, var(--background-alt) 0%, transparent 18%), linear-gradient(to bottom, var(--background-alt) 0%, transparent 12%); pointer-events: none; }
 .copy { position: absolute; z-index: 2; top: 39%; left: max(5%, calc((100% - 1280px) / 2)); width: 29%; max-width: 365px; }
 .chapter { grid-area: 1 / 1; opacity: 0; transform: translateY(12px); transition: opacity 240ms ease, transform 240ms ease; pointer-events: none; }
 .copy { display: grid; }
@@ -53,6 +67,7 @@
   .header h2 { font-size: 30px; margin-top: 7px; }
   .summary { display: none; }
   .scene { inset: 90px 0 34%; }
+  .draftingDesk { width: min(82%, 380px); }
   .sceneBlend { background: linear-gradient(to bottom, var(--background-alt), transparent 12%), linear-gradient(to top, var(--background-alt), transparent 15%); }
   .copy { top: auto; bottom: 94px; left: 6%; width: 88%; max-width: none; }
   .chapterNumber { font-size: 11px; }
