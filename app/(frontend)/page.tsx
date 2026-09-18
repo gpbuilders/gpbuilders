@@ -24,13 +24,7 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
-      <ParallaxSection
-        backgroundColor="bg-background-alt"
-        speed={0.5}
-        className=""
-      >
-        <WhatWeDo />
-      </ParallaxSection>
+      <WhatWeDo />
       <About />
       <HowWeDeliver />
       <ParallaxSection

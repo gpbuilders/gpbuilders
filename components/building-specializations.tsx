@@ -1,4 +1,9 @@
+'use client'
+
 import Image from 'next/image'
+import { useState } from 'react'
+import { Minus, Plus } from 'lucide-react'
+import styles from './building-specializations.module.css'
 
 const SPECIALIZATIONS = [
   {
@@ -34,54 +39,55 @@ const SPECIALIZATIONS = [
 ]
 
 export function BuildingSpecializations() {
+  const [selection, setSelection] = useState({ active: 0, previous: 0, forward: true })
+  const select = (index: number) => {
+    setSelection(current => index === current.active ? current : {
+      active: index,
+      previous: current.active,
+      forward: index > current.active,
+    })
+  }
+  const active = SPECIALIZATIONS[selection.active]
+
   return (
-    <section className="py-20 lg:py-28">
+    <section aria-labelledby="specializations-heading" className={styles.section}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-16 text-center max-w-2xl mx-auto">
-          <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-4">
-            Expertise
-          </p>
-          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-semibold text-foreground mb-6">
-            What We Build & Design
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            From intimate residences to commercial powerhouses, our portfolio spans diverse building types and spaces.
-          </p>
-        </div>
-
-        {/* Specializations Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-16">
-          {SPECIALIZATIONS.map((spec) => (
-            <div
-              key={spec.title}
-              className="group relative overflow-hidden rounded-3xl h-80 shadow-lg hover:shadow-2xl transition-all duration-300"
-            >
-              {/* Background Image */}
-              <Image
-                src={spec.image}
-                alt={spec.title}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-
-              {/* Scrim — see .card-scrim in globals.css */}
-              <div className="card-scrim pointer-events-none absolute inset-0" />
-
-              {/* Content Overlay */}
-              <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                <h3 className="font-serif text-2xl font-semibold text-white mb-2">
-                  {spec.title}
-                </h3>
-                <p className="text-white/85 text-sm leading-relaxed mb-0 group-hover:text-white transition-colors duration-300 line-clamp-2 group-hover:line-clamp-3">
-                  {spec.description}
-                </p>
-
-                {/* Bottom Accent Line */}
-                <div className="mt-4 h-1 w-0 bg-accent transition-all duration-300 group-hover:w-12" />
+        <header className={styles.header}>
+          <p className={styles.eyebrow}>Our expertise</p>
+          <h2 id="specializations-heading">What We Build<br />&amp; Design</h2>
+          <p className={styles.intro}>From intimate residences to ambitious commercial spaces, explore the places we bring to life.</p>
+        </header>
+        <div className={styles.layout}>
+          <div>
+            {SPECIALIZATIONS.map((spec, index) => {
+              const isActive = selection.active === index
+              return (
+                <div key={spec.title} className={styles.category} data-active={isActive}>
+                  <h3>
+                    <button type="button" id={`specialization-button-${index}`} aria-expanded={isActive} aria-controls={`specialization-description-${index}`} onClick={() => select(index)}>
+                      {spec.title}
+                      {isActive ? <Minus aria-hidden="true" size={22} /> : <Plus aria-hidden="true" size={22} />}
+                    </button>
+                  </h3>
+                  <div id={`specialization-description-${index}`} role="region" aria-labelledby={`specialization-button-${index}`} hidden={!isActive}>
+                    <p className={styles.description}>{spec.description}</p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+          <figure className={styles.figure}>
+            <div className={styles.photoStage}>
+              <Image src={SPECIALIZATIONS[selection.previous].image} alt="" aria-hidden="true" fill sizes="(max-width: 767px) 100vw, 50vw" className={styles.photo} />
+              <div key={selection.active} className={styles.reveal} data-forward={selection.forward}>
+                <Image src={active.image} alt={active.title} fill sizes="(max-width: 767px) 100vw, 50vw" className={styles.photo} />
               </div>
             </div>
-          ))}
+            <figcaption aria-live="polite">
+              <span>{active.title}</span>
+              <span className={styles.count}>{String(selection.active + 1).padStart(2, '0')} / 06</span>
+            </figcaption>
+          </figure>
         </div>
       </div>
     </section>

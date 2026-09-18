@@ -1,75 +1,64 @@
+import styles from './how-we-deliver.module.css'
+
 const STEPS = [
-  {
-    num: '01',
-    title: 'Project planning',
-    description:
-      'Requirements, scope, macro schedule and milestones — defined before work begins.',
-  },
-  {
-    num: '02',
-    title: 'Weekly progress reviews',
-    description:
-      'Management and site engineers review progress, resolve snags, and plan the week ahead.',
-  },
-  {
-    num: '03',
-    title: 'Leadership inspections',
-    description:
-      'The MD visits every active site twice weekly to inspect quality and unblock delivery.',
-  },
-  {
-    num: '04',
-    title: 'Engineering-led sites',
-    description:
-      'Experienced engineers handle supervision, coordination, documentation and safety.',
-  },
-  {
-    num: '05',
-    title: 'Continuous quality checks',
-    description:
-      'Quality monitoring built into every stage of construction and interior work.',
-  },
-  {
-    num: '06',
-    title: 'On-time delivery',
-    description:
-      'Disciplined planning and proactive reviews keep every project on schedule.',
-  },
-]
+  { title: 'Project planning', points: ['Define scope & goals', 'Set key milestones'], crop: '85 600 175 190' },
+  { title: 'Weekly reviews', points: ['Track site progress', 'Resolve issues early'], crop: '315 600 185 190' },
+  { title: 'Leadership inspections', points: ['Twice-weekly MD visits', 'Check quality & progress'], crop: '535 600 250 190' },
+  { title: 'Engineering-led sites', points: ['Expert supervision', 'Coordinate every detail'], crop: '840 600 170 190' },
+  { title: 'Quality checks', points: ['Inspect every stage', 'Maintain high standards'], crop: '1060 600 310 190' },
+  { title: 'On-time delivery', points: ['Proactive planning', 'Timely handover'], crop: '1400 600 180 190' },
+] as const
+
+// Reuse regions of one transparent illustration. All meaningful content is HTML.
+function BlueprintArt({ viewBox, className }: { viewBox: string; className: string }) {
+  const [x, y, width, height] = viewBox.split(' ').map(Number)
+  const clipId = `delivery-art-${x}-${y}`
+  return (
+    <svg viewBox={viewBox} className={className} aria-hidden="true" focusable="false">
+      <defs><clipPath id={clipId}><rect x={x} y={y} width={width} height={height} /></clipPath></defs>
+      <image href="/images/delivery-blueprint.png" width="1672" height="941" clipPath={`url(#${clipId})`} />
+    </svg>
+  )
+}
 
 export function HowWeDeliver() {
   return (
-    <section className="bg-background-alt py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <p className="mb-3.5 text-xs uppercase tracking-[0.28em] text-primary">
-          How we deliver
-        </p>
-        <h2 className="mb-14 font-serif text-3xl font-normal text-foreground sm:text-4xl lg:text-[40px]">
-          Plan strategically. Execute precisely.
-        </h2>
-
-        <div className="grid gap-x-14 gap-y-11 sm:grid-cols-2 lg:grid-cols-3">
-          {STEPS.map((step) => (
-            <div key={step.num} className="flex items-start gap-5">
-              <span className="min-w-11 font-serif text-[34px] leading-none text-secondary/45">
-                {step.num}
-              </span>
-              <div>
-                <h3 className="mb-2 text-[17px] font-medium tracking-[0.02em] text-foreground">
-                  {step.title}
-                </h3>
-                <p className="text-[14.5px] font-light leading-[1.6] text-muted-foreground">
-                  {step.description}
-                </p>
-              </div>
-            </div>
-          ))}
+    <section aria-labelledby="delivery-heading" className={`${styles.section} bg-background-alt px-4 py-12 sm:px-6 lg:px-8 lg:py-16`}>
+      <div className={styles.blueprint}>
+        <div className={styles.journey}>
+          <header className={styles.heading}>
+            <p className={styles.eyebrow}>Our approach</p>
+            <h2 id="delivery-heading" className={styles.title}>How we deliver</h2>
+            <p className={styles.intro}>Plan strategically. Execute precisely.</p>
+          </header>
+          <BlueprintArt viewBox="0 35 1672 555" className={styles.road} />
         </div>
-
-        <p className="mt-14 font-serif text-xl tracking-[0.04em] text-primary">
-          Our Managing Director personally inspects every active site — twice a
-          week.
-        </p>
+        <ol className={styles.steps}>
+          {STEPS.map((step, index) => (
+            <li key={step.title} className={styles.step}>
+              <h3 className={styles.stepTitle}>
+                <span className={styles.number}>{index + 1}.</span>{step.title}
+              </h3>
+              <BlueprintArt viewBox={step.crop} className={styles.icon} />
+              <ul className={styles.points}>
+                {step.points.map((point) => <li key={point}>{point}</li>)}
+              </ul>
+            </li>
+          ))}
+        </ol>
+        <footer className={styles.footer}>
+          <p className={styles.note}>Our Managing Director personally inspects<br className="hidden sm:block" /> every active site — twice a week.</p>
+          <p className={styles.plate}>A six-step building journey</p>
+          <div className={styles.stamp}>
+            <div><span>Built by</span><strong>GP Builders</strong></div>
+            <div><span>Our promise</span><strong>Quality &amp; value</strong></div>
+            <svg viewBox="0 0 60 76" aria-hidden="true" className={styles.compass}>
+              <text x="30" y="12" textAnchor="middle" fill="currentColor" stroke="none" fontSize="10">N</text>
+              <circle cx="30" cy="46" r="21" />
+              <path d="M30 18 36 40 56 46 36 52 30 74 24 52 4 46 24 40Z M30 18V74 M4 46H56 M15 31 45 61 M45 31 15 61" />
+            </svg>
+          </div>
+        </footer>
       </div>
     </section>
   )

@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { AboutStats } from '@/components/about-stats'
 
 export function AboutHero() {
   return (
@@ -74,41 +75,7 @@ export function AboutHero() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="bg-background-alt py-16 lg:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                number: '12+',
-                label: 'Years in Construction & Interiors',
-                description: 'Hands-on industry experience behind every project',
-              },
-              {
-                number: '9+',
-                label: 'Construction Projects',
-                description: 'Complete builds delivered from ground up',
-              },
-              {
-                number: '20+',
-                label: 'Interior Projects',
-                description: 'From modular kitchens to full home interiors',
-              },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="bg-card rounded-2xl p-8 border border-border hover:border-primary/50 transition-all"
-              >
-                <p className="text-5xl sm:text-6xl font-semibold text-foreground mb-3 font-serif">
-                  {stat.number}
-                </p>
-                <h3 className="font-semibold text-foreground mb-2">{stat.label}</h3>
-                <p className="text-sm text-muted-foreground">{stat.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <AboutStats />
     </>
   )
 }

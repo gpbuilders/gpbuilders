@@ -1,0 +1,70 @@
+.section {
+  background-image:
+    linear-gradient(to right, rgb(47 97 105 / 5%) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(47 97 105 / 5%) 1px, transparent 1px),
+    linear-gradient(to right, rgb(47 97 105 / 4%) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(47 97 105 / 4%) 1px, transparent 1px);
+  background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px;
+}
+.blueprint {
+  position: relative;
+  max-width: 1200px;
+  margin-inline: auto;
+  color: var(--primary-dark);
+}
+.journey { position: relative; }
+.heading { padding: 32px 28px 0; }
+.eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .24em; }
+.title { margin-top: 8px; font-family: var(--font-serif); font-size: clamp(30px, 3vw, 44px); line-height: 1.15; scroll-margin-top: 120px; }
+.intro { margin-top: 12px; font-size: 14px; }
+.road { display: block; width: 100%; height: auto; aspect-ratio: 1672 / 555; margin-top: 12px; }
+.steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; padding: 24px 24px 36px; list-style: none; }
+.step { min-width: 0; }
+.stepTitle { display: flex; gap: 7px; min-height: 42px; align-items: flex-start; font-size: 12px; font-weight: 500; line-height: 1.4; text-transform: uppercase; letter-spacing: .045em; }
+.number { flex-shrink: 0; }
+.icon { display: block; width: auto; max-width: 100%; height: 88px; margin: 8px auto 12px; overflow: hidden; }
+.points { padding-left: 13px; list-style: disc; font-size: 12px; line-height: 1.7; }
+.points li + li { margin-top: 3px; }
+.footer { position: relative; display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 0 24px 28px; }
+.note { font-size: 12px; line-height: 1.65; text-align: center; }
+.plate { position: relative; border: 1px solid var(--primary); padding: 12px 20px; font-size: 13px; letter-spacing: .09em; text-align: center; text-transform: uppercase; }
+.plate::before, .plate::after { content: '·'; position: absolute; top: 50%; transform: translateY(-50%); font-size: 22px; }
+.plate::before { left: 5px; }
+.plate::after { right: 5px; }
+.stamp { display: grid; grid-template-columns: 1fr 1fr 50px; align-items: stretch; border: 1px solid var(--primary); }
+.stamp > div { display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 10px 12px; border-right: 1px solid var(--primary); }
+.stamp span { font-size: 9px; text-transform: uppercase; letter-spacing: .08em; }
+.stamp strong { font-size: 11px; text-transform: uppercase; font-weight: 500; white-space: nowrap; }
+.compass { width: 42px; height: 58px; margin: 4px; fill: none; stroke: currentColor; stroke-width: .8; }
+@media (min-width: 640px) {
+  .road { margin-top: 0; }
+  .intro { font-size: 13px; }
+  .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 28px; padding: 20px 36px 40px; }
+  .stepTitle { font-size: 13px; }
+  .points { font-size: 13px; }
+}
+@media (min-width: 1024px) {
+  .heading { position: absolute; top: 9%; left: 4%; padding: 0; }
+  .intro { font-size: 16px; }
+  .steps { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 20px; padding: 4px 28px 26px; }
+  .stepTitle { min-height: 40px; font-size: 13px; }
+  .icon { height: 92px; }
+  .points { font-size: 12px; }
+  .footer { flex-direction: row; justify-content: space-between; gap: 20px; padding: 4px 28px 22px; }
+  .note { max-width: 260px; text-align: left; font-size: 11px; }
+  .plate { font-size: 15px; }
+}
+@media (min-width: 1280px) {
+  .steps { gap: 22px; padding-inline: 32px; }
+  .stepTitle { font-size: 14px; }
+  .points { font-size: 13px; }
+  .icon { height: 100px; }
+  .plate { font-size: 16px; }
+}
+
+@media (max-width: 399px) {
+  .stamp { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 42px; max-width: 100%; }
+  .stamp > div { padding: 8px; }
+  .stamp strong { white-space: normal; font-size: 10px; }
+  .compass { width: 34px; }
+}
