@@ -74,7 +74,7 @@ export function Process() {
                 <span className="absolute right-6 top-6 font-serif text-4xl font-semibold text-primary/10">
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-secondary">
                   <Icon className="h-6 w-6" />
                 </div>
                 <h3 className="mt-5 text-lg font-semibold text-foreground">

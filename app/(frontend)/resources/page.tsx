@@ -31,6 +31,7 @@ export default async function ResourcesPage() {
   return (
     <>
       <MinimalHero
+        background="alt"
         title="Resource"
         subtitle="Blog & News"
         description="Explore the latest architectural trends, innovative designs, sustainability insights, industry news, and expert tips to inspire creativity and enhance your next project."

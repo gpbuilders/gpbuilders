@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Calendar, Clock } from 'lucide-react'
+import { ArrowRight, Calendar, Clock } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { CATEGORY_LABELS, formatPostDate } from '@/lib/posts'
 import { mediaAlt, mediaUrl } from '@/lib/media'
@@ -123,9 +123,14 @@ export function FullBlogResources({ posts }: { posts: Post[] }) {
                       ) : null}
                     </div>
                     {/* A span, not a button: the whole card is already the
-                        link, and a button nested in an anchor is invalid. */}
-                    <span className="inline-flex whitespace-nowrap rounded-full bg-foreground px-6 py-2.5 text-sm font-semibold text-white transition-colors group-hover:bg-primary">
-                      Read article
+                        link, and a button nested in an anchor is invalid. The
+                        underline is on a pseudo-element rather than
+                        text-decoration so it can grow from the left on hover. */}
+                    <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+                      <span className="relative after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 group-hover:after:scale-x-100">
+                        Read article
+                      </span>
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
                   </div>
                 </div>
