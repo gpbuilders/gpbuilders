@@ -52,7 +52,7 @@ export function ViewWorkCta() {
                   alt={image.alt}
                   fill
                   sizes="(max-width: 1024px) 50vw, 25vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
                 />
               </Link>
             ))}

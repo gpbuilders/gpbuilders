@@ -62,6 +62,11 @@
   .plate { font-size: 16px; }
 }
 
+@media (max-width: 639px) {
+  .plate { font-size: 10px; letter-spacing: .06em; padding: 10px 16px; }
+  .plate::before, .plate::after { font-size: 16px; }
+}
+
 @media (max-width: 399px) {
   .stamp { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 42px; max-width: 100%; }
   .stamp > div { padding: 8px; }

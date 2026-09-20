@@ -1,4 +1,7 @@
-import { Star, Quote } from 'lucide-react'
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+import { Star, Quote, Pause, Play } from 'lucide-react'
 
 const TESTIMONIALS = [
   {
@@ -25,6 +28,68 @@ const TESTIMONIALS = [
 ]
 
 export function Testimonials() {
+  const scrollerRef = useRef<HTMLDivElement>(null)
+  const interaction = useRef({ hover: false, touch: false, focus: false, resumeAt: 0 })
+  const [paused, setPaused] = useState(false)
+  const [canScroll, setCanScroll] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(true)
+
+  useEffect(() => {
+    const scroller = scrollerRef.current
+    if (!scroller) return
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const syncMotion = () => setReducedMotion(media.matches)
+    const syncSize = () => setCanScroll(scroller.scrollWidth > scroller.clientWidth + 2)
+    syncMotion()
+    syncSize()
+    media.addEventListener('change', syncMotion)
+    const resize = new ResizeObserver(syncSize)
+    resize.observe(scroller)
+    const release = () => {
+      interaction.current.touch = false
+      interaction.current.resumeAt = performance.now() + 1800
+    }
+    window.addEventListener('pointerup', release)
+    window.addEventListener('pointercancel', release)
+    return () => {
+      media.removeEventListener('change', syncMotion)
+      resize.disconnect()
+      window.removeEventListener('pointerup', release)
+      window.removeEventListener('pointercancel', release)
+    }
+  }, [])
+
+  useEffect(() => {
+    const scroller = scrollerRef.current
+    if (!scroller || !canScroll || paused || reducedMotion) return
+    let frame = 0
+    let previous = 0
+    let position = scroller.scrollLeft
+    let direction = 1
+    let visible = false
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting })
+    observer.observe(scroller)
+    const tick = (now: number) => {
+      const elapsed = previous ? Math.min(now - previous, 50) : 0
+      previous = now
+      const state = interaction.current
+      if (!visible || document.hidden || state.hover || state.touch || state.focus || now < state.resumeAt) {
+        position = scroller.scrollLeft
+      } else {
+        const end = scroller.scrollWidth - scroller.clientWidth
+        position = Math.max(0, Math.min(end, position + direction * elapsed * 0.018))
+        scroller.scrollLeft = position
+        if (position >= end || position <= 0) {
+          direction *= -1
+          state.resumeAt = now + 1800
+        }
+      }
+      frame = requestAnimationFrame(tick)
+    }
+    frame = requestAnimationFrame(tick)
+    return () => { cancelAnimationFrame(frame); observer.disconnect() }
+  }, [canScroll, paused, reducedMotion])
+
   return (
     <section id="reviews" className="scroll-mt-20 py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -37,14 +102,31 @@ export function Testimonials() {
           </h2>
         </div>
 
-        {/* Below lg this is a snapping horizontal scroller; at lg it goes back
-            to the three-column grid. It deliberately sits inside the page
-            gutter rather than bleeding to the screen edge, so cards keep the
-            same left inset as the heading above them. */}
+        {canScroll && !reducedMotion && (
+          <div className="mt-6 flex justify-center">
+            <button type="button" onClick={() => setPaused(value => !value)}
+              aria-label={paused ? 'Resume review scrolling' : 'Pause review scrolling'}
+              aria-pressed={paused}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-muted/30 px-4 text-sm text-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent">
+              {paused ? <Play size={14} /> : <Pause size={14} />}
+              {paused ? 'Resume scrolling' : 'Pause scrolling'}
+            </button>
+          </div>
+        )}
         <div
+          ref={scrollerRef}
+          role="region"
+          aria-label="Customer reviews"
+          tabIndex={canScroll ? 0 : undefined}
+          onPointerEnter={event => { if (event.pointerType === 'mouse') interaction.current.hover = true }}
+          onPointerLeave={() => { interaction.current.hover = false }}
+          onPointerDown={() => { interaction.current.touch = true; interaction.current.focus = false }}
+          onFocus={event => { interaction.current.focus = event.currentTarget.matches(':focus-visible') }}
+          onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) interaction.current.focus = false }}
+          onWheel={() => { interaction.current.resumeAt = performance.now() + 3000 }}
           className={[
-            'mt-14 flex snap-x snap-mandatory gap-8 overflow-x-auto overscroll-x-contain pb-4',
-            'lg:grid lg:snap-none lg:grid-cols-3 lg:overflow-visible lg:pb-0',
+            'mt-10 flex gap-8 overflow-x-auto overscroll-x-contain pb-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent',
+            TESTIMONIALS.length <= 3 ? 'lg:grid lg:grid-cols-3 lg:overflow-visible lg:pb-0' : '',
           ].join(' ')}
         >
           {TESTIMONIALS.map((t) => (
@@ -52,7 +134,7 @@ export function Testimonials() {
               key={t.name}
               /* 82% leaves the next card peeking, which is what signals the
                  row can be swiped. */
-              className="flex w-[82%] shrink-0 snap-start flex-col border-t border-muted/20 pt-7 sm:w-[60%] lg:w-auto"
+              className={`flex w-[82%] shrink-0 flex-col border-t border-muted/20 pt-7 sm:w-[60%] ${TESTIMONIALS.length <= 3 ? 'lg:w-auto' : 'lg:w-[calc((100%-4rem)/3)]'}`}
             >
               <Quote className="h-8 w-8 text-accent/30" />
               <div className="mt-4 flex gap-0.5" aria-label="5 out of 5 stars">

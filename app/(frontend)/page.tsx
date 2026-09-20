@@ -11,7 +11,6 @@ import { Testimonials } from '@/components/testimonials'
 import { BrandsWeBuild } from '@/components/brands-we-build'
 import { SelectedWork } from '@/components/selected-work'
 import { ConsultationCta } from '@/components/consultation-cta'
-import { ParallaxSection } from '@/components/parallax-section'
 
 export default async function HomePage() {
   const hero = await getHeroMedia()
@@ -30,21 +29,13 @@ export default async function HomePage() {
       <WhatWeDo />
       <About />
       <HowWeDeliver />
-      <ParallaxSection
-        backgroundColor="bg-dark-bg"
-        speed={0.4}
-        className=""
-      >
+      <div className="bg-dark-bg">
         <Testimonials />
-      </ParallaxSection>
+      </div>
       <BrandsWeBuild />
-      <ParallaxSection
-        backgroundColor="bg-background-alt"
-        speed={0.5}
-        className=""
-      >
+      <div className="bg-background-alt">
         <SelectedWork projects={projects} />
-      </ParallaxSection>
+      </div>
       <ConsultationCta />
     </>
   )

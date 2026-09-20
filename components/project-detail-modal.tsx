@@ -21,6 +21,9 @@ export function ProjectDetailModal({
   onClose,
 }: ProjectDetailModalProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const closeRef = useRef<HTMLButtonElement>(null)
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
 
   // Lock the page behind the modal. Compensating for the scrollbar keeps the
   // fixed header from jumping on platforms that reserve gutter space for it.
@@ -54,12 +57,30 @@ export function ProjectDetailModal({
   useEffect(() => {
     if (!isOpen) return
 
+    const previousFocus = document.activeElement as HTMLElement | null
+    closeRef.current?.focus()
+
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose()
+      if (event.key !== 'Tab') return
+      const controls = dialogRef.current?.querySelectorAll<HTMLElement>('button, a[href], [tabindex="0"]')
+      if (!controls?.length) return
+      const first = controls[0]
+      const last = controls[controls.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
     }
 
     document.addEventListener('keydown', onKeyDown)
-    return () => document.removeEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      if (previousFocus?.isConnected) previousFocus.focus()
+    }
   }, [isOpen, onClose])
 
   if (!isOpen || typeof document === 'undefined') return null
@@ -82,7 +103,6 @@ export function ProjectDetailModal({
   // Swipe handling. The panel below scrolls vertically, so a gesture only
   // counts as a swipe when it is clearly horizontal — otherwise scrolling the
   // details would keep changing the photo underneath.
-  const touchStart = useRef<{ x: number; y: number } | null>(null)
 
   const onTouchStart = (event: React.TouchEvent) => {
     const t = event.touches[0]
@@ -122,16 +142,21 @@ export function ProjectDetailModal({
 
       {/* Modal */}
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label={project.title}
         className="fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-8"
+        onClick={event => { if (event.target === event.currentTarget) onClose() }}
       >
         {/* flex-col so the scrolling area below can be given a bounded height.
             max-h alone leaves the child's h-full resolving against nothing. */}
         <div className="relative flex w-full max-w-5xl max-h-[90vh] flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
           {/* Close Button */}
           <button
+            ref={closeRef}
+            type="button"
+            aria-label="Close project details"
             onClick={onClose}
             className="absolute top-6 right-6 z-10 p-2 rounded-full bg-white/90 hover:bg-white text-foreground transition-all hover:shadow-lg"
           >
@@ -171,14 +196,14 @@ export function ProjectDetailModal({
                     <button
                       onClick={goPrev}
                       aria-label="Previous image"
-                      className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/80 hover:bg-white text-foreground transition-all lg:opacity-0 lg:group-hover:opacity-100"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/80 hover:bg-white text-foreground transition-all lg:opacity-0 lg:group-hover:opacity-100 focus-visible:opacity-100 motion-reduce:transition-none"
                     >
                       <ChevronLeft className="h-5 w-5" />
                     </button>
                     <button
                       onClick={goNext}
                       aria-label="Next image"
-                      className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/80 hover:bg-white text-foreground transition-all lg:opacity-0 lg:group-hover:opacity-100"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/80 hover:bg-white text-foreground transition-all lg:opacity-0 lg:group-hover:opacity-100 focus-visible:opacity-100 motion-reduce:transition-none"
                     >
                       <ChevronRight className="h-5 w-5" />
                     </button>

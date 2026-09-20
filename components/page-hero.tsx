@@ -8,29 +8,18 @@ export function PageHero({
   title,
   description,
   art,
+  showFeatureIcons = true,
 }: {
   eyebrow: string
   title: string
   description: string
   art: HeroSlide
+  showFeatureIcons?: boolean
 }) {
   return (
-    <section className="relative w-full min-h-[600px] overflow-hidden bg-dark-bg">
-      {/* Hand-drawn architecture background - transparent white lines */}
-      <div className="absolute right-0 inset-y-0 w-1/2 opacity-60 pointer-events-none">
-        <Image
-          src={art.src}
-          alt={art.alt}
-          fill
-          // Half the viewport wide at every breakpoint, capped at the point
-          // the layout stops growing.
-          sizes="(max-width: 1280px) 50vw, 640px"
-          className="object-contain object-right"
-        />
-      </div>
-
+    <section className="relative w-full lg:min-h-[600px] overflow-hidden bg-dark-bg">
       {/* Content Grid Layout */}
-      <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28 h-full">
+      <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-28 pb-0 lg:py-28 h-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Column - Main Content */}
           <div className="col-span-1">
@@ -45,7 +34,7 @@ export function PageHero({
             </h1>
 
             {/* Description paragraph - can be multi-line */}
-            <p className="text-lg sm:text-xl text-white/75 leading-relaxed max-w-2xl font-light mb-8">
+            <p className="text-lg sm:text-xl text-white/75 leading-relaxed max-w-2xl font-light lg:mb-8">
               {description}
             </p>
           </div>
@@ -54,8 +43,19 @@ export function PageHero({
         </div>
       </div>
 
+      {/* Mobile artwork follows the copy; desktop retains the right-side backdrop. */}
+      <div className="relative mx-auto mt-6 mb-8 h-[clamp(200px,58vw,280px)] w-[82%] max-w-md pointer-events-none opacity-80 lg:absolute lg:inset-y-0 lg:right-0 lg:m-0 lg:h-auto lg:w-1/2 lg:max-w-none lg:opacity-60">
+        <Image
+          src={art.src}
+          alt={art.alt}
+          fill
+          sizes="(max-width: 1023px) 82vw, (max-width: 1280px) 50vw, 640px"
+          className="object-contain object-center lg:object-right"
+        />
+      </div>
+
       {/* Bottom Feature Icons */}
-      <div className="absolute bottom-8 left-8 sm:left-12 lg:left-16 flex gap-4 z-10">
+      {showFeatureIcons && <div className="absolute bottom-8 left-8 sm:left-12 lg:left-16 flex gap-4 z-10">
         <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
           <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
             <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
@@ -76,7 +76,7 @@ export function PageHero({
             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
           </svg>
         </div>
-      </div>
+      </div>}
     </section>
   )
 }

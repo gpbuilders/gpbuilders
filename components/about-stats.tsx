@@ -69,7 +69,7 @@ export function AboutStats() {
     <section aria-labelledby="about-stats-heading" className="bg-background-alt py-14 lg:py-16">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-primary">Experience. Craftsmanship. Trust.</p>
-        <h2 id="about-stats-heading" className="mb-10 font-serif text-3xl font-normal text-foreground lg:mb-12 lg:text-4xl">A foundation you can count on.</h2>
+        <h2 id="about-stats-heading" className="mb-10 scroll-mt-24 font-serif text-3xl font-normal text-foreground lg:mb-12 lg:text-4xl">A foundation you can count on.</h2>
         <div className="grid grid-cols-1 divide-y divide-primary/20 md:grid-cols-3 md:divide-x md:divide-y-0">
           {STATS.map(stat => <Stat key={stat.label} stat={stat} />)}
         </div>

@@ -47,14 +47,14 @@ export function FullBlogResources({ posts }: { posts: Post[] }) {
                 key={post.id}
                 href={`/resources/${post.slug}`}
                 className={cn(
-                  'group relative block overflow-hidden rounded-3xl shadow-lg transition-all duration-300 hover:shadow-2xl',
+                  'group relative block overflow-hidden rounded-3xl bg-card shadow-lg transition-shadow duration-300 hover:shadow-2xl motion-reduce:transition-none',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
                   isLarge
-                    ? 'h-96 md:col-span-2 md:h-[500px]'
-                    : 'col-span-1 h-80 md:h-96',
+                    ? 'md:col-span-2 md:h-[500px]'
+                    : 'col-span-1 md:h-96',
                 )}
               >
-                <div className="relative h-full w-full overflow-hidden bg-background">
+                <div className="relative h-56 w-full overflow-hidden bg-background md:h-full">
                   <Image
                     src={mediaUrl(post.coverImage)}
                     alt={mediaAlt(post.coverImage, post.title)}
@@ -66,17 +66,17 @@ export function FullBlogResources({ posts }: { posts: Post[] }) {
                     }
                     // The first tiles are above the fold on every viewport.
                     priority={index < 2}
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
                   />
                   <div className="absolute inset-0 bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </div>
 
                 <div
                   className={cn(
-                    'absolute transition-all duration-300',
+                    'relative z-10 mx-4 -mt-10 mb-4 md:absolute md:m-0',
                     isLarge
-                      ? 'bottom-8 left-8 right-8 p-6 md:bottom-10 md:left-10 md:right-10 md:p-8'
-                      : 'bottom-4 left-4 right-4',
+                      ? 'md:bottom-8 md:left-8 md:right-8'
+                      : 'md:bottom-4 md:left-4 md:right-4',
                   )}
                 >
                   <div
@@ -92,8 +92,8 @@ export function FullBlogResources({ posts }: { posts: Post[] }) {
                       className={cn(
                         'mt-3 font-serif font-semibold text-foreground transition-colors group-hover:text-primary',
                         isLarge
-                          ? 'line-clamp-2 text-2xl lg:text-3xl'
-                          : 'line-clamp-3 text-lg lg:text-base',
+                          ? 'md:line-clamp-2 text-2xl lg:text-3xl'
+                          : 'md:line-clamp-3 text-lg lg:text-base',
                       )}
                     >
                       {post.title}
@@ -130,7 +130,7 @@ export function FullBlogResources({ posts }: { posts: Post[] }) {
                       <span className="relative after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 group-hover:after:scale-x-100">
                         Read article
                       </span>
-                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
                     </span>
                   </div>
                 </div>

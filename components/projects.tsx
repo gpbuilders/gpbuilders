@@ -119,7 +119,7 @@ export function Projects({ projects }: { projects: Project[] }) {
           <p className="text-sm font-semibold uppercase tracking-widest text-primary">
             Selected Work
           </p>
-          <h2 className="mt-3 text-balance font-serif text-5xl font-semibold leading-tight text-foreground">
+          <h2 className="mt-3 text-balance font-serif text-4xl sm:text-5xl font-semibold leading-tight text-foreground">
             Projects we&apos;re proud of
           </h2>
         </div>
@@ -132,7 +132,7 @@ export function Projects({ projects }: { projects: Project[] }) {
             // not implement.
             role="group"
             aria-label="Filter projects by category"
-            className="inline-flex gap-0.5 rounded-full border border-border bg-card p-1"
+            className="inline-flex flex-wrap justify-center gap-1 rounded-2xl sm:rounded-full border border-border bg-card p-1"
           >
             {FILTERS.map((filter) => {
               const isActive = active === filter.value
@@ -186,7 +186,7 @@ export function Projects({ projects }: { projects: Project[] }) {
               <article
                 key={project.id}
                 className={cn(
-                  'group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card cursor-pointer transition-all hover:shadow-xl hover:border-primary/50',
+                  'group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:shadow-xl hover:border-primary/50 focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 motion-reduce:transition-none',
                   project.featured && 'md:col-span-2',
                 )}
                 // Read by .project-grid in globals.css, which only applies them
@@ -200,7 +200,6 @@ export function Projects({ projects }: { projects: Project[] }) {
                     '--prs': cells[index].rowSpan,
                   } as React.CSSProperties
                 }
-                onClick={() => setSelectedProject(project)}
               >
                 <div
                   className={cn(
@@ -213,7 +212,7 @@ export function Projects({ projects }: { projects: Project[] }) {
                     alt={`${project.title} — ${project.scope} by GP Builders`}
                     width={900}
                     height={650}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/0 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-6">
@@ -221,7 +220,9 @@ export function Projects({ projects }: { projects: Project[] }) {
                       {project.scope}
                     </span>
                     <h3 className="mt-3 font-serif text-2xl font-semibold text-background">
-                      {project.title}
+                      <button type="button" onClick={() => setSelectedProject(project)} aria-haspopup="dialog" className="text-left cursor-pointer after:absolute after:inset-0 focus-visible:outline-none">
+                        {project.title}
+                      </button>
                     </h3>
                     <p className="mt-1 flex items-center gap-1.5 text-sm text-background/80">
                       <MapPin className="h-3.5 w-3.5" />

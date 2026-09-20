@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { Mail, MapPin, Phone, CheckCircle2 } from 'lucide-react'
+import { CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { submitLead } from '@/app/(frontend)/contact/actions'
 
@@ -50,20 +50,23 @@ export function ContactForm() {
     const data = new FormData(e.currentTarget)
     if (fromProject) data.set('project', fromProject)
 
-    const result = await submitLead(data)
-    setSending(false)
-
-    if (!result.ok) {
-      setError(result.error)
-      return
+    try {
+      const result = await submitLead(data)
+      if (!result.ok) {
+        setError(result.error)
+        return
+      }
+      setSubmitted(true)
+    } catch {
+      setError('Your enquiry could not be sent. Please try again or contact us by phone or email.')
+    } finally {
+      setSending(false)
     }
-
-    setSubmitted(true)
   }
 
   if (submitted) {
     return (
-      <div className="flex items-center justify-center min-h-[500px]">
+      <div role="status" className="flex items-center justify-center min-h-[320px] sm:min-h-[500px]">
         <div className="text-center">
           <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-6">
             <CheckCircle2 className="h-8 w-8 text-primary" />
@@ -80,7 +83,8 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} aria-busy={sending} className="space-y-6">
+      <p className="text-sm text-muted-foreground">All fields are required except phone number.</p>
       <div className="grid gap-6 md:grid-cols-2">
         <div>
           <label
@@ -93,10 +97,11 @@ export function ContactForm() {
             type="text"
             id="name"
             name="name"
+            autoComplete="name"
             value={formData.name}
             onChange={handleChange}
             required
-            className="form-input"
+            className="form-input min-h-11 text-base"
             placeholder="John Doe"
           />
         </div>
@@ -111,10 +116,11 @@ export function ContactForm() {
             type="email"
             id="email"
             name="email"
+            autoComplete="email"
             value={formData.email}
             onChange={handleChange}
             required
-            className="form-input"
+            className="form-input min-h-11 text-base"
             placeholder="you@example.com"
           />
         </div>
@@ -126,15 +132,16 @@ export function ContactForm() {
             htmlFor="phone"
             className="block text-sm font-semibold text-foreground mb-2"
           >
-            Phone Number
+            Phone Number (optional)
           </label>
           <input
             type="tel"
             id="phone"
             name="phone"
+            autoComplete="tel"
             value={formData.phone}
             onChange={handleChange}
-            className="form-input"
+            className="form-input min-h-11 text-base"
             placeholder="+91 98765 43210"
           />
         </div>
@@ -151,7 +158,7 @@ export function ContactForm() {
             value={formData.projectType}
             onChange={handleChange}
             required
-            className="form-input"
+            className="form-input min-h-11 text-base"
           >
             <option value="">Select a project type</option>
             <option value="residential">Residential</option>
@@ -177,7 +184,7 @@ export function ContactForm() {
           onChange={handleChange}
           required
           rows={5}
-          className="form-input resize-none"
+          className="form-input min-h-36 resize-y text-base"
           placeholder="Describe your project, vision, and any specific requirements..."
         />
       </div>

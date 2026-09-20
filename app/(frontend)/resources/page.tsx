@@ -5,7 +5,6 @@ import { getPayload } from 'payload'
 import { MinimalHero } from '@/components/minimal-hero'
 import { FullBlogResources } from '@/components/full-blog-resources'
 import { CtaBand } from '@/components/cta-band'
-import { ParallaxSection } from '@/components/parallax-section'
 
 export const metadata: Metadata = {
   title: 'Resources | GP Builders',
@@ -32,17 +31,11 @@ export default async function ResourcesPage() {
     <>
       <MinimalHero
         background="alt"
-        title="Resource"
+        title="Resources"
         subtitle="Blog & News"
         description="Explore the latest architectural trends, innovative designs, sustainability insights, industry news, and expert tips to inspire creativity and enhance your next project."
       />
-      <ParallaxSection
-        backgroundColor="bg-background"
-        speed={0.5}
-        className=""
-      >
-        <FullBlogResources posts={posts} />
-      </ParallaxSection>
+      <FullBlogResources posts={posts} />
       <CtaBand />
     </>
   )

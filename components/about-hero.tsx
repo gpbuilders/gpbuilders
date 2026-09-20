@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, BriefcaseBusiness } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { AboutStats } from '@/components/about-stats'
@@ -64,7 +64,7 @@ export function AboutHero({ sketch }: { sketch: HeroSlide }) {
 
               {/* Contact Info */}
               <div className="flex items-start gap-4 pb-12 border-b border-border">
-                <div className="text-2xl">💼</div>
+                <BriefcaseBusiness aria-hidden="true" className="mt-1 h-6 w-6 shrink-0 text-primary" strokeWidth={1.5} />
                 <div>
                   <h3 className="font-semibold text-foreground mb-1">Ready to Build?</h3>
                   <p className="text-sm text-muted-foreground">

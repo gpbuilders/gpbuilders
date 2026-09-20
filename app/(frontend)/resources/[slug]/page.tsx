@@ -83,7 +83,7 @@ export default async function PostPage({ params }: Params) {
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Link
             href="/resources"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-primary"
+            className="inline-flex min-h-11 items-center gap-2 rounded-sm text-sm font-semibold text-muted-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transition-none"
           >
             <ArrowLeft className="h-4 w-4" />
             All articles
@@ -131,6 +131,15 @@ export default async function PostPage({ params }: Params) {
 
         <div className="mx-auto mt-14 max-w-3xl px-4 sm:px-6 lg:px-8">
           <ArticleBody content={post.content} />
+          <nav aria-label="Article navigation" className="mt-12 border-t border-border pt-6">
+            <Link
+              href="/resources"
+              className="inline-flex min-h-11 items-center gap-2 rounded-sm text-sm font-semibold text-primary transition-colors hover:text-primary-dark focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transition-none"
+            >
+              <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+              Back to all articles
+            </Link>
+          </nav>
         </div>
       </article>
 

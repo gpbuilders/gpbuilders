@@ -3,24 +3,26 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Play, ChevronLeft, ChevronRight, Volume2, VolumeX } from 'lucide-react'
+import { ArrowRight, Play, Pause, ChevronLeft, ChevronRight, Volume2, VolumeX } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import type { HeroSlide } from '@/lib/hero-media'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { Swiper, SwiperSlide, type SwiperRef } from 'swiper/react'
 import { Autoplay, EffectFade, Navigation } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/effect-fade'
 import 'swiper/css/navigation'
 
 export function Hero({ slides }: { slides: HeroSlide[] }) {
-  const swiperRef = useRef(null)
+  const swiperRef = useRef<SwiperRef>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const [paused, setPaused] = useState(false)
   const [isMuted, setIsMuted] = useState(true)
 
   // A full-screen autoplaying video is exactly what this setting is for.
   // Read after mount rather than during render, so the server and the first
   // client pass agree and React does not report a hydration mismatch.
-  const [reduceMotion, setReduceMotion] = useState(false)
+  const [reduceMotion, setReduceMotion] = useState(true)
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)')
     const sync = () => setReduceMotion(query.matches)
@@ -32,20 +34,33 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
   // The control only exists while something can hear it.
   const hasVideo = slides.some((slide) => slide.kind === 'video') && !reduceMotion
 
+  useEffect(() => {
+    const stopped = paused || reduceMotion
+    const swiper = swiperRef.current?.swiper
+    if (stopped) swiper?.autoplay.stop()
+    else swiper?.autoplay.start()
+    sectionRef.current?.querySelectorAll('video').forEach(video => {
+      if (stopped) video.pause()
+      else void video.play().catch(() => {})
+    })
+  }, [paused, reduceMotion])
+
 
   return (
-    <section className="relative w-full h-screen min-h-[700px] overflow-hidden">
+    <section ref={sectionRef} className="relative w-full min-h-svh overflow-hidden sm:h-svh sm:min-h-[800px]">
       {/* Full-width Carousel Background */}
       <Swiper
         ref={swiperRef}
         modules={[Autoplay, EffectFade, Navigation]}
         effect="fade"
         autoplay={{
-          delay: 5000,
+          enabled: !reduceMotion && !paused,
+          delay: 7000,
           disableOnInteraction: false,
         }}
+        speed={reduceMotion ? 0 : 600}
         loop
-        className="absolute inset-0 w-full h-full"
+        className="!absolute inset-0 w-full h-full"
       >
         {slides.map((slide, idx) => (
           <SwiperSlide key={idx} className="relative w-full h-full">
@@ -79,6 +94,16 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
           </SwiperSlide>
         ))}
       </Swiper>
+
+      {!reduceMotion && (
+        <button type="button" onClick={() => setPaused(value => !value)}
+          aria-label={paused ? 'Resume hero animation' : 'Pause hero animation'}
+          aria-pressed={paused}
+          className="absolute bottom-8 right-6 z-20 flex items-center gap-2 rounded-full bg-black/40 px-4 py-3 text-sm text-white backdrop-blur-sm hover:bg-black/60 sm:right-8">
+          {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+          {paused ? 'Resume' : 'Pause'}
+        </button>
+      )}
 
       {hasVideo && (
         /* Sits clear of the fixed header (~64px tall) rather than level with
@@ -116,8 +141,8 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
       {/* Content Overlay - Full Width.
           pt-16 keeps the centring from counting the space behind the fixed
           header, which otherwise pushes the eyebrow up against it. */}
-      <div className="absolute inset-0 flex items-center justify-start z-10 pt-16 pointer-events-none">
-        <div className="w-full max-w-7xl mx-auto px-8 sm:px-12 lg:px-16">
+      <div className="relative flex min-h-svh items-center justify-start z-10 pt-28 pb-28 pointer-events-none sm:absolute sm:inset-0 sm:min-h-0 sm:pt-16 sm:pb-24">
+        <div className="w-full max-w-7xl mx-auto px-5 sm:px-12 lg:px-16">
           <div className="max-w-2xl">
             {/* Eyebrow */}
             <p className="text-sm font-semibold uppercase tracking-widest text-accent mb-6">
@@ -125,7 +150,7 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
             </p>
 
             {/* Main Heading */}
-            <h1 className="font-serif text-6xl sm:text-7xl lg:text-8xl font-semibold leading-tight text-white mb-6">
+            <h1 className="font-serif text-[clamp(2.75rem,12vw,3.25rem)] sm:text-7xl lg:text-8xl font-semibold leading-tight text-white mb-6">
               Spaces
               <br />
               <span className="text-accent">Built to Last</span>
@@ -137,7 +162,7 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-16 pointer-events-auto">
+            <div className="flex flex-col sm:flex-row gap-4 mb-8 sm:mb-16 pointer-events-auto">
               <Link
                 href="/projects"
                 className={cn(
@@ -148,24 +173,24 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
                 Explore Our Work
                 <ArrowRight className="h-5 w-5" />
               </Link>
-              <button className="h-14 px-8 text-base font-semibold gap-3 flex items-center justify-center rounded-full border-2 border-white text-white hover:bg-white/10 transition-all hover:border-accent">
+              <Link href="#what-we-do" className="h-14 px-8 text-base font-semibold gap-3 flex items-center justify-center rounded-full border-2 border-white text-white hover:bg-white/10 transition-all hover:border-accent">
                 <Play className="h-5 w-5 fill-white" />
                 Watch Process
-              </button>
+              </Link>
             </div>
 
             {/* Stats Bar */}
-            <div className="grid grid-cols-3 gap-12 pt-8 border-t border-white/20">
+            <div className="grid grid-cols-3 gap-4 sm:gap-12 pt-8 border-t border-white/20">
               {[
                 { number: '9+', label: 'Full Construction Projects' },
                 { number: '20+', label: 'Interior Projects Delivered' },
                 { number: '100%', label: 'Commitment to Quality' },
               ].map((stat) => (
                 <div key={stat.label}>
-                  <p className="text-4xl font-semibold text-accent font-serif">
+                  <p className="text-3xl sm:text-4xl font-semibold text-accent font-serif">
                     {stat.number}
                   </p>
-                  <p className="text-sm text-white/60 mt-2">{stat.label}</p>
+                  <p className="text-xs sm:text-sm text-white/80 mt-2">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -188,8 +213,8 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10">
-        <div className="flex flex-col items-center gap-3 text-white/60 animate-bounce">
+      <div className="absolute bottom-8 left-8 z-10 hidden lg:block">
+        <div className="flex flex-col items-center gap-3 text-white/60">
           <span className="text-xs font-medium uppercase tracking-widest">Scroll</span>
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path

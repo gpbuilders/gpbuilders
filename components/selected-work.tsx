@@ -25,7 +25,7 @@ function ProjectCard({
           alt={`${project.title} — ${project.scope} by GP Builders`}
           fill
           sizes={sizes}
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/0 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-6">

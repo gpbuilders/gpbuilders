@@ -26,15 +26,15 @@ export function MinimalHero({
       )}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
           {/* Left Column */}
           <div>
             {/* Main Heading */}
-            <div className="mb-8">
-              <h1 className="font-serif text-6xl lg:text-7xl font-semibold text-foreground leading-tight">
+            <div className="lg:mb-8">
+              <h1 className="font-serif text-[clamp(2.5rem,12vw,3.5rem)] sm:text-6xl lg:text-7xl font-semibold text-foreground leading-tight">
                 {title}
               </h1>
-              <p className="font-serif text-5xl lg:text-6xl font-light text-muted-foreground leading-tight mt-2">
+              <p className="font-serif text-[clamp(2.25rem,10vw,3rem)] sm:text-5xl lg:text-6xl font-light text-muted-foreground leading-tight mt-2">
                 {subtitle}
               </p>
             </div>

@@ -62,27 +62,27 @@
 .staticStages { display: none; }
 @media (max-width: 767px) {
   .section { height: 320svh; }
-  .stage { min-height: 560px; }
-  .header { top: 22px; left: 6%; max-width: 88%; }
+  .stage { min-height: 560px; display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; gap: 16px; padding: 22px 6% 16px; }
+  .header { position: relative; top: auto; left: auto; max-width: none; }
   .header h2 { font-size: 30px; margin-top: 7px; }
   .summary { display: none; }
-  .scene { inset: 90px 0 34%; }
+  .scene { position: relative; inset: auto; min-height: 0; }
   .draftingDesk { width: min(82%, 380px); }
   .sceneBlend { background: linear-gradient(to bottom, var(--background-alt), transparent 12%), linear-gradient(to top, var(--background-alt), transparent 15%); }
-  .copy { top: auto; bottom: 94px; left: 6%; width: 88%; max-width: none; }
+  .copy { position: relative; top: auto; bottom: auto; left: auto; width: 100%; max-width: none; }
   .chapterNumber { font-size: 11px; }
   .chapter h3 { font-size: 28px; margin-top: 7px; }
   .detail { display: none; }
   .description { font-size: 13px; line-height: 1.5; margin-top: 10px; max-width: 45ch; }
   .link { margin-top: 12px; font-size: 11px; }
-  .bottom { bottom: 16px; left: 6%; right: 6%; }
+  .bottom { position: relative; bottom: auto; left: auto; right: auto; }
   .navigation { width: 100%; gap: 14px; }
   .navigation button { flex: 1; align-items: flex-start; padding-top: 10px; gap: 5px; font-size: 9px; line-height: 1.4; text-align: left; }
   .scrollHint { display: none; }
 }
 @media (prefers-reduced-motion: reduce), (max-height: 620px) {
   .section { height: auto; }
-  .stage { position: relative; top: auto; height: auto; min-height: 0; overflow: visible; padding: 48px 6% 24px; }
+  .stage { display: block; position: relative; top: auto; height: auto; min-height: 0; overflow: visible; padding: 48px 6% 24px; }
   .header { position: static; max-width: none; }
   .summary { display: block; max-width: none; }
   .scene, .copy, .bottom { display: none; }
