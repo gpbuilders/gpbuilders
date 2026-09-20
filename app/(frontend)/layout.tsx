@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import { Jost, Marcellus } from 'next/font/google'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
+import { OrganizationSchema, WebSiteSchema } from '@/components/structured-data'
 import './globals.css'
 
 const jost = Jost({
@@ -30,6 +31,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: TITLE,
   description: DESCRIPTION,
+  // Resolved against metadataBase for whatever path is rendering, so every
+  // page declares itself canonical rather than pointing at the home page.
+  alternates: { canonical: './' },
   manifest: '/site.webmanifest',
   appleWebApp: {
     capable: true,
@@ -75,6 +79,8 @@ export default function RootLayout({
       className={`light ${jost.variable} ${marcellus.variable} bg-background`}
     >
       <body className="font-sans antialiased">
+        <OrganizationSchema />
+        <WebSiteSchema />
         <div className="flex min-h-screen flex-col bg-background">
           <SiteHeader />
           <main className="flex-1">{children}</main>
