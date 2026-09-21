@@ -27,3 +27,38 @@ export const BRAND_LOGOS: Record<string, BrandLogo> = {
 export function getBrandLogo(name: string): BrandLogo | undefined {
   return BRAND_LOGOS[name]
 }
+
+/**
+ * The brands shown in both "Brands We Build With" on the home page and
+ * "Brands We Use" on the projects page.
+ *
+ * One list, because two lists drifted: the home page carried Bosch, Dulux,
+ * Godrej, Hafele, Schüco and Somany that the projects page never showed, the
+ * projects page carried seven the home page never showed, and Saint-Gobain
+ * was spelled two different ways between them. Adding a brand in one place
+ * now puts it in both.
+ *
+ * Entries with artwork lead, so the sections open on the logos rather than on
+ * a run of text fallbacks. The rest keep the order they were listed in.
+ */
+export const BRANDS = [
+  // with logos
+  'Dalmia Cement',
+  'UltraTech Cement',
+  'Kohler',
+  'Bosch',
+  // text until artwork exists
+  'Asian Paints',
+  'Saint-Gobain',
+  'Jaquar',
+  'Hettich',
+  'Century Ply',
+  'Hindware',
+  'Greenlam',
+  'Philips',
+  'Hafele',
+  'Godrej',
+  'Dulux',
+  'Schüco',
+  'Somany',
+] as const

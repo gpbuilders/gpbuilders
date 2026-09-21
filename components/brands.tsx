@@ -1,19 +1,6 @@
 import Image from 'next/image'
-import { getBrandLogo } from '@/lib/brand-logos'
+import { BRANDS, getBrandLogo } from '@/lib/brand-logos'
 
-const BRANDS = [
-  'Dalmia Cement',
-  'Asian Paints',
-  'Jaquar',
-  'Kohler',
-  'Hettich',
-  'Century Ply',
-  'Saint-Gobain',
-  'UltraTech Cement',
-  'Hindware',
-  'Greenlam',
-  'Philips',
-]
 
 export function Brands() {
   return (
