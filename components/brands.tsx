@@ -33,7 +33,7 @@ export function Brands() {
                     alt={`${brand} logo`}
                     width={logo.width}
                     height={logo.height}
-                    className="max-h-8 w-auto max-w-full object-contain"
+                    className="max-h-8 w-auto max-w-[110px] object-contain"
                   />
                 ) : (
                   <span className="font-serif text-lg font-medium text-foreground">
