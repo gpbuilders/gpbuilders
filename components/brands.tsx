@@ -9,7 +9,7 @@ const BRANDS = [
   'Hettich',
   'Century Ply',
   'Saint-Gobain',
-  'Ultratech',
+  'UltraTech Cement',
   'Hindware',
   'Greenlam',
   'Philips',

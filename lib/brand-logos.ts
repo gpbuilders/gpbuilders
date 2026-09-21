@@ -19,6 +19,9 @@ export const BRAND_LOGOS: Record<string, BrandLogo> = {
   // Supplied with a wide transparent margin; trimmed so it sits at the same
   // optical weight as the others, which are cropped tight to the mark.
   'Dalmia Cement': { src: '/brands/dalmia.png', width: 1141, height: 538 },
+  // Black on transparent, so it ships as a palette PNG — a full-colour one
+  // spent 147KB on a palette it never used.
+  'UltraTech Cement': { src: '/brands/ultratech.png', width: 597, height: 233 },
 }
 
 export function getBrandLogo(name: string): BrandLogo | undefined {
