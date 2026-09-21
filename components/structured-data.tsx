@@ -47,6 +47,9 @@ export function OrganizationSchema() {
       '@type': 'State',
       name: 'Tamil Nadu',
     },
+    // Tells Google these profiles are the same entity as this site, rather
+    // than leaving it to infer the connection.
+    sameAs: ['https://www.instagram.com/gp_builders_trichy'],
     knowsAbout: [
       'Architectural design',
       'Construction',
