@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { getBrandLogo } from '@/lib/brand-logos'
 
 const BRANDS = [
+  'Dalmia Cement',
   'Asian Paints',
   'Jaquar',
   'Kohler',

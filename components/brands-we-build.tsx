@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { getBrandLogo } from '@/lib/brand-logos'
 
 const BRANDS = [
+  'Dalmia Cement',
   'Kohler',
   'Hafele',
   'Godrej',
@@ -25,13 +26,13 @@ export function BrandsWeBuild() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-4 lg:grid-cols-8">
+        <div className="flex flex-wrap justify-center gap-6">
           {BRANDS.map((brand) => {
             const logo = getBrandLogo(brand)
             return (
               <div
                 key={brand}
-                className="flex h-24 items-center justify-center rounded-lg border border-border bg-card px-4 transition-all hover:border-primary/50 hover:shadow-md"
+                className="flex h-24 w-[calc(50%-12px)] items-center justify-center rounded-lg border border-border bg-card px-4 transition-all hover:border-primary/50 hover:shadow-md sm:w-[calc(25%-18px)] lg:w-[calc(12.5%-21px)]"
               >
                 {logo ? (
                   <Image

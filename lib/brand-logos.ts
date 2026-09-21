@@ -16,6 +16,9 @@ export type BrandLogo = {
 export const BRAND_LOGOS: Record<string, BrandLogo> = {
   Kohler: { src: '/brands/kohler.jpg', width: 390, height: 130 },
   Bosch: { src: '/brands/bosch.jpg', width: 1680, height: 420 },
+  // Supplied with a wide transparent margin; trimmed so it sits at the same
+  // optical weight as the others, which are cropped tight to the mark.
+  'Dalmia Cement': { src: '/brands/dalmia.png', width: 1141, height: 538 },
 }
 
 export function getBrandLogo(name: string): BrandLogo | undefined {
