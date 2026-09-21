@@ -13,7 +13,7 @@ export function AboutHero({ sketch }: { sketch: HeroSlide }) {
     <>
       {/* Main Hero Section */}
       <section className="relative w-full overflow-hidden bg-background">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+        <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Left Side - Architectural Sketch */}
             <div className="relative h-96 lg:h-[500px]">

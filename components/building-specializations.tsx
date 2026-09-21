@@ -51,7 +51,7 @@ export function BuildingSpecializations() {
 
   return (
     <section aria-labelledby="specializations-heading" className={styles.section}>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
         <header className={styles.header}>
           <p className={styles.eyebrow}>Our expertise</p>
           <h2 id="specializations-heading">What We Build &amp; Design</h2>

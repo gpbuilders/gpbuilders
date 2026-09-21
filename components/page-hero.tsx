@@ -19,7 +19,7 @@ export function PageHero({
   return (
     <section className="relative w-full lg:min-h-[600px] overflow-hidden bg-dark-bg">
       {/* Content Grid Layout */}
-      <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-28 pb-0 lg:py-28 h-full">
+      <div className="relative z-20 mx-auto max-w-site px-4 sm:px-6 lg:px-8 pt-28 pb-0 lg:py-28 h-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Column - Main Content */}
           <div className="col-span-1">

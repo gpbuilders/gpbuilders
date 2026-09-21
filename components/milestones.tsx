@@ -37,7 +37,7 @@ const MILESTONES = [
 export function Milestones() {
   return (
     <section className="scroll-mt-20 bg-primary py-20 text-primary-foreground lg:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary-foreground/70">
             Our Journey

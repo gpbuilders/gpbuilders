@@ -45,7 +45,7 @@ export function SiteHeader() {
           : 'bg-transparent',
       )}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-site items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3">
           <Image
             src="/gp-logo.png"
@@ -123,7 +123,7 @@ export function SiteHeader() {
 
       {open && (
         <div className="border-t border-border/60 bg-background/95 backdrop-blur-md lg:hidden">
-          <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6">
+          <nav className="mx-auto flex max-w-site flex-col gap-1 px-4 py-4 sm:px-6">
             {NAV_LINKS.map((link) => {
               const active =
                 link.href === '/'

@@ -142,7 +142,9 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
           pt-16 keeps the centring from counting the space behind the fixed
           header, which otherwise pushes the eyebrow up against it. */}
       <div className="relative flex min-h-svh items-center justify-start z-10 pt-28 pb-28 pointer-events-none sm:absolute sm:inset-0 sm:min-h-0 sm:pt-16 sm:pb-24">
-        <div className="w-full max-w-7xl mx-auto px-5 sm:px-12 lg:px-16">
+        {/* Same inset as the header and every section below, so the headline
+              starts on the same left edge as the logo directly above it. */}
+        <div className="w-full max-w-site mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
             {/* Eyebrow */}
             <p className="text-sm font-semibold uppercase tracking-widest text-accent mb-6">

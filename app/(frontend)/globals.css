@@ -4,6 +4,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  /* The page container. Tailwind's max-w-7xl (1280px) was a default rather
+     than a decision, and on anything above a laptop it left more margin than
+     content. Named so the 20-odd sections that use it share one value.
+     Prose keeps its own narrower caps — this is not a reading measure. */
+  --container-site: 96rem; /* 1536px */
+}
+
 @theme inline {
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-serif), ui-serif, Georgia, serif;

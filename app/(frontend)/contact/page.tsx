@@ -18,7 +18,7 @@ export default function ContactPage() {
       />
 
       <section className="bg-background-alt py-16 sm:py-20 lg:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-5">
             {/* Info Column */}
             <div className="lg:col-span-2">

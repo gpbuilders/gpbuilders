@@ -54,7 +54,7 @@ export function SelectedWork({ projects }: { projects: Project[] }) {
 
   return (
     <section className="py-20 lg:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
         <div className="mb-12 flex flex-wrap items-end justify-between gap-10">
           <h2 className="font-serif text-3xl font-normal text-foreground sm:text-4xl lg:text-[40px]">
             Featured Projects

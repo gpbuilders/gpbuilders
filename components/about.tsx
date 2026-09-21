@@ -3,7 +3,7 @@ import Image from 'next/image'
 export function About() {
   return (
     <section id="about" className="scroll-mt-20 py-20 lg:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
             <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary">
