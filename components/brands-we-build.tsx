@@ -3,6 +3,7 @@ import { getBrandLogo } from '@/lib/brand-logos'
 
 const BRANDS = [
   'Dalmia Cement',
+  'UltraTech Cement',
   'Kohler',
   'Hafele',
   'Godrej',
