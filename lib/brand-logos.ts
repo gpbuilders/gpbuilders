@@ -14,10 +14,9 @@ export type BrandLogo = {
  * the file's real pixel dimensions.
  */
 export const BRAND_LOGOS: Record<string, BrandLogo> = {
-  Kohler: { src: '/brands/kohler.jpg', width: 390, height: 130 },
-  Bosch: { src: '/brands/bosch.jpg', width: 1680, height: 420 },
-  // Supplied with a wide transparent margin; trimmed so it sits at the same
-  // optical weight as the others, which are cropped tight to the mark.
+  // Both arrived with a transparent margin around the mark. object-contain
+  // fits the whole file into the 32px slot, so an untrimmed one renders
+  // visibly smaller than its neighbours; these are cropped to the artwork.
   'Dalmia Cement': { src: '/brands/dalmia.png', width: 1141, height: 538 },
   // Black on transparent, so it ships as a palette PNG — a full-colour one
   // spent 147KB on a palette it never used.
@@ -37,8 +36,5 @@ export function getBrandLogo(name: string): BrandLogo | undefined {
  * spelled two ways. Adding a brand here puts it in both sections.
  *
  * Both layouts size themselves from the count, so this can be any length.
- * BRAND_LOGOS keeps entries for Kohler and Bosch that are not listed here;
- * they are harmless, and re-listing either is one line rather than another
- * round of finding and preparing artwork.
  */
 export const BRANDS = ['Dalmia Cement', 'UltraTech Cement'] as const
