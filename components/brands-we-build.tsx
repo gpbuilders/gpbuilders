@@ -21,7 +21,7 @@ export function BrandsWeBuild() {
             return (
               <div
                 key={brand}
-                className="flex h-24 w-[calc(50%-12px)] items-center justify-center rounded-lg border border-border bg-card px-4 transition-all hover:border-primary/50 hover:shadow-md sm:w-[calc(25%-18px)] lg:w-[calc(12.5%-21px)]"
+                className="flex h-24 w-[calc(50%-12px)] items-center justify-center rounded-lg border border-border bg-card px-6 transition-all hover:border-primary/50 hover:shadow-md sm:w-56"
               >
                 {logo ? (
                   <Image

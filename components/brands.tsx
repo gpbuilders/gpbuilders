@@ -19,7 +19,7 @@ export function Brands() {
           </p>
         </div>
 
-        <div className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3 lg:grid-cols-5">
+        <div className="mt-12 grid grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))] gap-px overflow-hidden rounded-2xl border border-border bg-border">
           {BRANDS.map((brand) => {
             const logo = getBrandLogo(brand)
             return (
