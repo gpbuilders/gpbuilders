@@ -61,8 +61,8 @@ export default function ContactPage() {
                       <p className="font-semibold text-foreground text-sm">
                         Phone
                       </p>
-                      <a href="tel:+919876543210" className="inline-flex min-h-11 items-center rounded-sm text-sm text-muted-foreground hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
-                        +91 98765 43210
+                      <a href="tel:+919363699574" className="inline-flex min-h-11 items-center rounded-sm text-sm text-muted-foreground hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
+                        +91 93636 99574
                       </a>
                     </div>
                   </div>
@@ -76,11 +76,17 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="font-semibold text-foreground text-sm">
-                        Location
+                        Office
                       </p>
-                      <p className="mt-1 text-muted-foreground text-sm">
-                        Bangalore, India
-                      </p>
+                      <address className="mt-1 text-sm not-italic leading-relaxed text-muted-foreground">
+                        GP Builders
+                        <br />
+                        17/4, G-3, Pushpak Nagar
+                        <br />
+                        Srirangam, Trichy &ndash; 620006
+                        <br />
+                        Tamil Nadu, India
+                      </address>
                     </div>
                   </div>
                 </div>

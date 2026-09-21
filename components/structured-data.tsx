@@ -7,13 +7,10 @@ const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
  * the favicon alone only controls the small icon beside the URL. Without it,
  * Google infers everything from page text.
  *
- * Deliberately limited to facts that can be verified from the site itself.
- * The phone number and email address currently in components/contact.tsx are
- * placeholders (+91 98765 43210, and an address on a domain the company no
- * longer uses), and publishing those as machine-readable business data is
- * worse than publishing nothing: Google surfaces `telephone` in results, so a
- * dummy number sends real callers to a stranger. Add `telephone`, `email` and
- * a full `address` here once the real ones are known.
+ * `email` is still missing on purpose. The address on the contact page is
+ * hello@gpbuilders.in, a domain the company no longer uses, and inventing a
+ * replacement would route enquiries nowhere. Add it here once a working
+ * address exists — the contact form is a working channel in the meantime.
  */
 export function OrganizationSchema() {
   const schema = {
@@ -31,8 +28,21 @@ export function OrganizationSchema() {
     },
     image: `${SITE_URL}/og-image.jpg`,
     description:
-      'GP Builders delivers architecture, interior design, and construction for luxury residential and commercial spaces in Chennai.',
+      'GP Builders delivers architecture, interior design, and construction for luxury residential and commercial spaces, based in Tiruchirappalli, Tamil Nadu.',
     slogan: 'Quality. Affordable.',
+    // E.164 rather than the spaced form shown on the page: this is the value
+    // a phone dials from a search result, and spaces are not reliably parsed.
+    telephone: '+919363699574',
+    address: {
+      '@type': 'PostalAddress',
+      // Srirangam belongs in the street address — addressLocality wants the
+      // city, and Srirangam is a locality within Tiruchirappalli.
+      streetAddress: '17/4, G-3, Pushpak Nagar, Srirangam',
+      addressLocality: 'Tiruchirappalli',
+      addressRegion: 'Tamil Nadu',
+      postalCode: '620006',
+      addressCountry: 'IN',
+    },
     areaServed: {
       '@type': 'State',
       name: 'Tamil Nadu',
