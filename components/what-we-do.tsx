@@ -126,7 +126,7 @@ export function WhatWeDo() {
   return (
     <section ref={sectionRef} id="what-we-do" aria-labelledby="services-heading" className={styles.section}>
       <div ref={stageRef} className={styles.stage}>
-        <header className={styles.header}>
+        <header className={`${styles.header} ${styles.gutter}`}>
           <h2 id="services-heading">What We Do</h2>
           <p className={styles.summary}>From the first line to the space you call home.</p>
         </header>
@@ -148,7 +148,7 @@ export function WhatWeDo() {
           <div className={styles.sceneBlend} />
         </div>
 
-        <div className={styles.copy}>
+        <div className={`${styles.copy} ${styles.gutter}`}>
           {SERVICES.map((service, index) => (
             <div key={service.title} className={styles.chapter} data-active={active === index} aria-hidden={active !== index}>
               <p className={styles.chapterNumber}>0{index + 1} <span>/ {service.label}</span></p>
@@ -160,7 +160,7 @@ export function WhatWeDo() {
           <Link href="/services" className={styles.link}>Explore our services <ArrowUpRight size={16} /></Link>
         </div>
 
-        <div className={styles.bottom}>
+        <div className={`${styles.bottom} ${styles.gutter}`}>
           <nav className={styles.navigation} aria-label="Explore our services">
             {SERVICES.map((service, index) => (
               <button key={service.title} type="button" onClick={() => goToStage(index)} aria-current={active === index ? 'step' : undefined}>

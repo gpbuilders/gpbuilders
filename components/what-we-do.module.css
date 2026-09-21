@@ -20,7 +20,14 @@
   overflow: hidden;
   isolation: isolate;
 }
-.header { position: absolute; z-index: 2; top: 6%; left: max(5%, calc((100% - 1280px) / 2)); max-width: 40%; }
+/* Matches the mx-auto max-w-site px-4 sm:px-6 lg:px-8 that every other
+   section uses, so this heading starts on the same left edge as the site
+   header above it. Hardcoding 1280px here is what put it out of step. */
+.gutter { left: calc(max(0px, (100% - var(--container-site)) / 2) + 16px); }
+@media (min-width: 640px) { .gutter { left: calc(max(0px, (100% - var(--container-site)) / 2) + 24px); } }
+@media (min-width: 1024px) { .gutter { left: calc(max(0px, (100% - var(--container-site)) / 2) + 32px); } }
+
+.header { position: absolute; z-index: 2; top: 6%; max-width: 40%; }
 .eyebrow { color: var(--primary); text-transform: uppercase; letter-spacing: .22em; font-size: 11px; font-weight: 500; }
 .header h2 { margin-top: 12px; font-family: var(--font-serif); font-size: clamp(30px, 3vw, 46px); line-height: 1.15; }
 .summary { margin-top: 12px; max-width: 30ch; color: var(--muted-foreground); font-size: 15px; line-height: 1.6; }
@@ -42,7 +49,7 @@
 .exterior { clip-path: inset(calc((1 - var(--build)) * 100%) 0 0 0); opacity: var(--exterior-opacity); transform: scale(var(--camera-scale)); transform-origin: 57% 68%; will-change: transform, opacity; }
 .interior { opacity: var(--interior); transform: scale(var(--interior-scale)); will-change: transform, opacity; }
 .sceneBlend { position: absolute; inset: 0; opacity: .5; background: linear-gradient(to right, var(--background-alt) 0%, transparent 22%), linear-gradient(to top, var(--background-alt) 0%, transparent 18%), linear-gradient(to bottom, var(--background-alt) 0%, transparent 12%); pointer-events: none; }
-.copy { position: absolute; z-index: 2; top: 39%; left: max(5%, calc((100% - 1280px) / 2)); width: 29%; max-width: 365px; }
+.copy { position: absolute; z-index: 2; top: 39%; width: 29%; max-width: 365px; }
 .chapter { grid-area: 1 / 1; opacity: 0; transform: translateY(12px); transition: opacity 240ms ease, transform 240ms ease; pointer-events: none; }
 .copy { display: grid; }
 .chapter[data-active='true'] { opacity: 1; transform: none; }
@@ -53,12 +60,17 @@
 .description { margin-top: 12px; color: var(--muted-foreground); font-size: 14px; line-height: 1.7; max-width: 32ch; }
 .link { display: inline-flex; align-items: center; gap: 10px; width: fit-content; margin-top: 24px; padding-bottom: 6px; border-bottom: 1px solid var(--primary); color: var(--primary); font-size: 12px; }
 .link:focus-visible, .navigation button:focus-visible { outline: 2px solid var(--primary); outline-offset: 5px; }
-.bottom { position: absolute; z-index: 2; bottom: 32px; left: 5%; right: 5%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.bottom { position: absolute; z-index: 2; bottom: 32px; right: calc(max(0px, (100% - var(--container-site)) / 2) + 32px); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .navigation { display: flex; gap: 28px; }
 .navigation button { display: flex; align-items: center; gap: 10px; min-height: 44px; border-top: 1px solid var(--border); color: var(--muted-foreground); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; cursor: pointer; transition: color 200ms, border-color 200ms; }
 .navigation button > span:first-child { font-size: 10px; opacity: .65; }
 .navigation button[aria-current='step'] { border-color: var(--primary); color: var(--primary); }
-.scrollHint { display: flex; align-items: center; gap: 8px; color: var(--muted-foreground); font-size: 11px; white-space: nowrap; }
+/* This sits over the photograph, which is bright and changes between
+   chapters, so muted-foreground on nothing was unreadable. A translucent
+   chip carries it over any frame without darkening the image. */
+.scrollHint { display: flex; align-items: center; gap: 8px; padding: 7px 13px; border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 35%); background: rgb(35 42 44 / 45%); backdrop-filter: blur(6px);
+  color: #fff; font-size: 11px; white-space: nowrap; }
 .staticStages { display: none; }
 @media (max-width: 767px) {
   .section { height: 320svh; }
@@ -86,7 +98,7 @@
   .header { position: static; max-width: none; }
   .summary { display: block; max-width: none; }
   .scene, .copy, .bottom { display: none; }
-  .staticStages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; max-width: 1280px; margin: auto; padding: 0 6% 48px; }
+  .staticStages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; max-width: var(--container-site); margin: auto; padding: 0 32px 48px; }
   .staticStages .frame { height: auto; aspect-ratio: 1; }
   .staticStages h3 { margin-top: 20px; font-family: var(--font-serif); font-size: 23px; }
   .staticStages p { margin-top: 12px; color: var(--muted-foreground); font-size: 14px; line-height: 1.7; }
