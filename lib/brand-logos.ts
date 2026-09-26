@@ -60,6 +60,19 @@ export const BRAND_LOGOS: Record<string, BrandLogo> = {
   // The triangle is a rendered gradient, so this keeps 128 palette colours.
   // 256 was three times the size for no visible gain; 64 flattened the shading.
   'Astral Pipes': { src: '/brands/astral.png', width: 800, height: 238 },
+  // Aspect 1.60, the squarest mark here — the rising stripes make it taller
+  // than a plain wordmark, so height-constrained it renders narrower than the
+  // rest. Kept whole: the stripes are the brand device, not a strapline.
+  'Hettich': { src: '/brands/hettich.png', width: 820, height: 512 },
+  // Script lettering with shading through it, so 128 colours — the same size
+  // as 64 here, and it keeps the soft edges from stepping.
+  'Godrej': { src: '/brands/godrej.png', width: 799, height: 370 },
+  // A circular badge, so 1:1 — the only square mark here. Height-constrained
+  // it renders 32x32, a third the width of the wide wordmarks beside it.
+  'Yale': { src: '/brands/yale.png', width: 600, height: 600 },
+  // Fine line art, so resolution costs more than colour depth here — dropping
+  // from 567px to 400px saved more than halving the palette did.
+  'Ebco': { src: '/brands/ebco.png', width: 400, height: 298 },
 }
 
 export function getBrandLogo(name: string): BrandLogo | undefined {
@@ -95,4 +108,8 @@ export const BRANDS = [
   'Ashirvad',
   'Avonplast',
   'Astral Pipes',
+  'Hettich',
+  'Godrej',
+  'Yale',
+  'Ebco',
 ] as const
