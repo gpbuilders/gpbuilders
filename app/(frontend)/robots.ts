@@ -17,7 +17,7 @@ export default function robots(): MetadataRoute.Robots {
         // The admin panel and the API are not content. Crawling them wastes
         // budget on pages that redirect to a login, and keeps URLs nobody
         // should land on from appearing in results.
-        disallow: ['/admin', '/admin/', '/api/', '/keepalive'],
+        disallow: ['/admin', '/admin/', '/api/', '/keepalive', '/enquiry'],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

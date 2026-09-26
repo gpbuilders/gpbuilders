@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { submitLead } from '@/app/(frontend)/contact/actions'
 
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false)
@@ -51,7 +50,13 @@ export function ContactForm() {
     if (fromProject) data.set('project', fromProject)
 
     try {
-      const result = await submitLead(data)
+      // A POST to a route handler rather than a server action: actions return
+      // 500 on this deployment, so every submission was being lost.
+      const response = await fetch('/enquiry', { method: 'POST', body: data })
+      const result = (await response.json()) as
+        | { ok: true }
+        | { ok: false; error: string }
+
       if (!result.ok) {
         setError(result.error)
         return
