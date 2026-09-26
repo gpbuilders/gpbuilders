@@ -47,9 +47,17 @@ export function OrganizationSchema() {
       '@type': 'State',
       name: 'Tamil Nadu',
     },
-    // Tells Google these profiles are the same entity as this site, rather
-    // than leaving it to infer the connection.
+    // Profiles that are the organisation itself. A personal LinkedIn does not
+    // belong here — sameAs asserts "this profile IS this company" — so the
+    // founder's is attached to him as a Person below instead.
     sameAs: ['https://www.instagram.com/gp_builders_trichy'],
+    founder: {
+      '@type': 'Person',
+      name: 'Vignesh Chandrasekaran',
+      jobTitle: 'Founder',
+      image: `${SITE_URL}/vignesh-chandrasekaran.webp`,
+      sameAs: ['https://www.linkedin.com/in/vignesh-chandrasekaran-8b432843a'],
+    },
     knowsAbout: [
       'Architectural design',
       'Construction',

@@ -25,6 +25,25 @@ function InstagramIcon({ className }: { className?: string }) {
   )
 }
 
+function LinkedInIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  )
+}
+
 // An array rather than one hardcoded anchor, so a second profile is a row
 // here instead of a copied block of markup.
 const SOCIAL_LINKS = [
@@ -35,6 +54,11 @@ const SOCIAL_LINKS = [
     // markup; the profile URL alone is what is stable and canonical.
     href: 'https://www.instagram.com/gp_builders_trichy',
     Icon: InstagramIcon,
+  },
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/vignesh-chandrasekaran-8b432843a',
+    Icon: LinkedInIcon,
   },
 ]
 
