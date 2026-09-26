@@ -204,6 +204,10 @@ export default buildConfig({
         Logo: '/components/payload/Logo#Logo',
         Icon: '/components/payload/Icon#Icon',
       },
+      // Wraps the admin so the fetch patch is installed on every screen —
+      // uploads happen from the media library, from a project's gallery and
+      // from the hero global, not one place.
+      providers: ['/components/payload/CompressUploads#CompressUploads'],
       beforeNavLinks: ['/components/payload/DashboardLink#DashboardLink'],
       afterNavLinks: ['/components/payload/ViewSiteLink#ViewSiteLink'],
       views: {
