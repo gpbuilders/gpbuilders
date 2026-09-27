@@ -1,6 +1,9 @@
 /* Forty-two logos wrapped into a grid ran 2,496px tall on a phone and 816px
-   on a desktop — more scrolling than one supporting section earns. Three rows
-   that scroll themselves hold the same list in about 300px at every width. */
+   on a desktop — more scrolling than a supporting section earns. Three rows
+   that scroll themselves hold the same list in about 300px at every width.
+
+   Shared by both walls, for the same reason BRANDS is one list: the home and
+   projects sections had already drifted apart once. */
 
 .viewport {
   --gap: 1rem;

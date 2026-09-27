@@ -1,6 +1,4 @@
-import Image from 'next/image'
-import { BRANDS, getBrandLogo } from '@/lib/brand-logos'
-
+import { BrandMarquee } from './brand-marquee'
 
 export function Brands() {
   return (
@@ -18,33 +16,10 @@ export function Brands() {
             standard of premium quality and lasting value.
           </p>
         </div>
-
-        <div className="mt-12 grid grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))] gap-px overflow-hidden rounded-2xl border border-border bg-border">
-          {BRANDS.map((brand) => {
-            const logo = getBrandLogo(brand)
-            return (
-              <div
-                key={brand}
-                className="flex items-center justify-center bg-card px-6 py-8 text-center transition-colors hover:bg-background-alt"
-              >
-                {logo ? (
-                  <Image
-                    src={logo.src}
-                    alt={`${brand} logo`}
-                    width={logo.width}
-                    height={logo.height}
-                    className="max-h-8 w-auto max-w-[110px] object-contain"
-                  />
-                ) : (
-                  <span className="font-serif text-lg font-medium text-foreground">
-                    {brand}
-                  </span>
-                )}
-              </div>
-            )
-          })}
-        </div>
       </div>
+
+      {/* Outside the container on purpose — see BrandMarquee. */}
+      <BrandMarquee className="mt-12" />
     </section>
   )
 }
