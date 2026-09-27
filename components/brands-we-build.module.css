@@ -1,0 +1,90 @@
+/* Forty-two logos wrapped into a grid ran 2,496px tall on a phone and 816px
+   on a desktop — more scrolling than one supporting section earns. Three rows
+   that scroll themselves hold the same list in about 300px at every width. */
+
+.viewport {
+  --gap: 1rem;
+  position: relative;
+  overflow: hidden;
+  /* Full-bleed, so the rows run off the screen rather than stopping at the
+     container edge. The mask is what makes that read as intentional: logos
+     dissolve into the gutters instead of being sliced by them. */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+@media (min-width: 640px) {
+  .viewport {
+    --gap: 1.5rem;
+  }
+}
+
+.row {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--duration) linear infinite;
+}
+
+.row + .row {
+  margin-top: var(--gap);
+}
+
+/* Neighbouring rows differ in both direction and speed. Rows all travelling
+   the same way at the same rate hold their vertical alignment, and the wall
+   stops looking like three rows and starts looking like one conveyor belt. */
+.rowA {
+  --duration: 54s;
+}
+.rowB {
+  --duration: 46s;
+  animation-direction: reverse;
+}
+.rowC {
+  --duration: 62s;
+}
+
+.group {
+  display: flex;
+  gap: var(--gap);
+  /* The join between the two copies needs the same gap as every other join,
+     or the logos visibly bunch once per lap. */
+  padding-right: var(--gap);
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+/* Half the track is exactly one copy of the list, so the loop lands back
+   where it started with nothing to reset. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Motion you cannot stop is hostile when the thing moving is what you are
+   trying to read. Pointing at the wall stops it; so does tabbing into it. */
+.viewport:hover .row,
+.viewport:focus-within .row {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No automatic movement at all — the rows become swipeable instead, which
+     is still a great deal shorter than twenty-one wrapped rows. */
+  .viewport {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .row {
+    animation: none;
+  }
+  /* Nothing is looping now, so the second copy is just duplicate content. */
+  .group + .group {
+    display: none;
+  }
+}
