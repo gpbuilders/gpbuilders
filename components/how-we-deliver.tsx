@@ -91,7 +91,7 @@ function BlueprintArt({ viewBox, className }: { viewBox: string; className: stri
 
 export function HowWeDeliver() {
   return (
-    <section aria-labelledby="delivery-heading" className={`${styles.section} bg-background-alt px-4 py-12 sm:px-6 lg:px-8 lg:py-16`}>
+    <section aria-labelledby="delivery-heading" className={`${styles.section} bg-background-alt px-4 py-12 sm:px-6 lg:px-0 lg:py-16`}>
       <div className={styles.blueprint}>
         <div className={styles.journey}>
           <header className={styles.heading}>

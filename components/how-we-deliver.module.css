@@ -44,18 +44,19 @@
   .points { font-size: 13px; }
 }
 @media (min-width: 1024px) {
-  .heading { position: absolute; top: 9%; left: 4%; padding: 0; }
+  .blueprint { max-width: var(--container-site); padding-inline: 32px; }
+  .heading { position: absolute; top: 9%; left: 0; padding: 0; }
   .intro { font-size: 16px; }
-  .steps { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 20px; padding: 4px 28px 26px; }
+  .steps { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 20px; padding: 4px 0 26px; }
   .stepTitle { min-height: 40px; font-size: 13px; }
   .icon { height: 92px; }
   .points { font-size: 12px; }
-  .footer { flex-direction: row; justify-content: space-between; gap: 20px; padding: 4px 28px 22px; }
+  .footer { flex-direction: row; justify-content: space-between; gap: 20px; padding: 4px 0 22px; }
   .note { max-width: 260px; text-align: left; font-size: 11px; }
   .plate { font-size: 15px; }
 }
 @media (min-width: 1280px) {
-  .steps { gap: 22px; padding-inline: 32px; }
+  .steps { gap: 22px; }
   .stepTitle { font-size: 14px; }
   .points { font-size: 13px; }
   .icon { height: 100px; }
