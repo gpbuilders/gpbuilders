@@ -1,0 +1,77 @@
+# Keeps the Supabase project from pausing.
+#
+# The free tier pauses a project after a stretch of inactivity, and this site is
+# statically generated — every public page is a CDN hit, so the database can go
+# genuinely untouched for days. When it pauses, the admin and the enquiry form
+# stop working until someone notices and resumes it by hand.
+#
+# /keepalive is the endpoint built for this: it runs one real count against
+# Postgres and answers 200 {"ok":true} or 503. This is the scheduler that was
+# always meant to call it.
+#
+# What this does NOT do: keep the Amplify Lambda warm. That idles out in
+# minutes, so a first request after a quiet spell still pays ~10s of cold start.
+# Fixing that needs a ping every few minutes, which is a different trade — far
+# more Actions minutes for a saving only the admin sees.
+name: Keep the database awake
+
+on:
+  schedule:
+    # 00:00 and 12:00 UTC (05:30 and 17:30 IST). GitHub runs scheduled jobs on
+    # a best-effort basis and often late under load, which is fine here — the
+    # pause threshold is days, not hours.
+    - cron: '0 0,12 * * *'
+  # So it can be run by hand from the Actions tab, and to test it without
+  # waiting twelve hours.
+  workflow_dispatch:
+
+# Reads nothing, writes nothing. The endpoint is public, so there is no secret
+# to hand this job.
+permissions:
+  contents: read
+
+concurrency:
+  group: keepalive
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Ask /keepalive whether Postgres answered
+        env:
+          # Override in repo settings (Variables) if the domain ever changes,
+          # rather than editing this file.
+          URL: ${{ vars.KEEPALIVE_URL || 'https://gpbuildersgroup.com/keepalive' }}
+        run: |
+          set -uo pipefail
+
+          # Three attempts, because the first request after a quiet spell can
+          # hit a cold Lambda or a project that is still resuming, and a single
+          # slow response is not an outage. A generous timeout for the same
+          # reason: a resuming project is slow, not broken.
+          for attempt in 1 2 3; do
+            echo "Attempt $attempt — GET $URL"
+            code=$(curl -sS -o /tmp/keepalive.json -w '%{http_code}' --max-time 120 "$URL" || echo 000)
+            body=$(cat /tmp/keepalive.json 2>/dev/null || true)
+            echo "  HTTP $code  $body"
+
+            if [ "$code" = "200" ] && printf '%s' "$body" | grep -q '"ok":true'; then
+              echo "  Database responded."
+              echo "### Database awake — \`$body\`" >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+
+            if [ "$attempt" -lt 3 ]; then
+              echo "  Not healthy yet; waiting 30s."
+              sleep 30
+            fi
+          done
+
+          # Failing loudly is the point. A keep-alive that fails quietly for
+          # weeks is worse than none — you would believe the project was being
+          # kept awake while it had already paused.
+          echo "::error::/keepalive did not report a healthy database after 3 attempts"
+          echo "### Keepalive FAILED — last response: \`$body\` (HTTP $code)" >> "$GITHUB_STEP_SUMMARY"
+          exit 1
