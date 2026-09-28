@@ -128,11 +128,13 @@ export const BRAND_LOGOS: Record<string, BrandLogo> = {
   // and this is nowhere near the sliver that forced the Vizag and SAIL crops.
   // One flat red, so 16 palette colours; 32 and 64 were the same size.
   'CenturyPly': { src: '/brands/centuryply.png', width: 400, height: 180 },
-  // Transparent already; one column of padding cropped. The star is full
-  // height beside a thin serif wordmark, so at 68px the lettering renders
-  // lighter than the bold marks either side of it — that is the lockup, and
-  // there is no cropping it out of a horizontal arrangement.
-  'Sharon': { src: '/brands/sharon.png', width: 378, height: 179 },
+  // A filled plate, like GM Modular and Archidply: the yellow ground is the
+  // lockup, so there is nothing to key out. Cropped two pixels inside the
+  // plate edge rather than to it — the outermost pixels blend into the white
+  // the file was saved on, and would draw a pale rule on the hover tint.
+  // Resampled from 4165px to 500: at 700 it was 29KB against 6KB here, and
+  // 500 still covers a 3x screen at the 62px this renders.
+  'Sharon': { src: '/brands/sharon.png', width: 500, height: 259 },
   // Cropped to the wordmark and its tree, dropping the "Ply Mane Kitply"
   // strapline below it — whole it rendered 47px, among the smallest here, and
   // without the strapline it renders 63px, in line with Sharon and CenturyPly.
