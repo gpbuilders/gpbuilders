@@ -204,6 +204,13 @@ export const BRAND_LOGOS: Record<string, BrandLogo> = {
   // heights, so origx400 returned the same mark at 2119x400; resampled here
   // to 400. One flat blue, so 32 palette colours.
   'Duravit': { src: '/brands/duravit.png', width: 400, height: 76 },
+  // Kept whole, though the three descriptor lines render about 3px tall.
+  // Cropping to the mark is the usual answer to that and is the wrong one
+  // here: alone it is aspect 1.64, so it renders 53px and wants 106 at 2x
+  // while having only 92. The full lockup renders 110px on 255px of source.
+  // The brand publishes nothing larger — the one bigger file in their media
+  // library is a "Seeking Distributorship" badge, not the logo.
+  'Alpine': { src: '/brands/alpine.png', width: 255, height: 56 },
 }
 
 export function getBrandLogo(name: string): BrandLogo | undefined {
@@ -263,4 +270,5 @@ export const BRANDS = [
   'Atomberg',
   'White Teak',
   'Duravit',
+  'Alpine',
 ] as const
