@@ -12,8 +12,8 @@ const SPECIALIZATIONS = [
     description: 'Luxury villas, apartments, and bespoke residences designed for modern living with premium finishes and timeless aesthetics.',
   },
   {
-    image: '/spec-hospitality.png',
-    title: 'F&B & Hospitality',
+    image: '/spec-hospitality.webp',
+    title: 'F&B and Hospitality',
     description: 'Restaurants, cafes, and hospitality spaces that blend ambiance with functionality for unforgettable guest experiences.',
   },
   {
