@@ -17,7 +17,7 @@ const SPECIALIZATIONS = [
     description: 'Restaurants, cafes, and hospitality spaces that blend ambiance with functionality for unforgettable guest experiences.',
   },
   {
-    image: '/spec-commercial.png',
+    image: '/spec-commercial.webp',
     title: 'Commercial Offices',
     description: 'Corporate workspaces, co-working hubs, and office interiors that inspire productivity and reflect brand identity.',
   },
