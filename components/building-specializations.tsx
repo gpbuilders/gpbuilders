@@ -40,6 +40,21 @@ const SPECIALIZATIONS = [
 
 export function BuildingSpecializations() {
   const [selection, setSelection] = useState({ active: 0, previous: 0, forward: true })
+  // Which photograph has finished downloading. The reveal is a 650ms wipe over
+  // whatever is in the frame, and only the current pair is ever in the DOM, so
+  // a photograph chosen for the first time was still arriving while its own
+  // wipe played out: the animation ran across an empty box and finished before
+  // the image painted. It looked like no transition until the browser had the
+  // file cached, which is why it seemed to start working after a few clicks.
+  const [loaded, setLoaded] = useState(0)
+
+  // Fetching on hover or focus means the file is usually there by the time the
+  // click lands. Costs nothing if the click never comes; the browser caches it.
+  const warm = (index: number) => {
+    const img = new window.Image()
+    img.src = SPECIALIZATIONS[index].image
+  }
+
   const select = (index: number) => {
     setSelection(current => index === current.active ? current : {
       active: index,
@@ -64,7 +79,7 @@ export function BuildingSpecializations() {
               return (
                 <div key={spec.title} className={styles.category} data-active={isActive}>
                   <h3>
-                    <button type="button" id={`specialization-button-${index}`} aria-expanded={isActive} aria-controls={`specialization-description-${index}`} onClick={() => select(index)}>
+                    <button type="button" id={`specialization-button-${index}`} aria-expanded={isActive} aria-controls={`specialization-description-${index}`} onClick={() => select(index)} onPointerEnter={() => warm(index)} onFocus={() => warm(index)}>
                       {spec.title}
                       {isActive ? <Minus aria-hidden="true" size={22} /> : <Plus aria-hidden="true" size={22} />}
                     </button>
@@ -79,8 +94,8 @@ export function BuildingSpecializations() {
           <figure className={styles.figure}>
             <div className={styles.photoStage}>
               <Image src={SPECIALIZATIONS[selection.previous].image} alt="" aria-hidden="true" fill sizes="(max-width: 767px) 100vw, 50vw" className={styles.photo} />
-              <div key={selection.active} className={styles.reveal} data-forward={selection.forward}>
-                <Image src={active.image} alt={active.title} fill sizes="(max-width: 767px) 100vw, 50vw" className={styles.photo} />
+              <div key={selection.active} className={styles.reveal} data-forward={selection.forward} data-ready={loaded === selection.active}>
+                <Image src={active.image} alt={active.title} fill sizes="(max-width: 767px) 100vw, 50vw" className={styles.photo} onLoad={() => setLoaded(selection.active)} />
               </div>
             </div>
             <figcaption aria-live="polite">

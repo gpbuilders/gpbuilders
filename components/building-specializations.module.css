@@ -16,8 +16,15 @@
 .figure { min-width: 0; margin: 0; }
 .photoStage { position: relative; overflow: hidden; aspect-ratio: 25 / 27; background: var(--background-alt); border-radius: 2px; }
 .photo { object-fit: cover; transition: transform 700ms cubic-bezier(.2,.7,.2,1); }
-.reveal { position: absolute; inset: 0; animation: reveal-forward 650ms cubic-bezier(.22,1,.36,1); }
-.reveal[data-forward='false'] { animation-name: reveal-backward; }
+/* The wipe waits for the photograph rather than playing over an empty frame.
+   Only the animation is held back — the frame is never clipped while it
+   loads, because an element clipped to zero width is one the lazy loader
+   never fetches, so the image would wait forever for a wipe waiting for it.
+   Until it arrives the img simply has nothing to paint and the previous
+   photograph shows through underneath. */
+.reveal { position: absolute; inset: 0; }
+.reveal[data-ready='true'] { animation: reveal-forward 650ms cubic-bezier(.22,1,.36,1); }
+.reveal[data-forward='false'][data-ready='true'] { animation-name: reveal-backward; }
 .figure figcaption { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 18px; color: var(--primary); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
 .count { flex-shrink: 0; color: var(--muted-foreground); }
 @keyframes reveal-forward { from { clip-path: inset(0 100% 0 0); transform: scale(1.06); } to { clip-path: inset(0); transform: scale(1); } }
@@ -34,6 +41,6 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .category::after, .category button, .photo { transition: none; }
-  .reveal, .description { animation: none; }
+  .reveal, .reveal[data-ready='true'], .description { animation: none; }
   .photoStage:hover .reveal .photo { transform: none; }
 }
