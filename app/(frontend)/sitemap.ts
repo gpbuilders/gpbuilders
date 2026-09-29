@@ -14,6 +14,16 @@ const STATIC_ROUTES: [path: string, priority: number, freq: 'weekly' | 'monthly'
   ['/contact', 0.6, 'monthly'],
 ]
 
+// Stated here rather than inherited from the frontend layout: a metadata route
+// is generated on its own, not rendered inside that layout, so the cascade is
+// not something to rely on. Without it the post list is frozen at build time.
+//
+// Nothing purges this path — the Posts hook revalidates /resources and the
+// article, not /sitemap.xml — so unlike the pages, the interval really is how
+// long a new post waits to be listed here. An hour is well inside how often a
+// crawler asks for it.
+export const revalidate = 3600
+
 /**
  * Served at /sitemap.xml.
  *

@@ -15,15 +15,20 @@ export const metadata: Metadata = {
 }
 
 export default async function ProjectsPage() {
-  const hero = await getHeroMedia()
-  const payload = await getPayload({ config })
-  // depth 1 populates the image and gallery upload fields.
-  const { docs: projects } = await payload.find({
-    collection: 'projects',
-    depth: 1,
-    limit: 100,
-    sort: 'order',
-  })
+  // Independent of one another, so they go together rather than as two serial
+  // round trips to Sydney — see the home page for the same reasoning.
+  const [hero, { docs: projects }] = await Promise.all([
+    getHeroMedia(),
+    // depth 1 populates the image and gallery upload fields.
+    getPayload({ config }).then((payload) =>
+      payload.find({
+        collection: 'projects',
+        depth: 1,
+        limit: 100,
+        sort: 'order',
+      }),
+    ),
+  ])
 
   return (
     <>

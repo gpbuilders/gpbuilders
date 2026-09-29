@@ -68,6 +68,28 @@ export const viewport: Viewport = {
   themeColor: '#2f6169',
 }
 
+/**
+ * Every public page is served from cache and rebuilt at most once a minute.
+ *
+ * Route segment config cascades, so this one line covers the whole frontend
+ * and a page added later cannot forget it.
+ *
+ * The minute is a backstop, not the update latency. An edit in the admin shows
+ * up within seconds, because each collection's afterChange hook purges the
+ * paths it affects (see lib/revalidate.ts). This catches whatever a hook does
+ * not — a direct database write, or a relationship nobody thought to map.
+ *
+ * Why not render every request instead: the database is in Sydney and the app
+ * runs in Mumbai, so each query is a ~300ms round trip. Measured on this app,
+ * rendering per request costs 1.5s on the home and projects pages and 2.3s on
+ * a project page, before Amplify's 10-14s cold start. From cache it is ~30ms.
+ *
+ * Why this also fixed the stale CDN copies: a page with no revalidate is
+ * treated as permanent and goes out with s-maxage=31536000, which CloudFront
+ * held onto for a year. Declaring the interval sends s-maxage=60 instead.
+ */
+export const revalidate = 60
+
 export default function RootLayout({
   children,
 }: Readonly<{

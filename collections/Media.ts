@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
+import { revalidateEverything } from '@/lib/revalidate'
+
 export const Media: CollectionConfig = {
   slug: 'media',
   access: {
@@ -11,6 +13,29 @@ export const Media: CollectionConfig = {
     // uploads, not administration of the site.
     group: 'Content',
     description: 'Every image used across the site. Uploading here is optional — adding one to a project uploads it for you.',
+  },
+  // Replacing a file here used to refresh nothing at all, which made the media
+  // library the one place in the admin where a save appeared to do nothing:
+  // the page kept the old photograph until the next deploy. A replacement also
+  // gets a new filename in the bucket, so the stale page pointed at an object
+  // that no longer existed.
+  //
+  // Which pages an image reaches cannot be known from the image, so all of
+  // them are purged — see revalidateEverything for why that is the cheap
+  // option rather than the lazy one.
+  hooks: {
+    afterChange: [
+      ({ doc, req }) => {
+        void revalidateEverything(req.payload)
+        return doc
+      },
+    ],
+    afterDelete: [
+      ({ doc, req }) => {
+        void revalidateEverything(req.payload)
+        return doc
+      },
+    ],
   },
   upload: {
     // Without this, Payload leaves thumbnailURL null and the admin falls back

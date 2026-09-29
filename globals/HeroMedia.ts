@@ -1,21 +1,15 @@
 import type { GlobalConfig, Payload } from 'payload'
 
+import { revalidate } from '@/lib/revalidate'
+
 const authenticated = ({ req: { user } }: { req: { user?: unknown } }) => Boolean(user)
 
-// Every page that renders a hero is statically generated, so an upload here
-// stays invisible until they are revalidated.
+// Every page that renders a hero is served from cache, so an upload here
+// stays invisible until they are purged.
 const DEPENDENT_PATHS = ['/', '/about', '/projects', '/services'] as const
 
-async function revalidateHeroes(payload: Payload) {
-  try {
-    const { revalidatePath } = await import('next/cache')
-    for (const path of DEPENDENT_PATHS) {
-      revalidatePath(path)
-    }
-    payload.logger.info(`Revalidated ${DEPENDENT_PATHS.join(', ')}`)
-  } catch {
-    payload.logger.warn('Skipped revalidation (no Next.js cache in this context)')
-  }
+function revalidateHeroes(payload: Payload) {
+  return revalidate(payload, DEPENDENT_PATHS)
 }
 
 /**

@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -13,7 +14,12 @@ import { mediaAlt, mediaUrl } from '@/lib/media'
 
 type Params = { params: Promise<{ slug: string }> }
 
-async function findPost(slug: string) {
+/**
+ * Wrapped in React's `cache` so generateMetadata and the page share one result
+ * rather than each querying for the same row — see the project route for the
+ * full reasoning. It matters more here, where a draft check runs on both.
+ */
+const findPost = cache(async (slug: string) => {
   const payload = await getPayload({ config })
   // depth 1 populates coverImage.
   //
@@ -29,8 +35,13 @@ async function findPost(slug: string) {
   })
 
   return docs[0]
-}
+})
 
+/**
+ * Published articles are built at deploy time; one published afterwards is
+ * rendered on its first request and cached from there. Drafts are excluded so
+ * an unpublished article is never built into the deploy.
+ */
 export async function generateStaticParams() {
   const payload = await getPayload({ config })
   const { docs } = await payload.find({

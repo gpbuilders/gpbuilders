@@ -1,5 +1,7 @@
 import type { CollectionConfig, Payload } from 'payload'
 
+import { revalidate } from '@/lib/revalidate'
+
 const authenticated = ({ req: { user } }: { req: { user?: unknown } }) => Boolean(user)
 
 /**
@@ -14,29 +16,16 @@ const toSlug = (title: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
 
-// Both pages read this collection and both are statically rendered, so an edit
-// in the admin panel stays invisible until they are revalidated.
+// Both pages read this collection, and both are served from cache, so an edit
+// in the admin panel stays invisible until they are purged.
 const DEPENDENT_PATHS = ['/projects', '/'] as const
 
-/**
- * Imported lazily and guarded because the same config is loaded by the Payload
- * CLI (seeding, migrations), where there is no Next.js cache to revalidate.
- */
-async function revalidateProjects(payload: Payload, slug?: string | null) {
+function revalidateProjects(payload: Payload, slug?: string | null) {
   // The project's own page too, now that it has one. Without it an edit shows
   // on the listing straight away and on the project itself only after the next
   // deploy, which reads as the save having failed.
   const paths = slug ? [...DEPENDENT_PATHS, `/projects/${slug}`] : [...DEPENDENT_PATHS]
-
-  try {
-    const { revalidatePath } = await import('next/cache')
-    for (const path of paths) {
-      revalidatePath(path)
-    }
-    payload.logger.info(`Revalidated ${paths.join(', ')}`)
-  } catch {
-    payload.logger.warn('Skipped revalidation (no Next.js cache in this context)')
-  }
+  return revalidate(payload, paths)
 }
 
 export const Projects: CollectionConfig = {

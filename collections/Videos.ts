@@ -1,6 +1,10 @@
 import type { CollectionConfig } from 'payload'
 
+import { revalidate } from '@/lib/revalidate'
+
 const authenticated = ({ req: { user } }: { req: { user?: unknown } }) => Boolean(user)
+
+const DEPENDENT_PATHS = ['/'] as const
 
 /**
  * Video files, kept apart from Media on purpose.
@@ -27,6 +31,24 @@ export const Videos: CollectionConfig = {
     group: 'Content',
     description:
       'Video used in the home page slideshow. Keep files under ~10MB — a hero video downloads before anything else on the page.',
+  },
+  // The only field pointing at this collection is the Hero Media global's
+  // home slideshow, so the home page is the whole of its reach. Narrower than
+  // Media's blanket purge because here the reach is actually knowable — if a
+  // video is ever used on a second page, add that path here.
+  hooks: {
+    afterChange: [
+      ({ doc, req }) => {
+        void revalidate(req.payload, DEPENDENT_PATHS)
+        return doc
+      },
+    ],
+    afterDelete: [
+      ({ doc, req }) => {
+        void revalidate(req.payload, DEPENDENT_PATHS)
+        return doc
+      },
+    ],
   },
   upload: {
     staticDir: 'public/videos',

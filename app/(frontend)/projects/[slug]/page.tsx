@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -18,7 +19,14 @@ const CATEGORY_LABELS: Record<Project['category'], string> = {
   commercial: 'Commercial',
 }
 
-async function findProject(slug: string) {
+/**
+ * Wrapped in React's `cache` so generateMetadata and the page itself share one
+ * result. Next runs the two together for the same request, so without this the
+ * page opens with two identical queries to Sydney — about 300ms of the render
+ * spent fetching a row already in memory. Free when the page was prerendered;
+ * paid by every visitor now that it is not.
+ */
+const findProject = cache(async (slug: string) => {
   const payload = await getPayload({ config })
   // depth 1 populates image and every gallery entry, which is what lets the
   // page lay each photograph out at its own proportions.
@@ -34,8 +42,14 @@ async function findProject(slug: string) {
   })
 
   return docs[0]
-}
+})
 
+/**
+ * Builds every project's page at deploy time, so the first visitor to one is
+ * not the person who pays for rendering it. A project added afterwards is not
+ * in this list and is rendered on its first request instead, then cached like
+ * the rest — nothing needs rebuilding for a new project to work.
+ */
 export async function generateStaticParams() {
   const payload = await getPayload({ config })
   const { docs } = await payload.find({

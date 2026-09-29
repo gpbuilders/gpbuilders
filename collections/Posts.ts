@@ -1,5 +1,7 @@
 import type { CollectionConfig, Payload } from 'payload'
 
+import { revalidate } from '@/lib/revalidate'
+
 const authenticated = ({ req: { user } }: { req: { user?: unknown } }) => Boolean(user)
 
 // Words per minute used to estimate reading time. 200 is the usual figure for
@@ -45,19 +47,10 @@ function countWords(node: unknown): number {
   return total
 }
 
-// Both the list and the article itself are statically rendered, so an edit in
-// the admin panel stays invisible until they are revalidated.
-async function revalidatePost(payload: Payload, slug?: string) {
-  try {
-    const { revalidatePath } = await import('next/cache')
-    const paths = ['/resources', ...(slug ? [`/resources/${slug}`] : [])]
-    for (const path of paths) {
-      revalidatePath(path)
-    }
-    payload.logger.info(`Revalidated ${paths.join(', ')}`)
-  } catch {
-    payload.logger.warn('Skipped revalidation (no Next.js cache in this context)')
-  }
+// Both the list and the article itself are served from cache, so an edit in
+// the admin panel stays invisible until they are purged.
+function revalidatePost(payload: Payload, slug?: string) {
+  return revalidate(payload, ['/resources', ...(slug ? [`/resources/${slug}`] : [])])
 }
 
 export const Posts: CollectionConfig = {
