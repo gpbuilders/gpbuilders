@@ -154,9 +154,20 @@ async function survey(dir: string) {
     const images: Candidate[] = []
     const ignored: string[] = []
 
-    for (const file of readdirSync(full).filter((f) => !f.startsWith('.')).sort()) {
-      const abs = path.join(full, file)
-      if (!statSync(abs).isFile()) continue
+    // Walks subfolders too. Reading only the top level quietly skipped two
+    // photographs filed one directory deeper, and nothing said so — the
+    // folder simply reported fewer images than it held.
+    const walk = (dir: string): string[] =>
+      readdirSync(dir)
+        .filter((f) => !f.startsWith('.'))
+        .sort()
+        .flatMap((f) => {
+          const abs = path.join(dir, f)
+          return statSync(abs).isDirectory() ? walk(abs) : [abs]
+        })
+
+    for (const abs of walk(full)) {
+      const file = path.basename(abs)
       if (!IMAGE.test(file)) {
         ignored.push(file)
         continue
