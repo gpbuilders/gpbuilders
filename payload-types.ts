@@ -266,6 +266,10 @@ export interface Media {
 export interface Project {
   id: number;
   title: string;
+  /**
+   * The web address for this project, taken from the name above. Renaming a project changes it, and any link already shared will stop working.
+   */
+  slug?: string | null;
   location: string;
   /**
    * Which filter tab the project appears under.
@@ -490,6 +494,7 @@ export interface PostsSelect<T extends boolean = true> {
  */
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
+  slug?: T;
   location?: T;
   category?: T;
   scope?: T;

@@ -2,6 +2,18 @@ import type { CollectionConfig, Payload } from 'payload'
 
 const authenticated = ({ req: { user } }: { req: { user?: unknown } }) => Boolean(user)
 
+/**
+ * The address a project gets. Derived from the title rather than typed, so
+ * there is one less field to fill in and no chance of the two disagreeing.
+ */
+const toSlug = (title: string) =>
+  title
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+
 // Both pages read this collection and both are statically rendered, so an edit
 // in the admin panel stays invisible until they are revalidated.
 const DEPENDENT_PATHS = ['/projects', '/'] as const
@@ -10,13 +22,18 @@ const DEPENDENT_PATHS = ['/projects', '/'] as const
  * Imported lazily and guarded because the same config is loaded by the Payload
  * CLI (seeding, migrations), where there is no Next.js cache to revalidate.
  */
-async function revalidateProjects(payload: Payload) {
+async function revalidateProjects(payload: Payload, slug?: string | null) {
+  // The project's own page too, now that it has one. Without it an edit shows
+  // on the listing straight away and on the project itself only after the next
+  // deploy, which reads as the save having failed.
+  const paths = slug ? [...DEPENDENT_PATHS, `/projects/${slug}`] : [...DEPENDENT_PATHS]
+
   try {
     const { revalidatePath } = await import('next/cache')
-    for (const path of DEPENDENT_PATHS) {
+    for (const path of paths) {
       revalidatePath(path)
     }
-    payload.logger.info(`Revalidated ${DEPENDENT_PATHS.join(', ')}`)
+    payload.logger.info(`Revalidated ${paths.join(', ')}`)
   } catch {
     payload.logger.warn('Skipped revalidation (no Next.js cache in this context)')
   }
@@ -45,13 +62,13 @@ export const Projects: CollectionConfig = {
   hooks: {
     afterChange: [
       ({ doc, req }) => {
-        void revalidateProjects(req.payload)
+        void revalidateProjects(req.payload, doc?.slug)
         return doc
       },
     ],
     afterDelete: [
       ({ doc, req }) => {
-        void revalidateProjects(req.payload)
+        void revalidateProjects(req.payload, doc?.slug)
         return doc
       },
     ],
@@ -61,6 +78,30 @@ export const Projects: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
+    },
+    {
+      name: 'slug',
+      type: 'text',
+      unique: true,
+      index: true,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description:
+          'The web address for this project, taken from the name above. Renaming a project changes it, and any link already shared will stop working.',
+      },
+      hooks: {
+        // Rebuilt from the title on every save, including the first. Falling
+        // back to the stored title matters for a partial update — changing only
+        // the Featured checkbox sends no title, and without this the slug would
+        // be cleared.
+        beforeValidate: [
+          ({ data, originalDoc, value }) => {
+            const title = data?.title ?? originalDoc?.title
+            return typeof title === 'string' && title.trim() ? toSlug(title) : value
+          },
+        ],
+      },
     },
     {
       type: 'row',

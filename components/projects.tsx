@@ -2,11 +2,11 @@
 
 import { useMemo, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { MapPin } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { mediaUrl } from '@/lib/media'
 import type { Project } from '@/payload-types'
-import { ProjectDetailModal } from './project-detail-modal'
 
 // 'all' is not a category on the collection — it is the absence of a filter,
 // and it is the default. Opening on 'residential' meant a visitor who did not
@@ -113,7 +113,6 @@ function layoutProjects(projects: Project[]): Cell[] {
 
 export function Projects({ projects }: { projects: Project[] }) {
   const [active, setActive] = useState<Filter>('all')
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
   // Shown on each segment so the visitor knows what is behind it before
   // clicking, and so an empty category is obvious rather than a dead end.
@@ -271,36 +270,24 @@ export function Projects({ projects }: { projects: Project[] }) {
                     </p>
                   </div>
 
-                {/* The whole card opens the project, not just the title.
-                    This used to ride on the title's ::after, but a stretched
-                    link only reaches as far as its nearest positioned
-                    ancestor — and the caption above is absolute, so the hit
-                    area was the caption alone and the photograph above it did
-                    nothing. A sibling of the article covers the card instead.
-                    Labelled, because on its own it is an empty button. */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedProject(project)}
-                  aria-haspopup="dialog"
-                  className="absolute inset-0 z-10 cursor-pointer focus-visible:outline-none"
+                {/* The whole card is the link, not just the title. A
+                    stretched link reaches only as far as its nearest
+                    positioned ancestor, and the caption above is absolute, so
+                    anchoring it there left the photograph dead. A sibling of
+                    the article covers the card instead. Labelled, because on
+                    its own it has no text to announce. */}
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="absolute inset-0 z-10 focus-visible:outline-none"
                 >
                   <span className="sr-only">View {project.title}</span>
-                </button>
+                </Link>
                 </div>
               </article>
             ))}
           </div>
         )}
       </div>
-
-      {/* Project Detail Modal */}
-      {selectedProject && (
-        <ProjectDetailModal
-          project={selectedProject}
-          isOpen={!!selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
-      )}
     </section>
   )
 }
