@@ -7,10 +7,10 @@ const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
  * the favicon alone only controls the small icon beside the URL. Without it,
  * Google infers everything from page text.
  *
- * `email` is still missing on purpose. The address on the contact page is
- * hello@gpbuilders.in, a domain the company no longer uses, and inventing a
- * replacement would route enquiries nowhere. Add it here once a working
- * address exists — the contact form is a working channel in the meantime.
+ * `email` is the address on the contact page. It sat empty here for a while
+ * because the only address on the site was hello@gpbuilders.in, on a domain
+ * the company had stopped using; the two must not drift apart again, since
+ * this is the address Google offers in a search result.
  */
 export function OrganizationSchema() {
   const schema = {
@@ -33,6 +33,7 @@ export function OrganizationSchema() {
     // E.164 rather than the spaced form shown on the page: this is the value
     // a phone dials from a search result, and spaces are not reliably parsed.
     telephone: '+919363699574',
+    email: 'projects@gpbuildersgroup.com',
     address: {
       '@type': 'PostalAddress',
       // Srirangam belongs in the street address — addressLocality wants the
