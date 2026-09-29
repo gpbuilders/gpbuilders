@@ -21,7 +21,9 @@
     "reprocess:media": "tsx --env-file=.env scripts/reprocess-media.ts",
     "migrate": "PAYLOAD_MIGRATING=true payload migrate",
     "migrate:create": "PAYLOAD_MIGRATING=true payload migrate:create",
-    "migrate:status": "PAYLOAD_MIGRATING=true payload migrate:status"
+    "migrate:status": "PAYLOAD_MIGRATING=true payload migrate:status",
+    "import:projects": "NODE_ENV=production PAYLOAD_MIGRATING=true tsx --env-file=.env scripts/import-projects.ts",
+    "verify:projects": "NODE_ENV=production tsx --env-file=.env scripts/verify-projects.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
