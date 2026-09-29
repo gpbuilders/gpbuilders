@@ -295,6 +295,10 @@ export interface Project {
    */
   gallery?: (number | Media)[] | null;
   /**
+   * Still on site. Shows an "Ongoing" marker on the card so a visitor can tell it apart from finished work.
+   */
+  ongoing?: boolean | null;
+  /**
    * Span a larger tile in the grid.
    */
   featured?: boolean | null;
@@ -492,6 +496,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   description?: T;
   image?: T;
   gallery?: T;
+  ongoing?: T;
   featured?: T;
   order?: T;
   updatedAt?: T;

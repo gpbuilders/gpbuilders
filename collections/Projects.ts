@@ -36,7 +36,7 @@ export const Projects: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'location', 'category', 'featured', 'order'],
+    defaultColumns: ['title', 'location', 'category', 'ongoing', 'featured', 'order'],
     group: 'Content',
     description:
       'Everything shown on the Projects page. Order controls the sequence; Featured makes a project span a larger tile.',
@@ -143,6 +143,15 @@ export const Projects: CollectionConfig = {
         className: 'gallery-grid',
         description:
           'Extra images for the detail modal, shown after the main one. Drag to reorder. Leave empty to show only the card image.',
+      },
+    },
+    {
+      name: 'ongoing',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description:
+          'Still on site. Shows an "Ongoing" marker on the card so a visitor can tell it apart from finished work.',
       },
     },
     {

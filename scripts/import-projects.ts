@@ -47,10 +47,12 @@ const args = process.argv.slice(2)
 const SOURCE = args.find((a) => !a.startsWith('--'))
 const APPLY = args.includes('--apply')
 const SCOPE_ARG = args.find((a) => a.startsWith('--scope='))?.slice('--scope='.length)
+const ONGOING = args.includes('--ongoing')
 
 if (!SOURCE) {
   console.error(
-    'Usage: tsx scripts/import-projects.ts "/path/to/folder" [--scope="Interior Design"] [--apply]',
+    'Usage: tsx scripts/import-projects.ts "/path/to/folder" ' +
+      '[--scope="Interior Design"] [--ongoing] [--apply]',
   )
   process.exit(1)
 }
@@ -202,7 +204,7 @@ async function survey(dir: string) {
 const plan = await survey(SOURCE)
 
 console.log(`\nSource: ${SOURCE}`)
-console.log(`Scope:  ${SCOPE}\n`)
+console.log(`Scope:  ${SCOPE}${ONGOING ? '   (marked ongoing)' : ''}\n`)
 for (const p of plan) {
   const land = p.images.filter((i) => i.landscape).length
   const decode = p.images.filter((i) => !PAYLOAD_HANDLES.has(i.ext)).length
@@ -326,6 +328,7 @@ for (const project of usable) {
       scope: SCOPE,
       image,
       gallery,
+      ongoing: ONGOING,
       featured: false,
       order: order++,
     },

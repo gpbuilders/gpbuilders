@@ -247,9 +247,21 @@ export function Projects({ projects }: { projects: Project[] }) {
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/0 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-6">
-                    <span className="inline-block rounded-full bg-background/90 px-3 py-1 text-xs font-medium text-primary">
-                      {project.scope}
-                    </span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="inline-block rounded-full bg-background/90 px-3 py-1 text-xs font-medium text-primary">
+                        {project.scope}
+                      </span>
+                      {/* Filled rather than outlined, so it reads as a state
+                          the project is in and not another label like the
+                          scope beside it. The dot carries the same meaning
+                          for anyone who cannot separate the two colours. */}
+                      {project.ongoing && (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-xs font-medium text-background">
+                          <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-background" />
+                          Ongoing
+                        </span>
+                      )}
+                    </div>
                     <h3 className="mt-3 font-serif text-2xl font-semibold text-background">
                       <button type="button" onClick={() => setSelectedProject(project)} aria-haspopup="dialog" className="text-left cursor-pointer after:absolute after:inset-0 focus-visible:outline-none">
                         {project.title}
@@ -260,6 +272,7 @@ export function Projects({ projects }: { projects: Project[] }) {
                       {project.location}
                     </p>
                   </div>
+
                 </div>
               </article>
             ))}
