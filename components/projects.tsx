@@ -263,9 +263,7 @@ export function Projects({ projects }: { projects: Project[] }) {
                       )}
                     </div>
                     <h3 className="mt-3 font-serif text-2xl font-semibold text-background">
-                      <button type="button" onClick={() => setSelectedProject(project)} aria-haspopup="dialog" className="text-left cursor-pointer after:absolute after:inset-0 focus-visible:outline-none">
-                        {project.title}
-                      </button>
+                      {project.title}
                     </h3>
                     <p className="mt-1 flex items-center gap-1.5 text-sm text-background/80">
                       <MapPin className="h-3.5 w-3.5" />
@@ -273,6 +271,21 @@ export function Projects({ projects }: { projects: Project[] }) {
                     </p>
                   </div>
 
+                {/* The whole card opens the project, not just the title.
+                    This used to ride on the title's ::after, but a stretched
+                    link only reaches as far as its nearest positioned
+                    ancestor — and the caption above is absolute, so the hit
+                    area was the caption alone and the photograph above it did
+                    nothing. A sibling of the article covers the card instead.
+                    Labelled, because on its own it is an empty button. */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedProject(project)}
+                  aria-haspopup="dialog"
+                  className="absolute inset-0 z-10 cursor-pointer focus-visible:outline-none"
+                >
+                  <span className="sr-only">View {project.title}</span>
+                </button>
                 </div>
               </article>
             ))}
