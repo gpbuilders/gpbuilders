@@ -20,14 +20,33 @@ const FILTERS: { label: string; value: Filter }[] = [
 ]
 
 // The grid is three columns at lg, and a featured project takes a 2x2 block of
-// it. Left to CSS auto-placement every one of those blocks lands on the left,
-// so a page with several featured projects reads as a single column of big
-// tiles. This walks the list and places each card explicitly instead, flipping
-// the big tile to the right-hand columns every second time.
+// it: two columns wide, two rows deep, with one ordinary card stacked beside
+// it in the remaining column.
+//
+// Left to CSS auto-placement every big block lands on the left, so a page with
+// several featured projects reads as a single column of them. This walks the
+// list and places each card explicitly instead, flipping the big tile to the
+// right-hand columns every second time.
+//
+// Each big tile opens a fresh row, so a full row of small cards always sits
+// between one block and the next rather than the second block butting up
+// against the first.
+//
+// That only works if the small cards are allowed to fill gaps behind the
+// cursor: a big tile jumping to a clean row leaves holes beside the previous
+// one, and without backfilling those stay empty. The cost is that a card can
+// appear slightly before its order would suggest.
+//
+// A block wants five ordinary projects to each featured one — two beside it
+// and three for the row beneath. Eight projects with two featured leaves one
+// cell short, which shows as a single gap beside the last big tile; a ninth
+// ordinary project closes it exactly.
 //
 // Only the lg layout is computed here — below that the grid is one or two
 // columns and a featured card simply spans the full width.
 const LG_COLS = 3
+const FEATURED_COLS = 2
+const FEATURED_ROWS = 2
 
 type Cell = { colStart: number; rowStart: number; colSpan: number; rowSpan: number }
 
@@ -51,25 +70,33 @@ function layoutProjects(projects: Project[]): Cell[] {
     }
   }
 
-  // Never moves backwards, so a small card fills the space beside the big tile
-  // it follows rather than backfilling a gap further up the page.
-  let cursorRow = 1
+  const rowIsEmpty = (row: number) => {
+    for (let c = 1; c <= LG_COLS; c++) {
+      if (taken.has(key(row, c))) return false
+    }
+    return true
+  }
+
   let featuredSeen = 0
 
   return projects.map((project) => {
     if (project.featured) {
-      const colStart = featuredSeen % 2 === 0 ? 1 : LG_COLS - 1
+      const colStart = featuredSeen % 2 === 0 ? 1 : LG_COLS - FEATURED_COLS + 1
       featuredSeen++
 
-      let rowStart = cursorRow
-      while (!isFree(rowStart, colStart, 2, 2)) rowStart++
+      // Start on the first row nothing occupies, so the row above is a clean
+      // band of small cards rather than the tail of the previous block.
+      let rowStart = 1
+      while (!rowIsEmpty(rowStart)) rowStart++
+      while (!isFree(rowStart, colStart, FEATURED_COLS, FEATURED_ROWS)) rowStart++
 
-      occupy(rowStart, colStart, 2, 2)
-      cursorRow = rowStart
-      return { colStart, rowStart, colSpan: 2, rowSpan: 2 }
+      occupy(rowStart, colStart, FEATURED_COLS, FEATURED_ROWS)
+      return { colStart, rowStart, colSpan: FEATURED_COLS, rowSpan: FEATURED_ROWS }
     }
 
-    let rowStart = cursorRow
+    // Scans from the top rather than from the cursor: the gaps a big tile
+    // leaves when it jumps to a fresh row are exactly what these should fill.
+    let rowStart = 1
     let colStart = 1
     while (!isFree(rowStart, colStart, 1, 1)) {
       colStart++
@@ -80,7 +107,6 @@ function layoutProjects(projects: Project[]): Cell[] {
     }
 
     occupy(rowStart, colStart, 1, 1)
-    cursorRow = rowStart
     return { colStart, rowStart, colSpan: 1, rowSpan: 1 }
   })
 }
@@ -201,10 +227,15 @@ export function Projects({ projects }: { projects: Project[] }) {
                   } as React.CSSProperties
                 }
               >
+                {/* The image is absolutely positioned on purpose. In flow, an
+                    h-full image in an auto-sized grid row still reports its
+                    intrinsic aspect ratio, so a portrait card image stretched
+                    its row and the big tile spanning it came out twice the
+                    height of the others. Out of flow, min-height decides. */}
                 <div
                   className={cn(
                     'relative flex-1 overflow-hidden',
-                    project.featured ? 'min-h-72 lg:min-h-[520px]' : 'min-h-60',
+                    project.featured ? 'min-h-72 lg:min-h-[600px]' : 'min-h-60 lg:min-h-72',
                   )}
                 >
                   <Image
@@ -212,7 +243,7 @@ export function Projects({ projects }: { projects: Project[] }) {
                     alt={`${project.title} — ${project.scope} by GP Builders`}
                     width={900}
                     height={650}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/0 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-6">
