@@ -7,32 +7,32 @@ import styles from './building-specializations.module.css'
 
 const SPECIALIZATIONS = [
   {
-    image: '/spec-residential.png',
+    image: '/spec-residential-courtyard.webp',
     title: 'Residential Homes',
     description: 'Luxury villas, apartments, and bespoke residences designed for modern living with premium finishes and timeless aesthetics.',
   },
   {
-    image: '/spec-hospitality.webp',
+    image: '/spec-hospitality-waiting.webp',
     title: 'F&B and Hospitality',
     description: 'Restaurants, cafes, and hospitality spaces that blend ambiance with functionality for unforgettable guest experiences.',
   },
   {
-    image: '/spec-commercial.webp',
+    image: '/spec-commercial-reception.webp',
     title: 'Commercial Offices',
     description: 'Corporate workspaces, co-working hubs, and office interiors that inspire productivity and reflect brand identity.',
   },
   {
-    image: '/spec-retail.png',
+    image: '/spec-retail.webp',
     title: 'Retail & Showrooms',
     description: 'High-impact retail environments and brand showrooms designed to captivate customers and drive engagement.',
   },
   {
-    image: '/spec-landscape.png',
+    image: '/spec-landscape.webp',
     title: 'Landscape Design',
     description: 'Outdoor spaces, gardens, and terraces that seamlessly extend your interiors with natural beauty and function.',
   },
   {
-    image: '/spec-industrial.png',
+    image: '/spec-industrial-cabin.webp',
     title: 'Industrial & Adaptive',
     description: 'Warehouse conversions, studio spaces, and adaptive reuse projects that celebrate character and practicality.',
   },
