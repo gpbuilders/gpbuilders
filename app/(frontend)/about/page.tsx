@@ -12,7 +12,7 @@ export default async function AboutPage() {
   return (
     <>
       <AboutHero sketch={hero.aboutSketch} />
-      <About />
+      <About showFounder={false} />
       <div className="bg-background-alt">
         <Values />
       </div>

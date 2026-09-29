@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
 
-export function About() {
+export function About({ showFounder = true }: { showFounder?: boolean }) {
   return (
     <section id="about" className="scroll-mt-20 py-20 lg:py-28">
       <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
@@ -28,11 +28,11 @@ export function About() {
             </div>
           </div>
 
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 lg:pt-9">
             <div className="space-y-5 text-pretty text-base leading-relaxed text-muted-foreground">
               <p>
-                Founded in 2021, GP Builders was established with a clear
-                vision — to make high-quality construction and interior
+                GP Builders brings a clear vision to every project — making
+                high-quality construction and interior
                 solutions accessible at an affordable price. Since our
                 inception, we have delivered{' '}
                 <span className="font-medium text-foreground">
@@ -66,7 +66,7 @@ export function About() {
             {/* The section names the company but nobody in it. A face and a
                 name are what turn "founded in 2021" into someone accountable
                 for the work. */}
-            <div className="mt-8 flex flex-wrap items-center gap-5 rounded-2xl border border-border bg-card p-6">
+            {showFounder && <div className="mt-8 flex flex-wrap items-center gap-5 rounded-2xl border border-border bg-card p-6">
               <Image
                 src="/vignesh-chandrasekaran.webp"
                 alt="Vignesh Chandrasekaran, founder of GP Builders"
@@ -94,7 +94,7 @@ export function About() {
                   <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                 </a>
               </div>
-            </div>
+            </div>}
           </div>
         </div>
       </div>
