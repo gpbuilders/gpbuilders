@@ -91,7 +91,17 @@ export const Projects: CollectionConfig = {
       name: 'scope',
       type: 'select',
       required: true,
+      // The single disciplines come first: most projects are one of them, and
+      // the combined options below are for jobs that genuinely span all three.
+      //
+      // These are a Postgres enum, so adding a value here is a schema change.
+      // Adding one by hand is `alter type enum_projects_scope add value ...`;
+      // it cannot be removed again, so nothing existing should ever be
+      // renamed or dropped from this list without migrating the rows first.
       options: [
+        'Architecture',
+        'Interior Design',
+        'Construction',
         'Architecture + Interior + Construction',
         'Architecture + Construction',
         'Interior Design + Construction',

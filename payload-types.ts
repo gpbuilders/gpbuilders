@@ -275,6 +275,9 @@ export interface Project {
    * Shown as the pill on the project card.
    */
   scope:
+    | 'Architecture'
+    | 'Interior Design'
+    | 'Construction'
     | 'Architecture + Interior + Construction'
     | 'Architecture + Construction'
     | 'Interior Design + Construction'
