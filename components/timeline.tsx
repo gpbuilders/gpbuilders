@@ -27,7 +27,7 @@ const MILESTONES = [
 
 export function Timeline() {
   return (
-    <section className="bg-background-alt py-24">
+    <section id="milestones" className="scroll-mt-20 bg-background-alt py-24">
       <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
         <p className="mb-3.5 text-xs uppercase tracking-[0.28em] text-primary">
           Milestones

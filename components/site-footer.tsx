@@ -65,19 +65,27 @@ const SOCIAL_LINKS = [
 const FOOTER_LINKS = [
   {
     title: 'Company',
+    // Each of these lands on the section it names. Two of them used to stop at
+    // the top of a page — "Our Process" at /services and "Milestones" at
+    // /about — leaving the visitor to scroll and guess which section had been
+    // promised.
     links: [
       { label: 'About Us', href: '/about' },
-      { label: 'Our Process', href: '/services' },
-      { label: 'Milestones', href: '/about' },
+      { label: 'Our Process', href: '/services#process' },
+      { label: 'Milestones', href: '/about#milestones' },
       { label: 'Contact', href: '/contact' },
     ],
   },
   {
     title: 'Services',
+    // One discipline per line. These read as the four things the firm does,
+    // where the combined packages they replace ("Architecture + Interior",
+    // "Construction Only") read as a price list and left a visitor working
+    // out which bundle they needed before they could click anything.
     links: [
-      { label: 'Architecture + Interior', href: '/services' },
-      { label: 'Interior + Construction', href: '/services' },
-      { label: 'Construction Only', href: '/services' },
+      { label: 'Architecture', href: '/services' },
+      { label: 'Construction', href: '/services' },
+      { label: 'Interior Design', href: '/services' },
       { label: 'Landscape Design', href: '/services' },
     ],
   },
