@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+import { LegalContents } from '@/components/legal-contents'
+
 /**
  * The shell both legal pages share.
  *
@@ -27,49 +29,25 @@ export function LegalDocument({
   sections: LegalSection[]
 }) {
   return (
-    <section className="w-full bg-background pb-20 lg:pb-28">
-      {/* max-w-site, the same container every other page uses, so the contents
-          column starts on the same line as the hero above it rather than
-          floating in from a narrower container of its own.
-          The grid tracks are fixed instead of fractional: a 16rem index and a
-          48rem measure for the clauses. Letting the text track take 1fr here
-          would stretch it to the full width of the site container and give
-          lines far too long to read. The space left over at the right is
-          deliberate. */}
-      <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
-        <div className="lg:grid lg:grid-cols-[16rem_minmax(0,48rem)] lg:gap-16 xl:gap-20">
+    <section className="w-full bg-background pt-14 pb-20 lg:pt-20 lg:pb-28">
+      {/* 72rem is not arbitrary: it is exactly what the two columns need —
+          16rem of index, a 4rem gutter, a 48rem measure for the clauses, and
+          the 2rem page padding either side. Sized this way the grid fills its
+          container, so the document sits centred under the hero instead of
+          hugging the left with a bank of dead space down the right.
+          The tracks stay fixed rather than fractional. A 1fr text column in a
+          wider container would stretch to well over a thousand pixels, which
+          is far too long a line to read comfortably. */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="lg:grid lg:grid-cols-[16rem_minmax(0,48rem)] lg:gap-16">
           {/* Sticky on desktop so the clause numbers stay reachable through a
               long document; a plain list there, but kept as a bordered card on
               narrow screens where it sits inline above the text and needs an
-              edge to separate it. max-h and overflow are for short laptop
-              screens, so the list can never outgrow the viewport it is pinned
-              to and strand its last few entries. */}
-          <nav
-            aria-label="Contents"
-            className="rounded-2xl border border-border bg-card p-6 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0"
-          >
-            <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-              Contents
-            </h2>
-            <ol className="mt-4 space-y-2 lg:mt-5 lg:space-y-2.5 lg:border-l lg:border-border lg:pl-5">
-              {sections.map((section, index) => (
-                <li key={section.id} className="flex gap-3 text-sm">
-                  <span
-                    aria-hidden="true"
-                    className="w-5 shrink-0 tabular-nums text-muted-foreground/60"
-                  >
-                    {index + 1}.
-                  </span>
-                  <a
-                    href={`#${section.id}`}
-                    className="rounded-sm text-balance text-muted-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transition-none"
-                  >
-                    {section.heading}
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </nav>
+              edge to separate it. Only the id and heading are handed over, so
+              the clause bodies never have to cross into client code. */}
+          <LegalContents
+            sections={sections.map(({ id, heading }) => ({ id, heading }))}
+          />
 
           {/* min-w-0 so a long unbroken string in a clause cannot widen the
               grid track and push the page into a horizontal scroll. */}
