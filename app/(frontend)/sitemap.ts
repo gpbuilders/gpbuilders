@@ -18,11 +18,11 @@ const STATIC_ROUTES: [path: string, priority: number, freq: 'weekly' | 'monthly'
 // is generated on its own, not rendered inside that layout, so the cascade is
 // not something to rely on. Without it the post list is frozen at build time.
 //
-// Nothing purges this path — the Posts hook revalidates /resources and the
-// article, not /sitemap.xml — so unlike the pages, the interval really is how
-// long a new post waits to be listed here. An hour is well inside how often a
-// crawler asks for it.
-export const revalidate = 3600
+// Dynamic rather than on an interval, for the same reason as the pages: a
+// prerendered sitemap ships in the deployment bundle and a container that
+// starts from it serves a post list from the last deploy. Submitting a stale
+// sitemap is worse than the one query this costs, and only crawlers ask.
+export const dynamic = 'force-dynamic'
 
 /**
  * Served at /sitemap.xml.

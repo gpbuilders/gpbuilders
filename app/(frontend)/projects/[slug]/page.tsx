@@ -44,23 +44,11 @@ const findProject = cache(async (slug: string) => {
   return docs[0]
 })
 
-/**
- * Builds every project's page at deploy time, so the first visitor to one is
- * not the person who pays for rendering it. A project added afterwards is not
- * in this list and is rendered on its first request instead, then cached like
- * the rest — nothing needs rebuilding for a new project to work.
- */
-export async function generateStaticParams() {
-  const payload = await getPayload({ config })
-  const { docs } = await payload.find({
-    collection: 'projects',
-    depth: 0,
-    limit: 500,
-    select: { slug: true },
-  })
-
-  return docs.flatMap((project) => (project.slug ? [{ slug: project.slug }] : []))
-}
+// No generateStaticParams on purpose. Prebuilding these pages is what put a
+// copy of every project into the deployment bundle, and on Amplify that copy
+// is what each new Lambda container starts serving — so an edit made after
+// the last deploy kept being overwritten by the version from before it. See
+// the frontend layout for the measurements.
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params

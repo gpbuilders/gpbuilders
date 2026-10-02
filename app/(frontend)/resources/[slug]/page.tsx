@@ -37,23 +37,9 @@ const findPost = cache(async (slug: string) => {
   return docs[0]
 })
 
-/**
- * Published articles are built at deploy time; one published afterwards is
- * rendered on its first request and cached from there. Drafts are excluded so
- * an unpublished article is never built into the deploy.
- */
-export async function generateStaticParams() {
-  const payload = await getPayload({ config })
-  const { docs } = await payload.find({
-    collection: 'posts',
-    depth: 0,
-    limit: 200,
-    where: { _status: { equals: 'published' } },
-    select: { slug: true },
-  })
-
-  return docs.flatMap((post) => (post.slug ? [{ slug: post.slug }] : []))
-}
+// No generateStaticParams on purpose — same reason as the project route: a
+// prebuilt copy in the deployment bundle is what kept resurfacing after an
+// edit. An article published between deploys also works without one.
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params

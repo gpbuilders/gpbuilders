@@ -69,26 +69,33 @@ export const viewport: Viewport = {
 }
 
 /**
- * Every public page is served from cache and rebuilt at most once a minute.
+ * Every public page reads the CMS on every request.
  *
  * Route segment config cascades, so this one line covers the whole frontend
  * and a page added later cannot forget it.
  *
- * The minute is a backstop, not the update latency. An edit in the admin shows
- * up within seconds, because each collection's afterChange hook purges the
- * paths it affects (see lib/revalidate.ts). This catches whatever a hook does
- * not — a direct database write, or a relationship nobody thought to map.
+ * This was briefly `revalidate = 60`, which is the textbook answer and is
+ * wrong on this host. Amplify serves the app from several Lambda containers,
+ * each holding its own cache on local disk and each starting life with the
+ * HTML prerendered at build time. revalidatePath reaches only the container
+ * that handled the save, so every other one — and every container started
+ * afterwards — keeps serving the build-time copy, and
+ * stale-while-revalidate lets it do that for a year.
  *
- * Why not render every request instead: the database is in Sydney and the app
- * runs in Mumbai, so each query is a ~300ms round trip. Measured on this app,
- * rendering per request costs 1.5s on the home and projects pages and 2.3s on
- * a project page, before Amplify's 10-14s cold start. From cache it is ~30ms.
+ * That is not a theory. Two projects were edited in the admin and measured
+ * against production with cache-busted requests: Karthick Residence served
+ * pre-edit data on 17 of 30 requests two hours after the change, and Sriram
+ * residence on 13 of 24 requests twenty hours after it. Both flapped between
+ * old and new rather than converging. Nothing short of a redeploy cleared it.
  *
- * Why this also fixed the stale CDN copies: a page with no revalidate is
- * treated as permanent and goes out with s-maxage=31536000, which CloudFront
- * held onto for a year. Declaring the interval sends s-maxage=60 instead.
+ * Rendering per request costs ~1.5s on the home and projects pages and ~2.3s
+ * on a project page, because the database is in Sydney and the app runs in
+ * Mumbai. That is the price of being correct here. The way to buy the speed
+ * back is a shared cache handler (next.config `cacheHandler` over Redis or
+ * DynamoDB) so the containers stop disagreeing — not another revalidate
+ * interval, which cannot fix a cache that is per-container by construction.
  */
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default function RootLayout({
   children,
