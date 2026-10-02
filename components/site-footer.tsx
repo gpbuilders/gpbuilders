@@ -183,9 +183,26 @@ export function SiteFooter() {
               </a>
             </p>
           </div>
-          <p className="text-sm font-medium text-accent">
-            Quality at an Affordable Price
-          </p>
+          {/* Beside the copyright rather than in a column of their own: these
+              are the two links a visitor goes looking for deliberately, and
+              the convention is to find them here. */}
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+            <Link
+              href="/privacy-policy"
+              className="text-sm text-muted/45 underline-offset-4 transition-colors hover:text-accent hover:underline"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="/terms"
+              className="text-sm text-muted/45 underline-offset-4 transition-colors hover:text-accent hover:underline"
+            >
+              Terms &amp; Conditions
+            </Link>
+            <p className="text-sm font-medium text-accent">
+              Quality at an Affordable Price
+            </p>
+          </div>
         </div>
       </div>
     </footer>

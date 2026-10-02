@@ -12,6 +12,10 @@ const STATIC_ROUTES: [path: string, priority: number, freq: 'weekly' | 'monthly'
   ['/about', 0.7, 'monthly'],
   ['/resources', 0.7, 'weekly'],
   ['/contact', 0.6, 'monthly'],
+  // Low priority but genuinely wanted in the index: these are pages people
+  // search for by name, and a search result is often how they are reached.
+  ['/privacy-policy', 0.3, 'monthly'],
+  ['/terms', 0.3, 'monthly'],
 ]
 
 // Stated here rather than inherited from the frontend layout: a metadata route
