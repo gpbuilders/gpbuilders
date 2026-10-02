@@ -44,8 +44,8 @@ export default function ContactPage() {
                       <p className="font-semibold text-foreground text-sm">
                         Email
                       </p>
-                      <a href="mailto:info@gpbuildersgroup.com" className="inline-flex min-h-11 items-center rounded-sm text-sm text-muted-foreground hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
-                        info@gpbuildersgroup.com
+                      <a href="mailto:projects@gpbuildersgroup.com" className="inline-flex min-h-11 items-center rounded-sm text-sm text-muted-foreground hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
+                        projects@gpbuildersgroup.com
                       </a>
                     </div>
                   </div>

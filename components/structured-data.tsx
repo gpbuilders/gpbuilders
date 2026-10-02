@@ -33,7 +33,7 @@ export function OrganizationSchema() {
     // E.164 rather than the spaced form shown on the page: this is the value
     // a phone dials from a search result, and spaces are not reliably parsed.
     telephone: '+919363699574',
-    email: 'info@gpbuildersgroup.com',
+    email: 'projects@gpbuildersgroup.com',
     address: {
       '@type': 'PostalAddress',
       // Srirangam belongs in the street address — addressLocality wants the
