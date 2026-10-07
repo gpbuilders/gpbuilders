@@ -31,10 +31,16 @@ export const dynamic = 'force-dynamic'
 /**
  * Served at /sitemap.xml.
  *
- * Blog posts are listed from the database rather than hardcoded, so publishing
- * an article makes it discoverable without anyone remembering to edit a list.
- * A failure to read them must not take the whole sitemap down — the static
- * routes are the ones that matter most, and half a sitemap beats a 500.
+ * Projects and blog posts are listed from the database rather than hardcoded,
+ * so publishing either makes it discoverable without anyone remembering to
+ * edit a list. A failure to read them must not take the whole sitemap down —
+ * the static routes are the ones that matter most, and half a sitemap beats
+ * a 500, so each query is caught separately.
+ *
+ * The project pages were missing from here entirely until now. /projects was
+ * listed but none of the pages it links to were, which left the largest and
+ * most valuable part of the site — a page per project — relying on Google
+ * following links to find it.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
@@ -48,8 +54,41 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
   )
 
+  const payload = await getPayload({ config })
+
+  // Each list is caught on its own, so a failure reading posts still leaves the
+  // projects in the sitemap, and the other way round.
+  let projectEntries: MetadataRoute.Sitemap = []
   try {
-    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'projects',
+      depth: 0,
+      limit: 500,
+      sort: 'order',
+      overrideAccess: false,
+      select: { slug: true, updatedAt: true },
+    })
+
+    projectEntries = docs.flatMap((project) =>
+      project.slug
+        ? [
+            {
+              url: `${SITE_URL}/projects/${project.slug}`,
+              lastModified: new Date(project.updatedAt ?? now),
+              // Higher than a post: these are the pages the business is
+              // actually found on, and they change when a project is edited.
+              changeFrequency: 'monthly' as const,
+              priority: 0.8,
+            },
+          ]
+        : [],
+    )
+  } catch (error) {
+    console.error('[sitemap] could not list projects:', error)
+  }
+
+  let postEntries: MetadataRoute.Sitemap = []
+  try {
     // overrideAccess: false applies the collection's read rule, so drafts stay
     // out of the sitemap — submitting an unpublished URL to Google is worse
     // than omitting it.
@@ -62,7 +101,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       select: { slug: true, updatedAt: true, publishedAt: true },
     })
 
-    const postEntries: MetadataRoute.Sitemap = docs.flatMap((post) =>
+    postEntries = docs.flatMap((post) =>
       post.slug
         ? [
             {
@@ -74,10 +113,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           ]
         : [],
     )
-
-    return [...staticEntries, ...postEntries]
   } catch (error) {
     console.error('[sitemap] could not list posts:', error)
-    return staticEntries
   }
+
+  return [...staticEntries, ...projectEntries, ...postEntries]
 }
