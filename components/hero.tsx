@@ -201,7 +201,12 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
       </div>
 
       {/* Carousel Indicators */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+      {/* gap-5 (20px), not gap-2. Each button is a 24px hit area (-m-2 p-2
+          around an 8px dot) but the negative margin collapses its layout box
+          back to 8px, so at gap-2 the centres sat 16px apart and the hit areas
+          overlapped — WCAG 2.5.8 wants 24px clear. 20px of gap puts the
+          centres 28px apart. The dots themselves are unchanged. */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-5">
         {slides.map((_, idx) => (
           <button
             key={idx}
