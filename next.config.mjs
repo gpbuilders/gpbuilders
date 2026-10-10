@@ -31,6 +31,31 @@ const storageHostname = (() => {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    /**
+     * Ship the CSS inside the document instead of as <link> tags.
+     *
+     * Two stylesheets were blocking the first render, and on a cold mobile
+     * load they cost a round trip each before anything could paint. Inlined,
+     * the page has no render-blocking request left at all.
+     *
+     * The trade is bytes for round trips, and it is worth it here because the
+     * bytes land in one place only. A <Link> navigation fetches an RSC payload,
+     * and those carry no CSS — measured: /about comes back at 6.6 KB with none
+     * of it in there. So only a full document load pays, by about 12-16 KB
+     * compressed, against two round trips saved. On the networks this site is
+     * actually read on, that is the better side of the trade.
+     *
+     * What it costs: the HTML is `no-store` under force-dynamic, so inlined CSS
+     * can never be cached. A second full load — a new tab, a refresh, landing
+     * on another page from search — re-sends it where the two files would have
+     * been cache hits. That case is rarer here than a first visit.
+     *
+     * Still flagged experimental in Next 16.2.6. If it misbehaves, deleting
+     * these lines restores the two <link> tags and nothing else changes.
+     */
+    inlineCss: true,
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
