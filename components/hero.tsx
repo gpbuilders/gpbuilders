@@ -222,7 +222,12 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-8 sm:mb-16 pointer-events-auto">
+            {/* w-fit on the stacked layout, so the column is only as wide as its
+                widest label rather than the whole content block — full-bleed
+                pills were 468px of a 468px column on a phone. The items still
+                stretch inside it, so both buttons come out the same width
+                without either one being given a number to hold to. */}
+            <div className="flex w-fit flex-col gap-4 mb-8 pointer-events-auto sm:mb-16 sm:w-auto sm:flex-row">
               <Link
                 href="/projects"
                 className={cn(
