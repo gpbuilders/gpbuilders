@@ -94,7 +94,9 @@
   .bottom { position: relative; bottom: auto; left: auto; right: auto; }
   .navigation { width: 100%; gap: 14px; }
   /* 9px was unreadable on a phone whatever its contrast. 11px matches the
-     desktop size and still fits three labels across a 360px screen. */
+     desktop size. Two of the three labels wrap to a second line at 360px,
+     which is why this rule sets line-height and align-items: flex-start —
+     the wrap is expected, and the top borders stay aligned through it. */
   .navigation button { flex: 1; align-items: flex-start; padding-top: 10px; gap: 5px; font-size: 11px; line-height: 1.4; text-align: left; }
   .scrollHint { display: none; }
 }

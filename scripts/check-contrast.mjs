@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 /**
- * Computes WCAG 2.1 contrast ratios for the colour pairs this site renders,
- * straight from the design tokens in app/(frontend)/globals.css.
+ * Computes WCAG 2.1 contrast ratios for the colour pairs this site renders.
+ * The token values below are COPIED from app/(frontend)/globals.css, not read
+ * from it — change a token there and you must change it here too, or this
+ * script will keep passing while the site fails.
  *
  * There is no test runner in this repo, and contrast is pure arithmetic, so
  * this pins the one class of accessibility bug that can be checked without a

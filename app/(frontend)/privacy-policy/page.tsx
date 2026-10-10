@@ -337,6 +337,12 @@ const SECTIONS: LegalSection[] = [
           than made quietly.
         </p>
         <p>
+          <Term>10 October 2026.</Term> We removed the analytics service this
+          site had been using. It had never worked on our hosting and collected
+          nothing, so no visitor data was ever gathered through it. Clause 4 and
+          the list of service providers in clause 5 have been updated to match.
+        </p>
+        <p>
           This policy sits alongside our{' '}
           <Link
             href="/terms"
