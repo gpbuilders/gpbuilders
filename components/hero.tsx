@@ -18,6 +18,22 @@ import { Autoplay, EffectFade } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/effect-fade'
 
+/**
+ * Both of these are module constants, not literals in the JSX, because their
+ * identity is a prop. Swiper re-measures itself whenever it is handed params it
+ * does not recognise, and measuring means reading the geometry of a full-bleed
+ * element on a 9,000px page. Written inline they were new objects on every
+ * render of this component, which has six pieces of state: six re-renders cost
+ * six forced layouts, 57.9ms of them under 4x CPU throttling.
+ *
+ * autoplay starts disabled whatever the slides are. The effect below is what
+ * governs it, from `paused` and the reduced-motion preference, and it did so
+ * already — having `enabled` in here as well only meant the param object
+ * changed every time somebody hit pause.
+ */
+const SWIPER_MODULES = [Autoplay, EffectFade]
+const SWIPER_AUTOPLAY = { enabled: false, delay: 7000, disableOnInteraction: false }
+
 export function Hero({ slides }: { slides: HeroSlide[] }) {
   const swiperRef = useRef<SwiperRef>(null)
   const sectionRef = useRef<HTMLElement>(null)
@@ -86,6 +102,7 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
   useEffect(() => {
     const stopped = paused || reduceMotion
     const swiper = swiperRef.current?.swiper
+    if (swiper) swiper.params.speed = reduceMotion ? 0 : 600
     if (stopped) swiper?.autoplay.stop()
     else swiper?.autoplay.start()
     sectionRef.current?.querySelectorAll('video').forEach(video => {
@@ -100,14 +117,13 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
       {/* Full-width Carousel Background */}
       <Swiper
         ref={swiperRef}
-        modules={[Autoplay, EffectFade]}
+        modules={SWIPER_MODULES}
         effect="fade"
-        autoplay={{
-          enabled: !reduceMotion && !paused,
-          delay: 7000,
-          disableOnInteraction: false,
-        }}
-        speed={reduceMotion ? 0 : 600}
+        autoplay={SWIPER_AUTOPLAY}
+        // Fixed, and set to 0 on the instance by the effect above when motion
+        // is to be reduced. As a prop it changed once on mount — the preference
+        // can only be read after hydration — and cost a measure to do it.
+        speed={600}
         loop
         // realIndex, not activeIndex: in loop mode the two differ, and this one
         // counts in the same order as the slides prop.
