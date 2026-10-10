@@ -19,6 +19,19 @@
 .intro { margin-top: 12px; font-size: 14px; }
 .roadContainer { padding-top: 32px; }
 .road { display: block; width: 100%; height: auto; aspect-ratio: 1672 / 555; overflow: hidden; }
+/* Where the six markers start, before the scroll handler has had a frame to
+   place them. It used to be set from JavaScript before the first paint, which
+   meant reading the page's geometry during React's commit and forcing a full
+   layout to do it.
+
+   Behind `scripting: enabled` so it applies only when something will animate
+   them. With JavaScript off — or in a browser that does not know the query —
+   the rule is skipped and the roadmap renders complete, which is the right
+   fallback and is what it did before. transform and opacity do not affect
+   layout, so neither this nor the handler's writes dirty it. */
+@media (scripting: enabled) {
+  .road [data-marker] { opacity: 0; transform: translateY(-180px); }
+}
 .steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; padding: 24px 24px 36px; list-style: none; }
 .step { min-width: 0; }
 .stepTitle { display: flex; gap: 7px; min-height: 42px; align-items: flex-start; font-size: 12px; font-weight: 500; line-height: 1.4; text-transform: uppercase; letter-spacing: .045em; }

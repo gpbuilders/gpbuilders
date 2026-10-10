@@ -105,7 +105,14 @@ export function WhatWeDo() {
     window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', schedule)
     reduced.addEventListener('change', schedule)
-    update()
+    // schedule(), not update(). Both observers above deliver a first callback
+    // on their own, so the stage gets measured either way; calling update()
+    // straight from the effect only measured it one extra time, inside React's
+    // commit, where reading geometry forces a full layout of a 9,000px page.
+    // Nothing flashes in the meantime: the nine custom properties this writes
+    // are all declared in what-we-do.module.css at their progress-0 values,
+    // which is exactly the state the first frame should show.
+    schedule()
     return () => {
       cancelAnimationFrame(frame)
       observer.disconnect()

@@ -39,7 +39,9 @@ function Roadmap() {
     window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', schedule)
     reduced.addEventListener('change', schedule)
-    update()
+    // The markers' start state is in the stylesheet now, so this no longer has
+    // to beat the first paint and can wait for a frame like every other update.
+    schedule()
     return () => {
       cancelAnimationFrame(frame)
       window.removeEventListener('scroll', schedule)

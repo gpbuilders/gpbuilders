@@ -41,8 +41,11 @@ export function Testimonials() {
     const syncMotion = () => setReducedMotion(media.matches)
     const syncSize = () => setCanScroll(scroller.scrollWidth > scroller.clientWidth + 2)
     syncMotion()
-    syncSize()
     media.addEventListener('change', syncMotion)
+    // No syncSize() call here on purpose. observe() delivers a first callback
+    // of its own, after layout, so calling it inline only added a second
+    // measurement — and that one ran inside React's commit, where reading
+    // scrollWidth forces the browser to lay the page out early.
     const resize = new ResizeObserver(syncSize)
     resize.observe(scroller)
     const release = () => {
