@@ -105,7 +105,11 @@ export function Testimonials() {
         {canScroll && !reducedMotion && (
           <div className="mt-6 flex justify-center">
             <button type="button" onClick={() => setPaused(value => !value)}
-              aria-label={paused ? 'Resume review scrolling' : 'Pause review scrolling'}
+              /* The accessible name must contain the visible text verbatim
+                 (WCAG 2.5.3), or a speech-input user saying what they can see
+                 does not activate the control. Visible text is
+                 "Pause scrolling" / "Resume scrolling". */
+              aria-label={paused ? 'Resume scrolling reviews' : 'Pause scrolling reviews'}
               aria-pressed={paused}
               className="inline-flex min-h-11 items-center gap-2 rounded-full border border-muted/30 px-4 text-sm text-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent">
               {paused ? <Play size={14} /> : <Pause size={14} />}
@@ -137,7 +141,11 @@ export function Testimonials() {
               className={`flex w-[82%] shrink-0 flex-col border-t border-muted/20 pt-7 sm:w-[60%] ${TESTIMONIALS.length <= 3 ? 'lg:w-auto' : 'lg:w-[calc((100%-4rem)/3)]'}`}
             >
               <Quote className="h-8 w-8 text-accent/30" />
-              <div className="mt-4 flex gap-0.5" aria-label="5 out of 5 stars">
+              {/* role="img" is what makes aria-label legal here: an aria-label
+                  on a bare div names nothing, so the five decorative Star
+                  glyphs reached the accessibility tree as five unlabelled
+                  nodes and the tree failed validation. */}
+              <div className="mt-4 flex gap-0.5" role="img" aria-label="5 out of 5 stars">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} className="h-4 w-4 fill-accent text-accent" />
                 ))}
