@@ -48,7 +48,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-site items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3">
           <Image
-            src="/gp-logo.png"
+            src="/gp-logo.webp"
             alt="GP Builders logo"
             width={44}
             height={44}

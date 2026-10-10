@@ -17,14 +17,14 @@ import { getPayload } from 'payload'
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 
 const HOME_SLIDES: [file: string, alt: string][] = [
-  ['/interior-hallway.jpg', 'Modern interior hallway with terracotta'],
-  ['/project-living-room.png', 'Luxury living room design'],
-  ['/exterior-render.jpg', 'Exterior architectural rendering'],
-  ['/project-kitchen.png', 'Modern kitchen design'],
-  ['/commercial-restaurant.jpg', 'Commercial restaurant design'],
+  ['/interior-hallway.webp', 'Modern interior hallway with terracotta'],
+  ['/project-living-room.webp', 'Luxury living room design'],
+  ['/exterior-render.webp', 'Exterior architectural rendering'],
+  ['/project-kitchen.webp', 'Modern kitchen design'],
+  ['/commercial-restaurant.webp', 'Commercial restaurant design'],
 ]
-const PAGE_ART: [string, string] = ['/architecture-line-art.png', 'Architecture sketch']
-const ABOUT_SKETCH: [string, string] = ['/architecture-sketch.png', 'Architectural building sketch']
+const PAGE_ART: [string, string] = ['/architecture-line-art.webp', 'Architecture sketch']
+const ABOUT_SKETCH: [string, string] = ['/architecture-sketch.webp', 'Architectural building sketch']
 
 const payload = await getPayload({ config })
 const cache = new Map<string, number>()

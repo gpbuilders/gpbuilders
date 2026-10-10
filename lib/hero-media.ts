@@ -28,14 +28,14 @@ export type HeroMediaResolved = {
  */
 const FALLBACK: HeroMediaResolved = {
   homeSlides: [
-    { kind: 'image', src: '/interior-hallway.jpg', alt: 'Modern interior hallway with terracotta' },
-    { kind: 'image', src: '/project-living-room.png', alt: 'Luxury living room design' },
-    { kind: 'image', src: '/exterior-render.jpg', alt: 'Exterior architectural rendering' },
-    { kind: 'image', src: '/project-kitchen.png', alt: 'Modern kitchen design' },
-    { kind: 'image', src: '/commercial-restaurant.jpg', alt: 'Commercial restaurant design' },
+    { kind: 'image', src: '/interior-hallway.webp', alt: 'Modern interior hallway with terracotta' },
+    { kind: 'image', src: '/project-living-room.webp', alt: 'Luxury living room design' },
+    { kind: 'image', src: '/exterior-render.webp', alt: 'Exterior architectural rendering' },
+    { kind: 'image', src: '/project-kitchen.webp', alt: 'Modern kitchen design' },
+    { kind: 'image', src: '/commercial-restaurant.webp', alt: 'Commercial restaurant design' },
   ],
-  pageHeroArt: { kind: 'image', src: '/architecture-line-art.png', alt: 'Architecture sketch' },
-  aboutSketch: { kind: 'image', src: '/architecture-sketch.png', alt: 'Architectural building sketch' },
+  pageHeroArt: { kind: 'image', src: '/architecture-line-art.webp', alt: 'Architecture sketch' },
+  aboutSketch: { kind: 'image', src: '/architecture-sketch.webp', alt: 'Architectural building sketch' },
 }
 
 function resolve(media: MediaField, fallback: HeroImage): HeroImage {

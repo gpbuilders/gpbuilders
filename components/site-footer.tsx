@@ -107,7 +107,7 @@ export function SiteFooter() {
           <div className="lg:col-span-4">
             <Link href="/" className="flex items-center gap-3">
               <Image
-                src="/gp-logo.png"
+                src="/gp-logo.webp"
                 alt="GP Builders logo"
                 width={44}
                 height={44}

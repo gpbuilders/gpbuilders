@@ -7,6 +7,7 @@
  * look right, not match glyph-for-glyph. Regenerating on a machine without
  * Palatino will fall back down the stack.
  */
+import { statSync } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -19,7 +20,7 @@ const H = 630
 const CREAM = '#f6f4ef'
 const ACCENT = '#8fc0c7'
 
-const photo = await sharp(path.join(ROOT, 'public/interior-hallway.jpg'))
+const photo = await sharp(path.join(ROOT, 'public/interior-hallway.webp'))
   .resize(W, H, { fit: 'cover', position: 'centre' })
   .modulate({ brightness: 1.12, saturation: 1.06 })
   .toBuffer()
@@ -72,5 +73,7 @@ await sharp(photo)
   .jpeg({ quality: 88, mozjpeg: true })
   .toFile(path.join(ROOT, 'public/og-image.jpg'))
 
-const { size } = await sharp(path.join(ROOT, 'public/og-image.jpg')).metadata()
+// From the filesystem, not from metadata(): sharp stopped reporting `size`
+// for a file input, so this line had been printing "NaN KB".
+const { size } = statSync(path.join(ROOT, 'public/og-image.jpg'))
 console.log(`public/og-image.jpg — ${W}x${H}, ${(size / 1024).toFixed(0)} KB`)

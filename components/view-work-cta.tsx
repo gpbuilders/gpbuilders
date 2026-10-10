@@ -3,12 +3,12 @@ import Link from 'next/link'
 
 const PREVIEW = [
   {
-    src: '/interior-hallway.jpg',
+    src: '/interior-hallway.webp',
     alt: 'Courtyard Residence interior by GP Builders',
     offset: false,
   },
   {
-    src: '/exterior-render.jpg',
+    src: '/exterior-render.webp',
     alt: 'Contemporary Villa exterior by GP Builders',
     offset: true,
   },
