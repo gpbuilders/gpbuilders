@@ -265,16 +265,31 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
           overlapped — so Lighthouse measured the usable area as 16x24 and failed it. 20px of gap puts the
           centres 28px apart. The dots themselves are unchanged. */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-5">
-        {slides.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => swiperRef.current?.swiper.slideTo(idx)}
-            aria-label={`Go to slide ${idx + 1}`}
-            className="group -m-2 p-2"
-          >
-            <span className="block w-2 h-2 rounded-full bg-white/40 transition-all group-hover:bg-white/80" />
-          </button>
-        ))}
+        {slides.map((_, idx) => {
+          const current = idx === active
+          return (
+            <button
+              key={idx}
+              // slideToLoop, not slideTo. In loop mode Swiper's own index drifts
+              // away from the one these dots are numbered by: after enough laps
+              // activeIndex read 3 while realIndex read 0, and every dot sent you
+              // two slides past the one it named. slideToLoop counts the way the
+              // slides prop does.
+              onClick={() => swiperRef.current?.swiper.slideToLoop(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+              aria-current={current ? 'true' : undefined}
+              className="group -m-2 p-2"
+            >
+              {/* Wider rather than larger: the row keeps its height, so marking
+                  the current slide cannot nudge anything around it. */}
+              <span
+                className={`block h-2 rounded-full transition-all motion-reduce:transition-none ${
+                  current ? 'w-6 bg-white' : 'w-2 bg-white/40 group-hover:bg-white/80'
+                }`}
+              />
+            </button>
+          )
+        })}
       </div>
 
       {/* Scroll Indicator */}
