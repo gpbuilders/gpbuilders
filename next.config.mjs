@@ -39,6 +39,19 @@ const nextConfig = {
     // actually displayed, and serves that from the CDN. Visitors stop pulling
     // multi-megabyte originals out of Supabase on every page view.
     formats: ['image/webp'],
+    // How long an optimised image may be reused before Next re-encodes it, and
+    // the max-age it sends to the browser when the source carries no cache
+    // header of its own — which is every image here, whether it comes from
+    // public/ or from the media bucket. The default is four hours, so a
+    // returning visitor re-downloaded every image on the page twice a day.
+    //
+    // Thirty days rather than a year because these URLs are not content
+    // addressed: /_next/image?url=%2Fgp-logo.webp stays the same string when
+    // the file behind it changes. A year would mean an editor replacing a
+    // photo in the admin, under the same filename, could not be sure it had
+    // reached everyone for twelve months. A month is where the repeat-visit
+    // benefit has essentially all arrived, and it bounds that staleness.
+    minimumCacheTTL: 60 * 60 * 24 * 30,
     // 85 is visually indistinguishable from the original at display size;
     // Next 16 requires every quality used in a component to be declared here.
     qualities: [75, 85, 90],
