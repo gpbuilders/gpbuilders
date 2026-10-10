@@ -8,10 +8,15 @@ import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import type { HeroSlide } from '@/lib/hero-media'
 import { Swiper, SwiperSlide, type SwiperRef } from 'swiper/react'
-import { Autoplay, EffectFade, Navigation } from 'swiper/modules'
+import { Autoplay, EffectFade } from 'swiper/modules'
+// Only the two stylesheets this carousel actually uses. Swiper's navigation
+// CSS was imported here too, and nothing rendered it: the arrows below are
+// our own buttons calling slidePrev/slideNext, which are core methods and do
+// not need the Navigation module. It cost 3.2 KB of render-blocking CSS —
+// the largest feature block in that chunk — to style elements that were
+// never in the markup.
 import 'swiper/css'
 import 'swiper/css/effect-fade'
-import 'swiper/css/navigation'
 
 export function Hero({ slides }: { slides: HeroSlide[] }) {
   const swiperRef = useRef<SwiperRef>(null)
@@ -51,7 +56,7 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
       {/* Full-width Carousel Background */}
       <Swiper
         ref={swiperRef}
-        modules={[Autoplay, EffectFade, Navigation]}
+        modules={[Autoplay, EffectFade]}
         effect="fade"
         autoplay={{
           enabled: !reduceMotion && !paused,
