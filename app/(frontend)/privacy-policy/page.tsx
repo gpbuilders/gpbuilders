@@ -126,10 +126,10 @@ const SECTIONS: LegalSection[] = [
           to dismiss a cookie banner.
         </p>
         <p>
-          We do use a privacy-focused analytics service to count page views and
-          see which pages are read. It does not use cookies, does not build a
-          profile of you and does not follow you to other websites. It tells us
-          that a page was viewed, not who viewed it.
+          <Term>We run no analytics at all.</Term> No service counts your visit,
+          measures which pages you read, or records how you move through the
+          site. We know a page was served because our host logs the request, and
+          that is the whole of it.
         </p>
         <p>
           Our hosting provider keeps standard server logs, including IP

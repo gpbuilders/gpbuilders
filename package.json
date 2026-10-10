@@ -26,15 +26,14 @@
     "verify:projects": "NODE_ENV=production tsx --env-file=.env scripts/verify-projects.ts"
   },
   "dependencies": {
-    "@base-ui/react": "^1.5.0",
     "@aws-sdk/client-s3": "^3.1116.0",
     "@aws-sdk/s3-request-presigner": "^3.1116.0",
+    "@base-ui/react": "^1.5.0",
     "@payloadcms/db-postgres": "3.88.0",
     "@payloadcms/next": "3.88.0",
     "@payloadcms/richtext-lexical": "3.88.0",
     "@payloadcms/storage-s3": "3.88.0",
     "@payloadcms/ui": "3.88.0",
-    "@vercel/analytics": "1.6.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "graphql": "^16.14.0",
