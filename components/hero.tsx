@@ -23,6 +23,50 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
   const sectionRef = useRef<HTMLElement>(null)
   const [paused, setPaused] = useState(false)
   const [isMuted, setIsMuted] = useState(true)
+  const [active, setActive] = useState(0)
+
+  /**
+   * Which slides are worth downloading yet.
+   *
+   * The fade effect stacks every slide in the same box, so all five sit inside
+   * the viewport at full size from the first paint and `loading="lazy"` holds
+   * none of them back. Measured on a 412px viewport without scrolling: five
+   * images, 252 KB, to show the 32 KB one. This keeps the first paint to the
+   * first slide and widens as the carousel moves.
+   *
+   * A slide never leaves the set once it is in. Taking its src away again
+   * would only make the browser ask for it a second time on the next lap.
+   */
+  const [eligible, setEligible] = useState<ReadonlySet<number>>(() => new Set([0]))
+
+  // The neighbours are fetched after the page has finished loading rather than
+  // during it, so nothing competes with the slide that is actually on screen.
+  // There is no hurry: autoplay waits seven seconds before it needs the next one.
+  const [loadComplete, setLoadComplete] = useState(false)
+  useEffect(() => {
+    if (document.readyState === 'complete') {
+      setLoadComplete(true)
+      return
+    }
+    const done = () => setLoadComplete(true)
+    window.addEventListener('load', done)
+    return () => window.removeEventListener('load', done)
+  }, [])
+
+  useEffect(() => {
+    // Still on the first paint with the first slide showing: nothing to widen to.
+    if (!loadComplete && active === 0) return
+    setEligible((current) => {
+      const count = slides.length
+      // Both neighbours, not just the next: fade needs the slide it is moving
+      // to already decoded, and the arrows can go either way.
+      const next = new Set(current)
+      for (const index of [active, (active + 1) % count, (active - 1 + count) % count]) {
+        next.add(index)
+      }
+      return next.size === current.size ? current : next
+    })
+  }, [active, loadComplete, slides.length])
 
   // A full-screen autoplaying video is exactly what this setting is for.
   // Read after mount rather than during render, so the server and the first
@@ -65,11 +109,19 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
         }}
         speed={reduceMotion ? 0 : 600}
         loop
+        // realIndex, not activeIndex: in loop mode the two differ, and this one
+        // counts in the same order as the slides prop.
+        onSlideChange={(swiper) => setActive(swiper.realIndex)}
         className="!absolute inset-0 w-full h-full"
       >
         {slides.map((slide, idx) => (
           <SwiperSlide key={idx} className="relative w-full h-full">
-            {slide.kind === 'video' && !reduceMotion ? (
+            {!eligible.has(idx) ? (
+              /* Holds the slide's place until it is near enough to be worth the
+                 bytes. Same colour as the section behind it, so a slide that
+                 has not arrived yet cannot flash light against the hero. */
+              <div className="h-full w-full bg-dark-bg" />
+            ) : slide.kind === 'video' && !reduceMotion ? (
               <video
                 key={slide.src}
                 src={slide.src}
@@ -93,6 +145,7 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
                 // widest source it can get.
                 sizes="100vw"
                 className="object-cover"
+                // The only slide on screen at first paint, and the LCP element.
                 priority={idx === 0}
               />
             )}
