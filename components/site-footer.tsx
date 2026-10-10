@@ -165,13 +165,13 @@ export function SiteFooter() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-muted/10 pt-8 sm:flex-row">
           <div className="flex flex-col items-center gap-1.5 sm:flex-row sm:gap-3">
-            <p className="text-sm text-muted/45">
+            <p className="text-sm text-muted/60">
               © {new Date().getFullYear()} GP Builders. All rights reserved.
             </p>
             <span aria-hidden className="hidden text-muted/25 sm:inline">
               &middot;
             </span>
-            <p className="text-sm text-muted/45">
+            <p className="text-sm text-muted/60">
               Crafted by{' '}
               <a
                 href="https://spatialcontinuum.com/"
@@ -189,13 +189,13 @@ export function SiteFooter() {
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <Link
               href="/privacy-policy"
-              className="text-sm text-muted/45 underline-offset-4 transition-colors hover:text-accent hover:underline"
+              className="text-sm text-muted/60 underline-offset-4 transition-colors hover:text-accent hover:underline"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className="text-sm text-muted/45 underline-offset-4 transition-colors hover:text-accent hover:underline"
+              className="text-sm text-muted/60 underline-offset-4 transition-colors hover:text-accent hover:underline"
             >
               Terms &amp; Conditions
             </Link>

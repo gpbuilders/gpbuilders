@@ -63,7 +63,11 @@
 .bottom { position: absolute; z-index: 2; bottom: 32px; right: calc(max(0px, (100% - var(--container-site)) / 2) + 32px); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .navigation { display: flex; gap: 28px; }
 .navigation button { display: flex; align-items: center; gap: 10px; min-height: 44px; border-top: 1px solid var(--border); color: var(--muted-foreground); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; cursor: pointer; transition: color 200ms, border-color 200ms; }
-.navigation button > span:first-child { font-size: 10px; opacity: .65; }
+/* No opacity here. At .65 the number flattened to #8c9596 on #e8eeec — 2.6:1,
+   and 2.86:1 in the aria-current state — against a 4.5:1 requirement at 10px.
+   The number still reads as secondary through its smaller size; it does not
+   need to be faded as well. */
+.navigation button > span:first-child { font-size: 10px; }
 .navigation button[aria-current='step'] { border-color: var(--primary); color: var(--primary); }
 /* This sits over the photograph, which is bright and changes between
    chapters, so muted-foreground on nothing was unreadable. A translucent
@@ -89,7 +93,9 @@
   .link { margin-top: 12px; font-size: 11px; }
   .bottom { position: relative; bottom: auto; left: auto; right: auto; }
   .navigation { width: 100%; gap: 14px; }
-  .navigation button { flex: 1; align-items: flex-start; padding-top: 10px; gap: 5px; font-size: 9px; line-height: 1.4; text-align: left; }
+  /* 9px was unreadable on a phone whatever its contrast. 11px matches the
+     desktop size and still fits three labels across a 360px screen. */
+  .navigation button { flex: 1; align-items: flex-start; padding-top: 10px; gap: 5px; font-size: 11px; line-height: 1.4; text-align: left; }
   .scrollHint { display: none; }
 }
 @media (prefers-reduced-motion: reduce), (max-height: 620px) {
