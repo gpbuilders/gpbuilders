@@ -2,6 +2,9 @@
 
 import { useEffect, useId, useRef } from 'react'
 import styles from './how-we-deliver.module.css'
+// See what-we-do.tsx: imported so the CDN can cache it immutably, and WebP
+// rather than PNG — the alpha channel survives the conversion untouched.
+import blueprint from '@/assets/delivery-blueprint.webp'
 
 const MARKERS = [
   { x: 134, y: 343, radius: 52 },
@@ -57,10 +60,10 @@ function Roadmap() {
             <clipPath key={index} id={`${id}-marker-${index}`}><circle cx={x} cy={y} r={radius} /></clipPath>
           ))}
         </defs>
-        <image href="/images/delivery-blueprint.png" width="1672" height="941" mask={`url(#${id}-road)`} />
+        <image href={blueprint.src} width={blueprint.width} height={blueprint.height} mask={`url(#${id}-road)`} />
         {MARKERS.map((_, index) => (
           <g key={index} data-marker>
-            <image href="/images/delivery-blueprint.png" width="1672" height="941" clipPath={`url(#${id}-marker-${index})`} />
+            <image href={blueprint.src} width={blueprint.width} height={blueprint.height} clipPath={`url(#${id}-marker-${index})`} />
           </g>
         ))}
       </svg>
@@ -84,7 +87,7 @@ function BlueprintArt({ viewBox, className }: { viewBox: string; className: stri
   return (
     <svg viewBox={viewBox} className={className} aria-hidden="true" focusable="false">
       <defs><clipPath id={clipId}><rect x={x} y={y} width={width} height={height} /></clipPath></defs>
-      <image href="/images/delivery-blueprint.png" width="1672" height="941" clipPath={`url(#${clipId})`} />
+      <image href={blueprint.src} width={blueprint.width} height={blueprint.height} clipPath={`url(#${clipId})`} />
     </svg>
   )
 }

@@ -4,6 +4,11 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { ArrowDown, ArrowUpRight, DraftingCompass, Ruler, Pencil, TriangleRight, Eraser } from 'lucide-react'
 import Link from 'next/link'
 import styles from './what-we-do.module.css'
+// Imported rather than written as a /public path. Next copies it to
+// /_next/static/media under a content hash and the CDN then serves it
+// immutable for a year; out of public/ the same file came back
+// `max-age=5` and was re-downloaded on practically every visit.
+import storyboard from '@/assets/services-villa-storyboard.webp'
 
 const SERVICES = [
   {
@@ -44,7 +49,7 @@ function VillaFrame({ index }: { index: number }) {
   return (
     <svg viewBox={`${x} ${y} ${width} ${height}`} className={styles.frame} role="img" aria-label={alt}>
       <defs><clipPath id={id}><rect x={x} y={y} width={width} height={height} /></clipPath></defs>
-      <image href="/images/services-villa-storyboard.png" width="2087" height="754" clipPath={`url(#${id})`} />
+      <image href={storyboard.src} width={storyboard.width} height={storyboard.height} clipPath={`url(#${id})`} />
     </svg>
   )
 }
