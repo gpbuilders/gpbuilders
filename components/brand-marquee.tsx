@@ -1,8 +1,10 @@
 import Image from 'next/image'
 import { BRANDS, getBrandLogo } from '@/lib/brand-logos'
-import styles from './brand-marquee.module.css'
 
-const ROW_CLASSES = [styles.rowA, styles.rowB, styles.rowC]
+// Plain global classes, defined in globals.css. They were a CSS module until
+// the module's 1.4 KB bought itself a render-blocking <link> of its own for a
+// section six screens down the page; globals.css is already in flight.
+const ROW_CLASSES = ['marquee-row-a', 'marquee-row-b', 'marquee-row-c']
 
 /**
  * Dealt round-robin rather than sliced into three blocks. Sliced, the wide
@@ -43,17 +45,17 @@ function BrandTile({ brand }: { brand: string }) {
  */
 export function BrandMarquee({ className }: { className?: string }) {
   return (
-    <div className={className ? `${styles.viewport} ${className}` : styles.viewport}>
+    <div className={className ? `marquee-viewport ${className}` : 'marquee-viewport'}>
       {rows.map((brands, index) => (
-        <div key={ROW_CLASSES[index]} className={`${styles.row} ${ROW_CLASSES[index]}`}>
-          <ul className={styles.group}>
+        <div key={ROW_CLASSES[index]} className={`marquee-row ${ROW_CLASSES[index]}`}>
+          <ul className="marquee-group">
             {brands.map((brand) => (
               <BrandTile key={brand} brand={brand} />
             ))}
           </ul>
           {/* The second copy is what makes the loop seamless. It is the same
               logos over again, so it is hidden from assistive tech. */}
-          <ul className={styles.group} aria-hidden="true">
+          <ul className="marquee-group" aria-hidden="true">
             {brands.map((brand) => (
               <BrandTile key={brand} brand={brand} />
             ))}

@@ -223,3 +223,107 @@
     );
   }
 }
+
+/* The brand wall's three self-scrolling rows.
+ *
+ * These live here rather than in a CSS module on purpose. As a module they
+ * compiled to a stylesheet of their own — 1.4 KB, its own <link> in the head,
+ * its own round trip — and Next emits that link render-blocking even though
+ * the wall is the sixth section down the home page. Folded in here they cost
+ * about 400 compressed bytes inside a file the page is already waiting on,
+ * and the browser has one less request standing between it and first paint.
+ *
+ * Shared by both walls, for the same reason BRANDS is one list: the home and
+ * projects sections had already drifted apart once.
+ *
+ * Forty-two logos wrapped into a grid ran 2,496px tall on a phone and 816px
+ * on a desktop — more scrolling than a supporting section earns. Three rows
+ * that scroll themselves hold the same list in about 300px at every width. */
+@layer components {
+  .marquee-viewport {
+    --gap: 1rem;
+    position: relative;
+    overflow: hidden;
+    /* Full-bleed, so the rows run off the screen rather than stopping at the
+       container edge. The mask is what makes that read as intentional: logos
+       dissolve into the gutters instead of being sliced by them. */
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  }
+
+  @media (min-width: 640px) {
+    .marquee-viewport {
+      --gap: 1.5rem;
+    }
+  }
+
+  .marquee-row {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll var(--duration) linear infinite;
+  }
+
+  .marquee-row + .marquee-row {
+    margin-top: var(--gap);
+  }
+
+  /* Neighbouring rows differ in both direction and speed. Rows all travelling
+     the same way at the same rate hold their vertical alignment, and the wall
+     stops looking like three rows and starts looking like one conveyor belt. */
+  .marquee-row-a {
+    --duration: 54s;
+  }
+  .marquee-row-b {
+    --duration: 46s;
+    animation-direction: reverse;
+  }
+  .marquee-row-c {
+    --duration: 62s;
+  }
+
+  .marquee-group {
+    display: flex;
+    gap: var(--gap);
+    /* The join between the two copies needs the same gap as every other join,
+       or the logos visibly bunch once per lap. */
+    padding-right: var(--gap);
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  /* Motion you cannot stop is hostile when the thing moving is what you are
+     trying to read. Pointing at the wall stops it; so does tabbing into it. */
+  .marquee-viewport:hover .marquee-row,
+  .marquee-viewport:focus-within .marquee-row {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* No automatic movement at all — the rows become swipeable instead, which
+       is still a great deal shorter than twenty-one wrapped rows. */
+    .marquee-viewport {
+      overflow-x: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .marquee-row {
+      animation: none;
+    }
+    /* Nothing is looping now, so the second copy is duplicate content. */
+    .marquee-group + .marquee-group {
+      display: none;
+    }
+  }
+}
+
+/* Half the track is exactly one copy of the list, so the loop lands back
+   where it started with nothing to reset. */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
