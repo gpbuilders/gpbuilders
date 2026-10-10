@@ -159,10 +159,6 @@ const SECTIONS: LegalSection[] = [
             <Term>Supabase</Term> &mdash; the database your enquiry is stored
             in.
           </li>
-          <li>
-            <Term>Vercel</Term> &mdash; the cookieless page-view analytics
-            described above.
-          </li>
         </ul>
         <p>
           We may also disclose data where the law requires it &mdash; for
@@ -365,7 +361,7 @@ export default function PrivacyPolicyPage() {
         description="What we collect when you contact us, why we collect it, where it is kept, and the rights you have over it under Indian law."
       />
       <LegalDocument
-        updated={{ label: '2 October 2026', iso: '2026-10-02' }}
+        updated={{ label: '10 October 2026', iso: '2026-10-10' }}
         intro={
           <p>
             This policy explains how GP Builders handles personal data collected
