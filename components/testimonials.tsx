@@ -67,30 +67,75 @@ export function Testimonials() {
     if (!scroller || !canScroll || paused || reducedMotion) return
     let frame = 0
     let previous = 0
-    let position = scroller.scrollLeft
+    let position = 0
     let direction = 1
-    let visible = false
-    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting })
-    observer.observe(scroller)
+    let end = 0
+    // Geometry is read only when this says it is out of date: when the row is
+    // first animated, when it is resized, and when the visitor hands the
+    // scroll position back. Reading it every frame is what made this loop
+    // expensive — see the comment on the observer below.
+    let stale = true
+    const resize = new ResizeObserver(() => { stale = true })
+    resize.observe(scroller)
     const tick = (now: number) => {
+      frame = requestAnimationFrame(tick)
       const elapsed = previous ? Math.min(now - previous, 50) : 0
       previous = now
       const state = interaction.current
-      if (!visible || document.hidden || state.hover || state.touch || state.focus || now < state.resumeAt) {
-        position = scroller.scrollLeft
-      } else {
-        const end = scroller.scrollWidth - scroller.clientWidth
-        position = Math.max(0, Math.min(end, position + direction * elapsed * 0.018))
-        scroller.scrollLeft = position
-        if (position >= end || position <= 0) {
-          direction *= -1
-          state.resumeAt = now + 1800
-        }
+      if (document.hidden || state.hover || state.touch || state.focus || now < state.resumeAt) {
+        // The visitor owns the scroll position while this lasts, so pick it
+        // back up from the DOM once, when the animation takes over again.
+        stale = true
+        return
       }
-      frame = requestAnimationFrame(tick)
+      if (stale) {
+        end = scroller.scrollWidth - scroller.clientWidth
+        position = scroller.scrollLeft
+        stale = false
+      }
+      // Nothing has elapsed on the frame the loop starts on, so there is
+      // nothing to move and nothing to turn around at. Running the rest of
+      // this anyway turned the row around at x=0 before it had travelled a
+      // pixel, and left it stalled against the left edge.
+      if (!elapsed) return
+      // The turn is decided on where the row was heading, not where it landed.
+      // Clamping first and comparing after cannot tell "ran into the edge"
+      // from "is sitting at the edge, about to leave it".
+      const target = position + direction * elapsed * 0.018
+      position = Math.max(0, Math.min(end, target))
+      scroller.scrollLeft = position
+      if (target >= end || target <= 0) {
+        direction *= -1
+        state.resumeAt = now + 1800
+      }
     }
-    frame = requestAnimationFrame(tick)
-    return () => { cancelAnimationFrame(frame); observer.disconnect() }
+    // The loop now runs only while the row is on screen, instead of running
+    // from mount and skipping its body. It was never free when it idled: the
+    // skipped branch still read scrollLeft back out of the DOM, and a read
+    // after the page has been touched makes the browser lay out all 9,000px
+    // of it before it can answer. On a phone the reviews sit far below the
+    // fold, so that ran on every frame of the whole page load to animate a
+    // row nobody could see: 478 forced layouts costing 39ms of the 54ms a
+    // trace of production measured, and the whole of the 39ms Lighthouse
+    // reported as unattributed. Desktop never reached it at all — at lg the
+    // row becomes a grid that does not overflow, so canScroll stays false.
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        if (frame) return
+        previous = 0
+        stale = true
+        frame = requestAnimationFrame(tick)
+      } else if (frame) {
+        cancelAnimationFrame(frame)
+        frame = 0
+      }
+    })
+    observer.observe(scroller)
+    return () => {
+      if (frame) cancelAnimationFrame(frame)
+      observer.disconnect()
+      resize.disconnect()
+    }
   }, [canScroll, paused, reducedMotion])
 
   return (
