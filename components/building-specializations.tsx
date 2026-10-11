@@ -5,10 +5,25 @@ import { useState } from 'react'
 import { Minus, Plus } from 'lucide-react'
 import styles from './building-specializations.module.css'
 
-const SPECIALIZATIONS = [
+/**
+ * `alt` describes the photograph. Where it is missing the title stands in,
+ * which is what every one of these used to do — and a title is not a
+ * description: it repeats the figcaption directly below the picture, so a
+ * screen reader announced "Residential Homes" twice and conveyed nothing
+ * about what was in the frame.
+ */
+type Specialization = {
+  image: string
+  title: string
+  description: string
+  alt?: string
+}
+
+const SPECIALIZATIONS: Specialization[] = [
   {
     image: '/spec-residential-courtyard.webp',
     title: 'Residential Homes',
+    alt: 'A double-height courtyard inside a house, open to a glazed roof. A terracotta brick wall patterned with projecting bricks runs its full height beside a square lawn with a young tree, and a box window looks down from the floor above.',
     description: 'Luxury villas, apartments, and bespoke residences designed for modern living with premium finishes and timeless aesthetics.',
   },
   {
@@ -95,7 +110,7 @@ export function BuildingSpecializations() {
             <div className={styles.photoStage}>
               <Image src={SPECIALIZATIONS[selection.previous].image} alt="" aria-hidden="true" fill sizes="(max-width: 767px) 100vw, 50vw" className={styles.photo} />
               <div key={selection.active} className={styles.reveal} data-forward={selection.forward} data-ready={loaded === selection.active}>
-                <Image src={active.image} alt={active.title} fill sizes="(max-width: 767px) 100vw, 50vw" className={styles.photo} onLoad={() => setLoaded(selection.active)} />
+                <Image src={active.image} alt={active.alt ?? active.title} fill sizes="(max-width: 767px) 100vw, 50vw" className={styles.photo} onLoad={() => setLoaded(selection.active)} />
               </div>
             </div>
             <figcaption aria-live="polite">
