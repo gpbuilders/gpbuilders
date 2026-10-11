@@ -3,6 +3,7 @@ import { Jost, Marcellus } from 'next/font/google'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { OrganizationSchema, WebSiteSchema } from '@/components/structured-data'
+import { GoogleAnalytics } from '@/components/google-analytics'
 import './globals.css'
 
 const jost = Jost({
@@ -109,6 +110,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <OrganizationSchema />
         <WebSiteSchema />
+        <GoogleAnalytics />
         <div className="flex min-h-screen flex-col bg-background">
           <SiteHeader />
           <main className="flex-1">{children}</main>

@@ -16,9 +16,11 @@ export const metadata: Metadata = {
  * The enquiry form is the only place a visitor hands over anything, and
  * app/(frontend)/enquiry/route.ts is the authority on which fields reach the
  * database — if a field is added there, clause 2 has to change with it.
- * Likewise, there is deliberately no cookie-consent language here: the
- * frontend sets no cookies and stores nothing in the browser, and saying
- * otherwise to look thorough would be a false statement in a privacy notice.
+ * Clause 4 is tied the same way to components/google-analytics.tsx: if that
+ * component is removed, or a second measurement tool is added beside it, the
+ * cookie list and the service providers in clause 5 have to move with it. A
+ * privacy notice that describes a site other than this one is worse than no
+ * notice at all.
  */
 const SECTIONS: LegalSection[] = [
   {
@@ -120,16 +122,42 @@ const SECTIONS: LegalSection[] = [
     body: (
       <>
         <p>
-          <Term>This website sets no cookies</Term> and stores nothing in your
-          browser. There is no advertising network, no tracking pixel and no
-          social media tracker on any page, which is why you are not being asked
-          to dismiss a cookie banner.
+          <Term>We use Google Analytics</Term> to see how many people visit this
+          website and which pages they find useful. It is the only measurement
+          tool on the site. There is no advertising network, no remarketing tag
+          and no social media tracker on any page, and nothing here is used to
+          build a profile of you or to follow you to other websites.
         </p>
         <p>
-          <Term>We run no analytics at all.</Term> No service counts your visit,
-          measures which pages you read, or records how you move through the
-          site. We know a page was served because our host logs the request, and
-          that is the whole of it.
+          <Term>It sets two cookies</Term> in your browser, named{' '}
+          <code className="font-mono text-[0.95em]">_ga</code> and{' '}
+          <code className="font-mono text-[0.95em]">_ga_QDXD8QFBNZ</code>. Google
+          asks for them to last two years; most browsers now shorten that to
+          about thirteen months. Their job is to tell a returning visitor from a
+          new one. Through them Google records the pages you open, roughly where in
+          the world you are, and what browser and device you used. Google
+          derives that location from your IP address but does not store the
+          address itself, and we never see one.
+        </p>
+        <p>
+          <Term>You can refuse all of it.</Term> Blocking cookies for this site
+          in your browser settings, or installing Google&rsquo;s{' '}
+          <a
+            href="https://tools.google.com/dlpage/gaoptout"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-sm font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+          >
+            opt-out add-on
+          </a>
+          , stops this entirely. Nothing on this site stops working if you do,
+          because none of it is needed to read a page or to send us an enquiry.
+        </p>
+        <p>
+          Analytics never sees your enquiry. The name, email address, phone
+          number and message you type into the contact form go to our database
+          and nowhere else &mdash; they are not passed to Google, and they are
+          not attached to any of the measurements above.
         </p>
         <p>
           Our hosting provider keeps standard server logs, including IP
@@ -159,6 +187,11 @@ const SECTIONS: LegalSection[] = [
             <Term>Supabase</Term> &mdash; the database your enquiry is stored
             in.
           </li>
+          <li>
+            <Term>Google</Term> &mdash; the analytics described in clause 4.
+            Google receives only the browsing measurements named there. It is
+            never sent your enquiry.
+          </li>
         </ul>
         <p>
           We may also disclose data where the law requires it &mdash; for
@@ -183,6 +216,11 @@ const SECTIONS: LegalSection[] = [
           and stored on a server in Australia. We are telling you this plainly
           because you are entitled to know where your data goes, and we are
           working to move this database to India.
+        </p>
+        <p>
+          The analytics measurements in clause 4 are held by Google on its own
+          infrastructure, outside India, under Google&rsquo;s terms rather than
+          ours. Your enquiry is not part of that.
         </p>
       </>
     ),
@@ -337,6 +375,15 @@ const SECTIONS: LegalSection[] = [
           than made quietly.
         </p>
         <p>
+          <Term>11 October 2026.</Term> We added Google Analytics to the site.
+          This is a change from the position a day earlier, when the site
+          carried no analytics and set no cookies, so we are stating it plainly
+          rather than leaving you to notice: this website now sets two cookies
+          and reports your page views to Google. Clause 4 describes exactly what
+          is collected and how to refuse it, and clauses 5 and 6 have been
+          updated to match.
+        </p>
+        <p>
           <Term>10 October 2026.</Term> We removed the analytics service this
           site had been using. It had never worked on our hosting and collected
           nothing, so no visitor data was ever gathered through it. Clause 4 and
@@ -367,7 +414,7 @@ export default function PrivacyPolicyPage() {
         description="What we collect when you contact us, why we collect it, where it is kept, and the rights you have over it under Indian law."
       />
       <LegalDocument
-        updated={{ label: '10 October 2026', iso: '2026-10-10' }}
+        updated={{ label: '11 October 2026', iso: '2026-10-11' }}
         intro={
           <p>
             This policy explains how GP Builders handles personal data collected
