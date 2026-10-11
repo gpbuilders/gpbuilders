@@ -25,25 +25,51 @@ function Roadmap() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
     const markers = svg.querySelectorAll<SVGGElement>('[data-marker]')
     let frame = 0
+    let visible = false
     const update = () => {
       frame = 0
+      // Nothing to animate for someone who asked not to be animated at, so
+      // this settles the markers and returns before reading any geometry.
+      if (reduced.matches) {
+        markers.forEach((marker) => {
+          marker.style.transform = 'translateY(0)'
+          marker.style.opacity = '1'
+        })
+        return
+      }
       const progress = (window.innerHeight * .95 - svg.getBoundingClientRect().top) / (window.innerHeight * .65)
       markers.forEach((marker, index) => {
-        const t = reduced.matches ? 1 : Math.max(0, Math.min(1, (progress - index * .09) / .5))
+        const t = Math.max(0, Math.min(1, (progress - index * .09) / .5))
         const eased = 1 - Math.pow(1 - t, 3)
         marker.style.transform = `translateY(${-180 * (1 - eased)}px)`
         marker.style.opacity = String(Math.min(1, t * 4))
       })
     }
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(update) }
+    // Gated the way what-we-do.tsx gates its own scroll animation. Every scroll
+    // anywhere on a 9,000px page used to reach update(), and getBoundingClientRect
+    // after the page has been touched makes the browser lay the whole thing out
+    // before it can answer — for a roadmap that is usually nowhere near the
+    // screen. The reduced-motion branch is let through because it reads no
+    // geometry and still has to settle the markers.
+    const schedule = () => {
+      if ((visible || reduced.matches) && !frame) frame = requestAnimationFrame(update)
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting
+      if (visible) schedule()
+    }, { rootMargin: '150px' })
+    observer.observe(svg)
     window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', schedule)
     reduced.addEventListener('change', schedule)
-    // The markers' start state is in the stylesheet now, so this no longer has
-    // to beat the first paint and can wait for a frame like every other update.
+    // The markers' start state is in the stylesheet, so nothing here has to
+    // beat the first paint. The observer delivers a first callback of its own,
+    // which covers the case of landing on the section directly; this call is
+    // what reveals the markers when motion is reduced.
     schedule()
     return () => {
       cancelAnimationFrame(frame)
+      observer.disconnect()
       window.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', schedule)
       reduced.removeEventListener('change', schedule)
