@@ -44,10 +44,44 @@ export function OrganizationSchema() {
       postalCode: '620006',
       addressCountry: 'IN',
     },
-    areaServed: {
-      '@type': 'State',
-      name: 'Tamil Nadu',
-    },
+    /**
+     * The state is the claim; the cities are the evidence for it.
+     *
+     * "Tamil Nadu" alone is a broad assertion with nothing behind it, and it
+     * is not how anyone searches — people ask for builders in a town, and an
+     * answer engine asked "who builds in Chennai" has to match a city, not a
+     * state. Naming the cities gives it something to match.
+     *
+     * These three are the ones GP Builders has actually delivered in, taken
+     * from the project collection: 30 in Tiruchirappalli, two in Chennai
+     * (Sholinganallur, Siruseri) and one in Pudukkottai (Madaiyur). A city
+     * belongs on this list once there is work to point at — a name with no
+     * project behind it is the kind of empty claim that earns nothing and
+     * cannot be backed up when somebody follows it to the portfolio.
+     *
+     * Trichy is carried as alternateName because it is the name people use
+     * and search for, while addressLocality above has to stay the official
+     * Tiruchirappalli to match the Google Business Profile listing.
+     */
+    areaServed: [
+      { '@type': 'State', name: 'Tamil Nadu' },
+      {
+        '@type': 'City',
+        name: 'Tiruchirappalli',
+        alternateName: 'Trichy',
+        containedInPlace: { '@type': 'State', name: 'Tamil Nadu' },
+      },
+      {
+        '@type': 'City',
+        name: 'Chennai',
+        containedInPlace: { '@type': 'State', name: 'Tamil Nadu' },
+      },
+      {
+        '@type': 'City',
+        name: 'Pudukkottai',
+        containedInPlace: { '@type': 'State', name: 'Tamil Nadu' },
+      },
+    ],
     // Profiles that are the organisation itself. A personal LinkedIn does not
     // belong here — sameAs asserts "this profile IS this company" — so the
     // founder's is attached to him as a Person below instead.
