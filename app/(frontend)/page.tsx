@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import config from '@payload-config'
 import { getPayload } from 'payload'
 
@@ -11,6 +13,13 @@ import { Testimonials } from '@/components/testimonials'
 import { BrandsWeBuild } from '@/components/brands-we-build'
 import { SelectedWork } from '@/components/selected-work'
 import { ConsultationCta } from '@/components/consultation-cta'
+
+export const metadata: Metadata = pageMetadata({
+  path: '/',
+  title: 'Builders & Interior Designers in Trichy | GP Builders',
+  description:
+    'GP Builders is a Trichy-based construction, architecture and interior design firm working across Tamil Nadu, on homes and commercial spaces alike.',
+})
 
 export default async function HomePage() {
   // Neither query needs the other's answer, so they go together. Awaited one

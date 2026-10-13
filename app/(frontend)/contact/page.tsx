@@ -1,12 +1,15 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import { MinimalHero } from '@/components/minimal-hero'
 import { Suspense } from 'react'
 import { ContactForm } from '@/components/contact-form'
-export const metadata: Metadata = {
-  title: 'Contact | GP Builders',
-  description: 'Tell GP Builders about your architecture, construction, or interior design project.',
-}
+export const metadata: Metadata = pageMetadata({
+  path: '/contact',
+  title: 'Contact GP Builders | Trichy Office & Project Enquiries',
+  description:
+    'Contact GP Builders in Trichy for construction, architectural planning and interior design anywhere in Tamil Nadu. Share your project requirements.',
+})
 
 export default function ContactPage() {
   return (

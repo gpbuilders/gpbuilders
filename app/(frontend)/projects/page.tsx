@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import config from '@payload-config'
 import { getPayload } from 'payload'
 
@@ -8,11 +9,12 @@ import { Projects } from '@/components/projects'
 import { Brands } from '@/components/brands'
 import { ConsultationCta } from '@/components/consultation-cta'
 
-export const metadata: Metadata = {
-  title: 'Projects | GP Builders',
+export const metadata: Metadata = pageMetadata({
+  path: '/projects',
+  title: 'Construction & Interior Design Projects | GP Builders',
   description:
-    "From luxury homes and interiors to commercial fit-outs and landscapes, explore a selection of spaces GP Builders has designed and delivered.",
-}
+    'Explore residential and commercial projects by GP Builders across Tamil Nadu, including Trichy, Chennai and Pudukottai. View our construction portfolio.',
+})
 
 export default async function ProjectsPage() {
   // Independent of one another, so they go together rather than as two serial

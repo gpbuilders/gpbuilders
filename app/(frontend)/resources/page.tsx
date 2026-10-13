@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import config from '@payload-config'
 import { getPayload } from 'payload'
 
@@ -6,11 +7,12 @@ import { MinimalHero } from '@/components/minimal-hero'
 import { FullBlogResources } from '@/components/full-blog-resources'
 import { CtaBand } from '@/components/cta-band'
 
-export const metadata: Metadata = {
-  title: 'Resources | GP Builders',
+export const metadata: Metadata = pageMetadata({
+  path: '/resources',
+  title: 'Architecture, Construction & Interior Design Blog',
   description:
-    'Architectural trends, sustainability insights, industry news and practical tips from the GP Builders team.',
-}
+    'Read GP Builders\' insights on architecture, home construction, sustainable design and interiors for Tamil Nadu homes. Inspiration for your next build.',
+})
 
 export default async function ResourcesPage() {
   const payload = await getPayload({ config })

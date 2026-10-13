@@ -1,4 +1,5 @@
 import { cache } from 'react'
+import { OG_SHARED, SITE_URL, TWITTER_SHARED } from '@/lib/page-metadata'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -54,12 +55,22 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return {
     title: `${post.title} | GP Builders`,
     description: post.excerpt,
+    // Same fix as the project route: without the shared spread, this object
+    // replaced the layout's and the card lost its site name, locale and image.
     openGraph: {
+      ...OG_SHARED,
       type: 'article',
       title: post.title,
       description: post.excerpt,
+      url: `${SITE_URL}/resources/${slug}`,
       publishedTime: post.publishedAt,
       ...(image ? { images: [{ url: image }] } : {}),
+    },
+    twitter: {
+      ...TWITTER_SHARED,
+      title: post.title,
+      description: post.excerpt,
+      ...(image ? { images: [image] } : {}),
     },
   }
 }

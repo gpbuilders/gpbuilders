@@ -1,14 +1,16 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 
 import { MinimalHero } from '@/components/minimal-hero'
 import { LegalDocument, Term, type LegalSection } from '@/components/legal-document'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  path: '/terms',
   title: 'Terms & Conditions | GP Builders',
   description:
-    'The terms on which GP Builders makes this website available, how estimates and project photographs should be read, and the law that governs them.',
-}
+    'Review GP Builders\' website terms and conditions for important information about accessing our services, website content and applicable policies.',
+})
 
 /**
  * These terms cover the website, not the building work.

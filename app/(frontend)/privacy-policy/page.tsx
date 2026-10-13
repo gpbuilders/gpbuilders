@@ -1,14 +1,16 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 
 import { MinimalHero } from '@/components/minimal-hero'
 import { LegalDocument, Term, type LegalSection } from '@/components/legal-document'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  path: '/privacy-policy',
   title: 'Privacy Policy | GP Builders',
   description:
-    'How GP Builders collects, uses and protects personal data submitted through this website, under the Digital Personal Data Protection Act, 2023.',
-}
+    'Read the GP Builders Privacy Policy to learn how information submitted through our website is collected, used, stored and protected.',
+})
 
 /**
  * Written from what the site actually does rather than from a template.

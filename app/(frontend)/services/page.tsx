@@ -1,8 +1,17 @@
+import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import { PageHero } from '@/components/page-hero'
 import { getHeroMedia } from '@/lib/hero-media'
 import { BuildingSpecializations } from '@/components/building-specializations'
 import { Process } from '@/components/process'
 import { ConsultationCta } from '@/components/consultation-cta'
+
+export const metadata: Metadata = pageMetadata({
+  path: '/services',
+  title: 'Construction & Interior Design Services | GP Builders',
+  description:
+    'Explore home construction, architecture, interior and landscape design services by GP Builders, delivered across Tamil Nadu from our Trichy studio.',
+})
 
 export default async function ServicesPage() {
   const hero = await getHeroMedia()

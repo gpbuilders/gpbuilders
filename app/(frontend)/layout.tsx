@@ -3,6 +3,7 @@ import { Jost, Marcellus } from 'next/font/google'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { OrganizationSchema, WebSiteSchema } from '@/components/structured-data'
+import { OG_IMAGE, OG_SHARED, TWITTER_SHARED } from '@/lib/page-metadata'
 import { GoogleAnalytics } from '@/components/google-analytics'
 import './globals.css'
 
@@ -40,27 +41,18 @@ export const metadata: Metadata = {
     title: 'GP Builders',
     statusBarStyle: 'black-translucent',
   },
+  // Spread from lib/page-metadata so a page's own card and this fallback
+  // cannot describe the site differently. Only the words differ.
   openGraph: {
-    type: 'website',
-    siteName: 'GP Builders',
+    ...OG_SHARED,
     title: TITLE,
     description: DESCRIPTION,
     url: SITE_URL,
-    locale: 'en_IN',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'GP Builders — architecture, interiors, and construction',
-      },
-    ],
   },
   twitter: {
-    card: 'summary_large_image',
+    ...TWITTER_SHARED,
     title: TITLE,
     description: DESCRIPTION,
-    images: ['/og-image.jpg'],
   },
 }
 

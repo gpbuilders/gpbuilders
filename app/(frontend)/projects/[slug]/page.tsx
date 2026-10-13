@@ -1,4 +1,6 @@
 import { cache } from 'react'
+import { OG_SHARED, SITE_URL, TWITTER_SHARED } from '@/lib/page-metadata'
+import { projectDescription, projectTitle } from '@/lib/project-metadata'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -58,21 +60,30 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     return { title: 'Project not found | GP Builders' }
   }
 
-  // Most projects have no description written yet, so the fallback has to read
-  // as a real sentence rather than an empty string.
-  const description =
-    project.description ??
-    `${project.scope} in ${project.location} by GP Builders.`
+  const title = projectTitle(project)
+  const description = projectDescription(project)
   const image = mediaUrl(project.image, '')
 
   return {
-    title: `${project.title} | GP Builders`,
+    title,
     description,
+    // Spread from the shared card rather than written fresh: an openGraph
+    // object set here replaces the layout's whole object, and the three lines
+    // this used to be took og:site_name, og:locale and the fallback image with
+    // them. See lib/page-metadata.ts.
     openGraph: {
+      ...OG_SHARED,
       type: 'article',
-      title: project.title,
+      title,
       description,
+      url: `${SITE_URL}/projects/${slug}`,
       ...(image ? { images: [{ url: image }] } : {}),
+    },
+    twitter: {
+      ...TWITTER_SHARED,
+      title,
+      description,
+      ...(image ? { images: [image] } : {}),
     },
   }
 }
