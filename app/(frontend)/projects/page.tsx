@@ -13,7 +13,7 @@ export const metadata: Metadata = pageMetadata({
   path: '/projects',
   title: 'Construction & Interior Design Projects | GP Builders',
   description:
-    'Explore residential and commercial projects by GP Builders across Tamil Nadu, including Trichy, Chennai and Pudukottai. View our construction portfolio.',
+    'Explore residential and commercial projects by GP Builders across Tamil Nadu, including Trichy, Chennai and Pudukkottai. View our construction portfolio.',
 })
 
 export default async function ProjectsPage() {
