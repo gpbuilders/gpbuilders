@@ -27,7 +27,16 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin', '/admin/', '/api/', '/keepalive', '/enquiry'],
       },
     ],
+    // The index, not a list of URLs: Google reads it and fetches
+    // sitemap-pages.xml, sitemap-projects.xml and sitemap-posts.xml itself.
     sitemap: `${SITE_URL}/sitemap.xml`,
-    host: SITE_URL,
+    // No `host` field, deliberately. Next will happily emit `Host:` here, but
+    // Google does not implement it — its parser supports user-agent, allow,
+    // disallow and sitemap, and says outright that everything else is ignored.
+    // Search Console flagged it as "Rule ignored by Googlebot" from the first
+    // day this file served, which makes a correct file look broken. The
+    // directive came from Yandex as a way to declare a preferred mirror; the
+    // way to tell Google to prefer the apex over www is a 301 and a canonical
+    // tag, both of which live elsewhere and neither of which is this.
   }
 }
