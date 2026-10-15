@@ -126,7 +126,13 @@ export function ContactForm() {
             onChange={handleChange}
             required
             className="form-input min-h-11 text-base"
-            placeholder="you@example.com"
+            // No placeholder. It used to read you@example.com, and Google's AI
+            // Overview has already published one stale address off this page
+            // as though it were the company's. A specimen address in a form is
+            // a second thing on the contact page shaped like a way to reach
+            // GP Builders, and it is worth nothing: the label says Email
+            // Address, the type and autocomplete say it too, and the browser
+            // offers the visitor their own address without being asked.
           />
         </div>
       </div>
@@ -147,7 +153,10 @@ export function ContactForm() {
             value={formData.phone}
             onChange={handleChange}
             className="form-input min-h-11 text-base"
-            placeholder="+91 98765 43210"
+            // No placeholder, for the reason above. A fabricated +91 number on
+            // the page that carries the real one is the worse of the two: the
+            // phone number is what people search for, and nothing here
+            // distinguishes the specimen from the genuine article.
           />
         </div>
         <div>
