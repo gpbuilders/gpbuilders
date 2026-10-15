@@ -7,10 +7,26 @@ const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
  * the favicon alone only controls the small icon beside the URL. Without it,
  * Google infers everything from page text.
  *
- * `email` is the address on the contact page. It sat empty here for a while
- * because the only address on the site was hello@gpbuilders.in, on a domain
- * the company had stopped using; the two must not drift apart again, since
- * this is the address Google offers in a search result.
+ * `email` is the address on the contact page, and the two must not drift
+ * apart: this is the address Google offers beside the phone number in a
+ * search result, and now inside an AI Overview.
+ *
+ * That has already gone wrong once, which is why this file now states more
+ * than it strictly has to. Until 29 September 2026 the contact page published
+ * hello@gpbuilders.in, on a domain GP Builders does not own — one that is
+ * live, parked on Squarespace, and accepting mail through Google Workspace.
+ * The page was corrected that day. Two weeks later Google's AI Overview was
+ * still answering "gp builders" with the old address and citing our own
+ * contact page as its source, because it was serving a crawl from before the
+ * fix.
+ *
+ * The lesson is not that the correction was wrong. It is that a fact written
+ * only as prose inside a link is one Google has to re-read the page to
+ * update, and this site is crawled slowly. A fact stated in JSON-LD is read
+ * unambiguously the next time anything here is fetched. Hence the
+ * ContactPoint and the opening hours below: both were already on the contact
+ * page in words, and words are what put a stranger's address in front of
+ * everyone searching for the company.
  */
 export function OrganizationSchema() {
   const schema = {
@@ -98,6 +114,56 @@ export function OrganizationSchema() {
       'Construction',
       'Interior design',
       'Landscape design',
+    ],
+    /**
+     * The same address and number as the fields above, stated again as a
+     * contact point.
+     *
+     * Not redundancy for its own sake. `email` and `telephone` on an
+     * organisation say "this is how you reach the company"; a ContactPoint
+     * says what the channel is for and who it serves, which is what an answer
+     * engine is looking for when it builds a contact block. The duplication
+     * is also the point: an assistant assembling an answer sees the same
+     * address twice, from two independent statements, with nothing else on
+     * the page to contradict it.
+     *
+     * `availableLanguage` is the one assumption here: an office in Trichy
+     * taking enquiries in English and Tamil. Nobody confirmed it, so if the
+     * firm does not want to answer in Tamil, drop 'ta' rather than leave a
+     * promise in the markup that the phone does not keep.
+     */
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'sales',
+      email: 'projects@gpbuildersgroup.com',
+      telephone: '+919363699574',
+      areaServed: 'IN',
+      availableLanguage: ['en', 'ta'],
+    },
+    /**
+     * The hours shown on the contact page, which until now lived only as three
+     * lines of prose there.
+     *
+     * Google was already reading and repeating them correctly, so this is not
+     * a correction — it is removing the need to parse a sentence to get them
+     * right. Times are 24-hour, which is what the schema expects, and Sunday
+     * is simply absent: a day with no entry is closed, and saying so with
+     * opens and closes set to the same minute is how you end up published as
+     * open at midnight.
+     */
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '09:00',
+        closes: '18:00',
+      },
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: 'Saturday',
+        opens: '10:00',
+        closes: '16:00',
+      },
     ],
   }
 
