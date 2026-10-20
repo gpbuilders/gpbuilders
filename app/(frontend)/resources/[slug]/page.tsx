@@ -5,8 +5,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, Calendar, Clock } from 'lucide-react'
-import config from '@payload-config'
-import { getPayload } from 'payload'
+
+import { getCachedPost } from '@/lib/cached-content'
 
 import { ArticleBody } from '@/components/article-body'
 import { CtaBand } from '@/components/cta-band'
@@ -20,23 +20,7 @@ type Params = { params: Promise<{ slug: string }> }
  * rather than each querying for the same row — see the project route for the
  * full reasoning. It matters more here, where a draft check runs on both.
  */
-const findPost = cache(async (slug: string) => {
-  const payload = await getPayload({ config })
-  // depth 1 populates coverImage.
-  //
-  // overrideAccess defaults to TRUE on the Local API — it assumes server-side
-  // code is trusted. Turning it off is what applies the collection's read rule
-  // and keeps a draft from being served to anyone who knows its URL.
-  const { docs } = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    limit: 1,
-    where: { slug: { equals: slug } },
-    overrideAccess: false,
-  })
-
-  return docs[0]
-})
+const findPost = cache((slug: string) => getCachedPost(slug))
 
 // No generateStaticParams on purpose — same reason as the project route: a
 // prebuilt copy in the deployment bundle is what kept resurfacing after an

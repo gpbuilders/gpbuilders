@@ -1,6 +1,7 @@
 import type { CollectionConfig, Payload } from 'payload'
 
-import { revalidate } from '@/lib/revalidate'
+import { POSTS_TAG } from '@/lib/cached-content'
+import { revalidate, revalidateTags } from '@/lib/revalidate'
 
 const authenticated = ({ req: { user } }: { req: { user?: unknown } }) => Boolean(user)
 
@@ -50,7 +51,13 @@ function countWords(node: unknown): number {
 // Both the list and the article itself are served from cache, so an edit in
 // the admin panel stays invisible until they are purged.
 function revalidatePost(payload: Payload, slug?: string) {
-  return revalidate(payload, ['/resources', ...(slug ? [`/resources/${slug}`] : [])])
+  // The rows as well as the pages — see collections/Projects.ts. Both the
+  // index and the article are rendered from cached reads now, so purging the
+  // path alone would rebuild them from the same stale post.
+  return Promise.all([
+    revalidate(payload, ['/resources', ...(slug ? [`/resources/${slug}`] : [])]),
+    revalidateTags(payload, [POSTS_TAG]),
+  ])
 }
 
 export const Posts: CollectionConfig = {

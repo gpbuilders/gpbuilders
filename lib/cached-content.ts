@@ -3,7 +3,7 @@ import { unstable_cache } from 'next/cache'
 import { getPayload } from 'payload'
 
 import { getHeroMedia, type HeroMediaResolved } from '@/lib/hero-media'
-import type { Project } from '@/payload-types'
+import type { Post, Project } from '@/payload-types'
 
 /**
  * The database reads that every visitor waits for, held between requests.
@@ -59,6 +59,7 @@ const REVALIDATE_SECONDS = 300
  *  in a purge is silent — nothing errors, the cache simply never clears. */
 export const HERO_MEDIA_TAG = 'hero-media'
 export const PROJECTS_TAG = 'projects'
+export const POSTS_TAG = 'posts'
 
 /**
  * The hero global, as read by every page that renders a hero.
@@ -95,4 +96,117 @@ export const getCachedHomeProjects = unstable_cache(
   },
   ['home-projects'],
   { tags: [PROJECTS_TAG], revalidate: REVALIDATE_SECONDS },
+)
+
+/**
+ * Everything below is the same treatment applied to the rest of the site,
+ * after measuring what a visitor pays to move around it.
+ *
+ * Every page is rendered per request, so a link click is a server render, and
+ * each of these was an uncached crossing to Sydney. Measured against the live
+ * database, two rounds:
+ *
+ *     /projects   projects depth:1 limit:100    977-1593 ms
+ *     /resources  posts    depth:1 limit:50     929-948 ms
+ *     [slug]      find the project by slug      937-994 ms
+ *     [slug]      related, by its category      936-942 ms
+ *
+ * The last two are serial — the related query needs the category it reads off
+ * the first — so a project page cost about 1.9 seconds, which is exactly what
+ * a navigation to one measured at. The queries are unchanged here; only their
+ * results are held. Each keeps the options it already had, including
+ * `overrideAccess: false` where the route had it, because on posts that flag
+ * is what keeps drafts off the public page.
+ */
+
+/** The Projects page: every project, newest arrangement first. */
+export const getCachedAllProjects = unstable_cache(
+  async (): Promise<Project[]> => {
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'projects',
+      depth: 1,
+      limit: 100,
+      sort: 'order',
+    })
+    return docs
+  },
+  ['all-projects'],
+  { tags: [PROJECTS_TAG], revalidate: REVALIDATE_SECONDS },
+)
+
+/**
+ * One project, by slug.
+ *
+ * Kept as its own query rather than picked out of the list above. The list is
+ * capped at 100, and a site that grows past that cap would start answering 404
+ * for its oldest projects — a quiet failure that would be found by a visitor
+ * rather than by us. A second cache entry is cheaper than that risk.
+ */
+export const getCachedProject = unstable_cache(
+  async (slug: string): Promise<Project | undefined> => {
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'projects',
+      depth: 1,
+      limit: 1,
+      where: { slug: { equals: slug } },
+      overrideAccess: false,
+    })
+    return docs[0]
+  },
+  ['project-by-slug'],
+  { tags: [PROJECTS_TAG], revalidate: REVALIDATE_SECONDS },
+)
+
+/** The two others shown at the foot of a project page. */
+export const getCachedRelatedProjects = unstable_cache(
+  async (category: Project['category'], excludeId: number | string): Promise<Project[]> => {
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'projects',
+      depth: 1,
+      limit: 2,
+      sort: 'order',
+      where: { category: { equals: category }, id: { not_equals: excludeId } },
+      overrideAccess: false,
+    })
+    return docs
+  },
+  ['related-projects'],
+  { tags: [PROJECTS_TAG], revalidate: REVALIDATE_SECONDS },
+)
+
+/** The Resources index. overrideAccess stays off: it is what hides drafts. */
+export const getCachedPosts = unstable_cache(
+  async (): Promise<Post[]> => {
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'posts',
+      depth: 1,
+      limit: 50,
+      sort: '-publishedAt',
+      overrideAccess: false,
+    })
+    return docs
+  },
+  ['all-posts'],
+  { tags: [POSTS_TAG], revalidate: REVALIDATE_SECONDS },
+)
+
+/** One article, by slug. Same draft rule as the index. */
+export const getCachedPost = unstable_cache(
+  async (slug: string): Promise<Post | undefined> => {
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'posts',
+      depth: 1,
+      limit: 1,
+      where: { slug: { equals: slug } },
+      overrideAccess: false,
+    })
+    return docs[0]
+  },
+  ['post-by-slug'],
+  { tags: [POSTS_TAG], revalidate: REVALIDATE_SECONDS },
 )

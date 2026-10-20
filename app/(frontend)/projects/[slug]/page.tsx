@@ -6,8 +6,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, ArrowUpRight, MapPin } from 'lucide-react'
-import config from '@payload-config'
-import { getPayload } from 'payload'
+
+import { getCachedProject, getCachedRelatedProjects } from '@/lib/cached-content'
 
 import { ProjectGallery } from '@/components/project-gallery'
 import { CtaBand } from '@/components/cta-band'
@@ -28,23 +28,7 @@ const CATEGORY_LABELS: Record<Project['category'], string> = {
  * spent fetching a row already in memory. Free when the page was prerendered;
  * paid by every visitor now that it is not.
  */
-const findProject = cache(async (slug: string) => {
-  const payload = await getPayload({ config })
-  // depth 1 populates image and every gallery entry, which is what lets the
-  // page lay each photograph out at its own proportions.
-  //
-  // overrideAccess defaults to TRUE on the Local API. Turning it off applies
-  // the collection's own read rule, the same as the article route does.
-  const { docs } = await payload.find({
-    collection: 'projects',
-    depth: 1,
-    limit: 1,
-    where: { slug: { equals: slug } },
-    overrideAccess: false,
-  })
-
-  return docs[0]
-})
+const findProject = cache((slug: string) => getCachedProject(slug))
 
 // No generateStaticParams on purpose. Prebuilding these pages is what put a
 // copy of every project into the deployment bundle, and on Amplify that copy
@@ -106,20 +90,15 @@ export default async function ProjectPage({ params }: Params) {
 
   const gallery = (project.gallery ?? []) as MediaField[]
 
-  const payload = await getPayload({ config })
   // Two more from the same category. Derived rather than curated, so there
   // is no field for an editor to keep in step.
-  const { docs: related } = await payload.find({
-    collection: 'projects',
-    depth: 1,
-    limit: 2,
-    sort: 'order',
-    where: {
-      category: { equals: project.category },
-      id: { not_equals: project.id },
-    },
-    overrideAccess: false,
-  })
+  //
+  // Still a second read rather than a filter over the list the Projects page
+  // holds: this one needs the category, which is only known once the project
+  // above has come back, so the two can never run together. Held between
+  // requests, both are free on a warm server; on a cold one they are the
+  // ~1.9s this page used to cost every visitor.
+  const related = await getCachedRelatedProjects(project.category, project.id)
 
   return (
     <>
