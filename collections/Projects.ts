@@ -1,6 +1,7 @@
 import type { CollectionConfig, Payload } from 'payload'
 
-import { revalidate } from '@/lib/revalidate'
+import { PROJECTS_TAG } from '@/lib/cached-content'
+import { revalidate, revalidateTags } from '@/lib/revalidate'
 
 const authenticated = ({ req: { user } }: { req: { user?: unknown } }) => Boolean(user)
 
@@ -25,7 +26,10 @@ function revalidateProjects(payload: Payload, slug?: string | null) {
   // on the listing straight away and on the project itself only after the next
   // deploy, which reads as the save having failed.
   const paths = slug ? [...DEPENDENT_PATHS, `/projects/${slug}`] : [...DEPENDENT_PATHS]
-  return revalidate(payload, paths)
+  // The rows as well as the pages: the home page's Featured Projects row is
+  // read through the cache in lib/cached-content.ts, and purging the path
+  // alone would rebuild that page from the same four stale projects.
+  return Promise.all([revalidate(payload, paths), revalidateTags(payload, [PROJECTS_TAG])])
 }
 
 export const Projects: CollectionConfig = {

@@ -1,9 +1,6 @@
 import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/page-metadata'
-import config from '@payload-config'
-import { getPayload } from 'payload'
-
-import { getHeroMedia } from '@/lib/hero-media'
+import { getCachedHeroMedia, getCachedHomeProjects } from '@/lib/cached-content'
 
 import { Hero } from '@/components/hero'
 import { WhatWeDo } from '@/components/what-we-do'
@@ -22,20 +19,13 @@ export const metadata: Metadata = pageMetadata({
 })
 
 export default async function HomePage() {
-  // Neither query needs the other's answer, so they go together. Awaited one
-  // after the other they were two serial round trips to Sydney — roughly 600ms
-  // of the render, now about 300.
-  const [hero, { docs: projects }] = await Promise.all([
-    getHeroMedia(),
-    // Only the four the Featured Projects layout can show.
-    getPayload({ config }).then((payload) =>
-      payload.find({
-        collection: 'projects',
-        depth: 1,
-        limit: 4,
-        sort: 'order',
-      }),
-    ),
+  // Neither read needs the other's answer, so they go together — and both are
+  // held between requests now, so on a warm server this pair costs nothing
+  // rather than the ~930ms of Sydney round trips it used to. See
+  // lib/cached-content.ts for what that buys and what it costs.
+  const [hero, projects] = await Promise.all([
+    getCachedHeroMedia(),
+    getCachedHomeProjects(),
   ])
 
   return (

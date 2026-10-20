@@ -1,6 +1,7 @@
 import type { GlobalConfig, Payload } from 'payload'
 
-import { revalidate } from '@/lib/revalidate'
+import { HERO_MEDIA_TAG } from '@/lib/cached-content'
+import { revalidate, revalidateTags } from '@/lib/revalidate'
 
 const authenticated = ({ req: { user } }: { req: { user?: unknown } }) => Boolean(user)
 
@@ -9,7 +10,12 @@ const authenticated = ({ req: { user } }: { req: { user?: unknown } }) => Boolea
 const DEPENDENT_PATHS = ['/', '/about', '/projects', '/services'] as const
 
 function revalidateHeroes(payload: Payload) {
-  return revalidate(payload, DEPENDENT_PATHS)
+  // Both, for the reason given in collections/Projects.ts: the four pages are
+  // rendered from a cached read of this global, so the read has to go too.
+  return Promise.all([
+    revalidate(payload, DEPENDENT_PATHS),
+    revalidateTags(payload, [HERO_MEDIA_TAG]),
+  ])
 }
 
 /**

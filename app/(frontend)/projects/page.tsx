@@ -4,7 +4,7 @@ import config from '@payload-config'
 import { getPayload } from 'payload'
 
 import { PageHero } from '@/components/page-hero'
-import { getHeroMedia } from '@/lib/hero-media'
+import { getCachedHeroMedia } from '@/lib/cached-content'
 import { Projects } from '@/components/projects'
 import { Brands } from '@/components/brands'
 import { ConsultationCta } from '@/components/consultation-cta'
@@ -20,7 +20,7 @@ export default async function ProjectsPage() {
   // Independent of one another, so they go together rather than as two serial
   // round trips to Sydney — see the home page for the same reasoning.
   const [hero, { docs: projects }] = await Promise.all([
-    getHeroMedia(),
+    getCachedHeroMedia(),
     // depth 1 populates the image and gallery upload fields.
     getPayload({ config }).then((payload) =>
       payload.find({

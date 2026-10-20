@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/page-metadata'
 import { PageHero } from '@/components/page-hero'
-import { getHeroMedia } from '@/lib/hero-media'
+import { getCachedHeroMedia } from '@/lib/cached-content'
 import { BuildingSpecializations } from '@/components/building-specializations'
 import { Process } from '@/components/process'
 import { ConsultationCta } from '@/components/consultation-cta'
@@ -14,7 +14,7 @@ export const metadata: Metadata = pageMetadata({
 })
 
 export default async function ServicesPage() {
-  const hero = await getHeroMedia()
+  const hero = await getCachedHeroMedia()
 
   return (
     <>
