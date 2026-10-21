@@ -104,4 +104,62 @@ const nextConfig = {
   },
 }
 
-export default withPayload(nextConfig)
+const configured = withPayload(nextConfig)
+
+/**
+ * Keeps Payload's colour-scheme client hint on the admin panel, where it is
+ * used, instead of on every page of the site, where it is not.
+ *
+ * withPayload appends a header rule with `source: '/:path*'` carrying
+ * Accept-CH, Critical-CH and Vary for Sec-CH-Prefers-Color-Scheme. The admin
+ * needs them: getRequestTheme reads that header to pick light or dark before
+ * the first paint, so the panel does not flash the wrong theme.
+ *
+ * On the public site it is pure cost. Critical-CH does not ask politely — it
+ * tells the browser the response depended on a hint it did not send, and
+ * Chrome RESTARTS the navigation to send it. Measured in a clean profile
+ * against production: one visit to the home page, two document requests, the
+ * hint absent from both. Lighthouse reports the same thing as a redirect from
+ * the page to itself, costing 272ms, and it was the only opportunity left on
+ * a desktop run otherwise scoring 99.
+ *
+ * Nothing here reads it. The frontend layout hardcodes `className="light"`,
+ * and the rendered HTML is byte-identical with the hint set to light, set to
+ * dark, and absent — the same md5 all three ways. So the site was paying a
+ * round trip on every first visit to answer a question it never asks.
+ *
+ * The rule is split rather than deleted: the hint headers move to /admin, and
+ * anything else in that rule — x-powered-by, which Payload adds here because
+ * it turns Next's own off — stays site-wide, so this changes one thing only.
+ */
+const payloadHeaders = configured.headers
+
+const isHintHeader = ({ key, value }) =>
+  /^(accept-ch|critical-ch)$/i.test(key) ||
+  (/^vary$/i.test(key) && /sec-ch-prefers-color-scheme/i.test(value))
+
+configured.headers = async () => {
+  const rules = await payloadHeaders()
+
+  return rules.flatMap((rule) => {
+    // Only the catch-all rule Payload adds; anything else is left alone.
+    if (rule.source !== '/:path*') return [rule]
+
+    const hints = rule.headers.filter(isHintHeader)
+    const rest = rule.headers.filter((header) => !isHintHeader(header))
+
+    // If Payload ever stops adding these, this degrades to a no-op rather
+    // than to an empty rule or a crash.
+    if (hints.length === 0) return [rule]
+
+    return [
+      ...(rest.length > 0 ? [{ ...rule, headers: rest }] : []),
+      // Both forms: `:path*` matches zero segments in Next's matcher, but
+      // naming /admin outright costs nothing and removes the doubt.
+      { source: '/admin', headers: hints },
+      { source: '/admin/:path*', headers: hints },
+    ]
+  })
+}
+
+export default configured
